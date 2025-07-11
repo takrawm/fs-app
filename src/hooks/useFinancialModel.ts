@@ -1,8 +1,10 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { FinancialModelManager } from "../models/FinancialModelManager";
-import type { Account, AccountCategory } from "../types/account";
+import type { Account, SheetType } from "../types/account";
 import type { Parameter } from "../types/parameter";
-import type { Period, CalculationResult } from "../types/financial";
+import type { Period } from "../types/newFinancialTypes";
+import type { CalculationResult } from "../types/financial";
+import { seedDataLoader } from "../seed";
 
 export const useFinancialModel = () => {
   const [manager] = useState(() => new FinancialModelManager());
@@ -11,8 +13,56 @@ export const useFinancialModel = () => {
   const [calculationResults, setCalculationResults] = useState<Map<string, CalculationResult>>(new Map());
   const [selectedPeriodId, setSelectedPeriodId] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addAccount = useCallback((accountData: Partial<Account> & { name: string; category: AccountCategory }) => {
+  // seedデータの初期化
+  useEffect(() => {
+    const initializeSeedData = async () => {
+      try {
+        setIsLoading(true);
+        
+        // seedデータからアカウントを読み込み
+        const seedAccounts = seedDataLoader.getAccounts();
+        seedAccounts.forEach(account => {
+          manager.addAccount(account);
+        });
+        
+        // seedデータから期間を読み込み
+        const seedPeriods = seedDataLoader.getPeriods();
+        seedPeriods.forEach(period => {
+          manager.addPeriod(period);
+        });
+        
+        // 状態を更新
+        setAccounts(manager.getAllAccounts());
+        const periodModels = manager.getAllPeriods();
+        // PeriodModelを新しいPeriod型に変換
+        const periods = periodModels.map(pm => ({
+          id: pm.id,
+          year: pm.startDate.getFullYear(),
+          month: pm.startDate.getMonth() + 1,
+          displayName: pm.name,
+          isHistorical: pm.isActual,
+          isForecast: !pm.isActual
+        }));
+        setPeriods(periods);
+        
+        // 最初の期間を選択
+        if (seedPeriods.length > 0) {
+          setSelectedPeriodId(seedPeriods[0].id);
+        }
+        
+      } catch (error) {
+        console.error("Failed to initialize seed data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    initializeSeedData();
+  }, [manager]);
+
+  const addAccount = useCallback((accountData: Omit<Account, "id">) => {
     const newAccount = manager.addAccount(accountData);
     setAccounts(manager.getAllAccounts());
     return newAccount;
@@ -28,14 +78,19 @@ export const useFinancialModel = () => {
     setAccounts(manager.getAllAccounts());
   }, [manager]);
 
-  const addPeriod = useCallback((periodData: Partial<Period> & { 
-    name: string; 
-    startDate: Date; 
-    endDate: Date; 
-    order: number 
-  }) => {
+  const addPeriod = useCallback((periodData: Period) => {
     const newPeriod = manager.addPeriod(periodData);
-    setPeriods(manager.getAllPeriods());
+    const periodModels = manager.getAllPeriods();
+    // PeriodModelを新しいPeriod型に変換
+    const periods = periodModels.map(pm => ({
+      id: pm.id,
+      year: pm.startDate.getFullYear(),
+      month: pm.startDate.getMonth() + 1,
+      displayName: pm.name,
+      isHistorical: pm.isActual,
+      isForecast: !pm.isActual
+    }));
+    setPeriods(periods);
     
     if (!selectedPeriodId) {
       setSelectedPeriodId(newPeriod.id);
@@ -48,160 +103,186 @@ export const useFinancialModel = () => {
     manager.setParameter(accountId, periodId, parameter);
   }, [manager]);
 
-  const getParameter = useCallback((accountId: string, periodId: string): Parameter | undefined => {
-    return manager.getParameter(accountId, periodId);
-  }, [manager]);
-
-  const calculateCurrentPeriod = useCallback(async () => {
-    if (!selectedPeriodId) return;
-
+  const calculatePeriod = useCallback(async (periodId: string) => {
     setIsCalculating(true);
+    
     try {
-      const results = manager.calculatePeriod(selectedPeriodId);
+      const results = manager.calculatePeriod(periodId);
       setCalculationResults(results);
+      return results;
     } catch (error) {
       console.error("Calculation error:", error);
       throw error;
     } finally {
       setIsCalculating(false);
     }
-  }, [manager, selectedPeriodId]);
+  }, [manager]);
+
+  const calculateCashFlow = useCallback(async (periodId: string) => {
+    setIsCalculating(true);
+    
+    try {
+      const cfResults = manager.calculateCashFlow(periodId);
+      return cfResults;
+    } catch (error) {
+      console.error("Cash flow calculation error:", error);
+      throw error;
+    } finally {
+      setIsCalculating(false);
+    }
+  }, [manager]);
+
+  const calculateCurrentPeriod = useCallback(async () => {
+    if (!selectedPeriodId) return;
+    return calculatePeriod(selectedPeriodId);
+  }, [selectedPeriodId, calculatePeriod]);
 
   const calculateAllPeriods = useCallback(async () => {
     setIsCalculating(true);
-    const allResults = new Map<string, CalculationResult>();
-
+    
     try {
+      const allResults = new Map<string, CalculationResult>();
+      
       for (const period of periods) {
         const results = manager.calculatePeriod(period.id);
         results.forEach((result, accountId) => {
           allResults.set(`${accountId}_${period.id}`, result);
         });
       }
+      
       setCalculationResults(allResults);
+      return allResults;
     } catch (error) {
-      console.error("Calculation error:", error);
+      console.error("All periods calculation error:", error);
       throw error;
     } finally {
       setIsCalculating(false);
     }
   }, [manager, periods]);
 
+  const initializeSampleData = useCallback(() => {
+    // This is already handled in the useEffect
+  }, []);
+
   const getAccountValue = useCallback((accountId: string, periodId: string): number => {
-    const result = calculationResults.get(`${accountId}_${periodId}`);
+    const result = calculationResults.get(accountId);
     return result?.value || 0;
   }, [calculationResults]);
 
-  const accountTree = useMemo(() => {
-    const tree: Map<string | undefined, Account[]> = new Map();
-    
-    accounts.forEach(account => {
-      const children = tree.get(account.parentId) || [];
-      children.push(account);
-      tree.set(account.parentId, children);
-    });
-
-    return tree;
+  const getAccountsBySheet = useCallback((sheet: SheetType): Account[] => {
+    return accounts.filter(account => account.sheet === sheet);
   }, [accounts]);
 
-  const getRootAccounts = useCallback((): Account[] => {
-    return accountTree.get(undefined) || [];
-  }, [accountTree]);
+  const getAccountsByParent = useCallback((parentId: string | null): Account[] => {
+    return accounts.filter(account => account.parentId === parentId);
+  }, [accounts]);
 
-  const getChildAccounts = useCallback((parentId: string): Account[] => {
-    return accountTree.get(parentId) || [];
-  }, [accountTree]);
+  const getAccountHierarchy = useCallback((rootId?: string) => {
+    const buildHierarchy = (parentId: string | null): AccountHierarchyNode[] => {
+      const children = accounts.filter(account => account.parentId === parentId);
+      return children.map(account => ({
+        account,
+        children: buildHierarchy(account.id)
+      }));
+    };
 
-  const initializeSampleData = useCallback(() => {
-    const period1 = addPeriod({
-      name: "2024年3月期",
-      startDate: new Date("2023-04-01"),
-      endDate: new Date("2024-03-31"),
-      order: 1,
-      isActual: true,
-    });
+    if (rootId) {
+      const root = accounts.find(account => account.id === rootId);
+      if (!root) return [];
+      return [{
+        account: root,
+        children: buildHierarchy(rootId)
+      }];
+    }
 
-    const period2 = addPeriod({
-      name: "2025年3月期",
-      startDate: new Date("2024-04-01"),
-      endDate: new Date("2025-03-31"),
-      order: 2,
-      isActual: false,
-    });
+    return buildHierarchy(null);
+  }, [accounts]);
 
-    const sales = addAccount({
-      name: "売上高",
-      category: "収益",
-      detailType: "営業",
-    });
+  const validateModel = useCallback(() => {
+    return manager.validateModel();
+  }, [manager]);
 
-    const cogs = addAccount({
-      name: "売上原価",
-      category: "費用",
-      detailType: "営業",
-    });
+  const getAccountParameter = useCallback((accountId: string, periodId: string): Parameter | undefined => {
+    return manager.getParameter(accountId, periodId);
+  }, [manager]);
 
-    setParameter(sales.id, period1.id, {
-      id: `param_${sales.id}_${period1.id}`,
-      accountId: sales.id,
-      periodId: period1.id,
-      config: { type: "参照", referenceId: sales.id },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  const setAccountParameter = useCallback((accountId: string, periodId: string, parameter: Parameter) => {
+    manager.setParameter(accountId, periodId, parameter);
+  }, [manager]);
 
-    setParameter(sales.id, period2.id, {
-      id: `param_${sales.id}_${period2.id}`,
-      accountId: sales.id,
-      periodId: period2.id,
-      config: { type: "成長率", value: 10 },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  // 計算結果の統計情報
+  const calculationStats = useMemo(() => {
+    const totalAccounts = accounts.length;
+    const calculatedAccounts = calculationResults.size;
+    const errorCount = Array.from(calculationResults.values()).filter(result => result.value === null).length;
+    
+    return {
+      totalAccounts,
+      calculatedAccounts,
+      errorCount,
+      successRate: totalAccounts > 0 ? (calculatedAccounts - errorCount) / totalAccounts : 0
+    };
+  }, [accounts, calculationResults]);
 
-    setParameter(cogs.id, period1.id, {
-      id: `param_${cogs.id}_${period1.id}`,
-      accountId: cogs.id,
-      periodId: period1.id,
-      config: { type: "比率", value: 60, referenceId: sales.id },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  // アカウントの統計情報
+  const accountStats = useMemo(() => {
+    const bySheet = accounts.reduce((acc, account) => {
+      acc[account.sheet] = (acc[account.sheet] || 0) + 1;
+      return acc;
+    }, {} as Record<SheetType, number>);
 
-    setParameter(cogs.id, period2.id, {
-      id: `param_${cogs.id}_${period2.id}`,
-      accountId: cogs.id,
-      periodId: period2.id,
-      config: { type: "比率", value: 58, referenceId: sales.id },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  }, [addAccount, addPeriod, setParameter]);
+    const byParameter = accounts.reduce((acc, account) => {
+      acc[account.parameter.type] = (acc[account.parameter.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return { bySheet, byParameter };
+  }, [accounts]);
 
   return {
+    // 基本データ
     accounts,
     periods,
-    selectedPeriodId,
-    setSelectedPeriodId,
-    isCalculating,
     calculationResults,
+    selectedPeriodId,
+    isCalculating,
+    isLoading,
     
+    // 操作関数
     addAccount,
     updateAccount,
     deleteAccount,
-    
     addPeriod,
-    
     setParameter,
-    getParameter,
-    
+    calculatePeriod,
+    calculateCashFlow,
     calculateCurrentPeriod,
     calculateAllPeriods,
-    getAccountValue,
-    
-    getRootAccounts,
-    getChildAccounts,
-    
     initializeSampleData,
+    
+    // 取得関数
+    getAccountValue,
+    getAccountsBySheet,
+    getAccountsByParent,
+    getAccountHierarchy,
+    getAccountParameter,
+    setAccountParameter,
+    
+    // ユーティリティ
+    validateModel,
+    calculationStats,
+    accountStats,
+    
+    // 期間選択
+    setSelectedPeriodId,
+    
+    // seedデータアクセス
+    seedDataLoader,
   };
 };
+
+// 型定義
+interface AccountHierarchyNode {
+  account: Account;
+  children: AccountHierarchyNode[];
+}

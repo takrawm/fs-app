@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../common/Button";
 import { Select } from "../common/Select";
-import type { Period } from "../../types/financial";
+import type { Period } from "../../types/newFinancialTypes";
 import { Plus, Play, RefreshCw } from "lucide-react";
 
 interface ControlPanelProps {
@@ -27,7 +27,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 }) => {
   const periodOptions = periods.map(period => ({
     value: period.id,
-    label: period.name,
+    label: period.displayName,
   }));
 
   return (

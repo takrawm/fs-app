@@ -1,26 +1,14 @@
-import type { 
-  Account, 
-  AccountRelation,
-  SheetType,
-  CfImpact,
-  FinancialValue as FinancialValueType 
-} from "../types/account";
-import type { 
-  Parameter, 
-  CalculationContext,
-  isFormulaParameter 
-} from "../types/parameter";
-import type { CalculationResult, CalculationError } from "../types/financial";
-import type { Period } from "../types/newFinancialTypes";
+import type { Account, AccountRelation } from "../types/account";
+import type { Parameter, CalculationContext } from "../types/parameter";
+import type { Period, CalculationResult, CalculationError } from "../types/financial";
 import { AccountModel } from "./Account";
 import { FinancialValue } from "./FinancialValue";
 import { PeriodModel } from "./Period";
-import { NewStrategyFactory } from "../factories/NewStrategyFactory";
-import { NewFormulaStrategy } from "../strategies/NewFormulaStrategy";
+import { StrategyFactory } from "../factories/StrategyFactory";
+import { SubtotalStrategy } from "../strategies";
 import { ASTBuilder } from "../ast/ASTBuilder";
 import { ASTEvaluator } from "../ast/ASTEvaluator";
 import type { EvaluationContext } from "../types/ast";
-import { CF_IMPACT_TYPES, SHEET_TYPES } from "../types/newFinancialTypes";
 
 export class FinancialModelManager {
   private accounts: Map<string, AccountModel>;
@@ -39,17 +27,17 @@ export class FinancialModelManager {
     this.astBuilder = new ASTBuilder();
   }
 
-  addAccount(account: Partial<Account> & { accountName: string; sheet: SheetType }): AccountModel {
+  addAccount(account: Partial<Account> & { name: string; category: Account["category"] }): AccountModel {
     const newAccount = new AccountModel(account);
     this.accounts.set(newAccount.id, newAccount);
 
     const cfItem = newAccount.generateCFItem();
-    if (cfItem && cfItem.accountName && cfItem.sheet) {
+    if (cfItem && cfItem.name) {
       const cfAccount = new AccountModel({
         ...cfItem,
-        accountName: cfItem.accountName,
-        sheet: cfItem.sheet,
-      } as Account);
+        name: cfItem.name,
+        category: "費用",
+      });
       this.accounts.set(cfAccount.id, cfAccount);
       
       this.addRelation({
@@ -93,7 +81,8 @@ export class FinancialModelManager {
 
     const paramKeys = Array.from(this.parameters.keys());
     paramKeys.forEach(key => {
-      if (key.startsWith(`${id}_`)) {
+      const param = this.parameters.get(key);
+      if (param && param.accountId === id) {
         this.parameters.delete(key);
       }
     });
@@ -118,15 +107,8 @@ export class FinancialModelManager {
     return Array.from(this.accounts.values());
   }
 
-  addPeriod(period: Period): PeriodModel {
-    const newPeriod = new PeriodModel({
-      id: period.id,
-      name: period.displayName,
-      startDate: new Date(period.year, period.month - 1, 1),
-      endDate: new Date(period.year, period.month, 0),
-      order: period.year * 12 + period.month,
-      isActual: period.isHistorical
-    });
+  addPeriod(period: Partial<Period> & { name: string; startDate: Date; endDate: Date; order: number }): PeriodModel {
+    const newPeriod = new PeriodModel(period);
     this.periods.set(newPeriod.id, newPeriod);
     return newPeriod;
   }
@@ -210,40 +192,36 @@ export class FinancialModelManager {
     const parameter = this.getParameter(account.id, periodId);
     if (!parameter) return null;
 
-    const strategy = NewStrategyFactory.getStrategy(parameter);
+    const strategy = StrategyFactory.getStrategy(parameter.config);
 
-    // 新しいパラメータ構造での子科目合計の処理
-    if (parameter.type === "formula" && parameter.formula === "SUM(children)" && strategy instanceof NewFormulaStrategy) {
+    if (parameter.config.type === "子科目合計" && strategy instanceof SubtotalStrategy) {
       const childIds = this.getChildAccountIds(account.id);
-      // NewFormulaStrategyでは子科目IDsは計算時に動的に取得
+      strategy.setChildAccountIds(childIds);
     }
 
-    // 新しいパラメータ構造での計算式の処理
-    if (parameter.type === "formula" && parameter.formula) {
+    if (parameter.config.type === "計算" && parameter.config.references.length > 0) {
       const astContext: EvaluationContext = {
         variables: new Map(),
         functions: new Map(),
       };
 
-      // 依存関係から変数を設定
-      if (parameter.dependencies) {
-        parameter.dependencies.forEach(depId => {
-          const value = context.accounts.get(depId) || 0;
-          astContext.variables.set(depId, value);
-        });
-      }
+      parameter.config.references.forEach(ref => {
+        const value = context.accounts.get(ref.id) || 0;
+        astContext.variables.set(ref.id, value);
+      });
 
       const evaluator = new ASTEvaluator(astContext);
       
       try {
-        const ast = this.astBuilder.parse(parameter.formula);
+        const formula = this.buildFormulaFromReferences(parameter.config.references);
+        const ast = this.astBuilder.parse(formula);
         const value = evaluator.evaluate(ast);
         
         return {
           accountId: account.id,
           periodId,
           value,
-          formula: parameter.formula,
+          formula,
           dependencies: evaluator.extractDependencies(ast),
           calculatedAt: new Date(),
         };
@@ -252,83 +230,16 @@ export class FinancialModelManager {
       }
     }
 
-    // 新しいパラメータ構造に対応したストラテジー呼び出し
-    return strategy.calculate(account.id, parameter, context);
+    return strategy.calculate(account.id, parameter.config, context);
   }
 
-  // CFインパクトに基づいたCF計算メソッド
-  calculateCashFlow(periodId: string): Map<string, CalculationResult> {
-    const cfResults = new Map<string, CalculationResult>();
-    const period = this.periods.get(periodId);
-    if (!period) {
-      throw new Error(`Period not found: ${periodId}`);
-    }
-
-    const accounts = this.getAllAccounts();
-    
-    // 基準利益の計算
-    const baseProfitAccounts = accounts.filter(acc => 
-      acc.cfImpact && acc.cfImpact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT
-    );
-    
-    let baseProfit = 0;
-    baseProfitAccounts.forEach(account => {
-      const value = this.getValue(account.id, periodId);
-      if (value) {
-        baseProfit += value.value;
-      }
-    });
-
-    // CF調整項目の計算
-    const adjustmentAccounts = accounts.filter(acc => 
-      acc.cfImpact && acc.cfImpact.type === CF_IMPACT_TYPES.ADJUSTMENT
-    );
-
-    adjustmentAccounts.forEach(account => {
-      const previousPeriod = this.getPreviousPeriod(period);
-      if (!previousPeriod) return;
-
-      const currentValue = this.getValue(account.id, periodId);
-      const previousValue = this.getValue(account.id, previousPeriod.id);
-
-      if (currentValue && previousValue) {
-        const change = currentValue.value - previousValue.value;
-        const cfAdjustment = account.isDebitAccount() ? -change : change;
-        
-        cfResults.set(account.id, {
-          accountId: account.id,
-          periodId,
-          value: cfAdjustment,
-          formula: `${account.accountName}の変動`,
-          dependencies: [account.id],
-          calculatedAt: new Date(),
-        });
-      }
-    });
-
-    return cfResults;
-  }
-
-  // 新しいパラメータ構造に対応したバリデーション
-  validateModel(): { errors: string[], warnings: string[] } {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-
-    this.accounts.forEach(account => {
-      // アカウントのバリデーション
-      const accountErrors = account.validate();
-      errors.push(...accountErrors.map(e => `Account ${account.id}: ${e}`));
-
-      // パラメータのバリデーション
-      this.periods.forEach(period => {
-        const parameter = this.getParameter(account.id, period.id);
-        if (!parameter) {
-          warnings.push(`No parameter set for account ${account.id} in period ${period.id}`);
-        }
-      });
-    });
-
-    return { errors, warnings };
+  private buildFormulaFromReferences(references: Array<{id: string; operation: string}>): string {
+    return references
+      .map((ref, index) => {
+        if (index === 0) return `[${ref.id}]`;
+        return `${ref.operation} [${ref.id}]`;
+      })
+      .join(" ");
   }
 
   private getValue(accountId: string, periodId: string): FinancialValue | undefined {
@@ -392,19 +303,11 @@ export class FinancialModelManager {
       const parameter = this.getParameter(accountId, period.id);
       if (!parameter) return;
 
-      // 新しいパラメータ構造での依存関係抽出
-      switch (parameter.type) {
-        case "percentage":
-        case "days":
-          if ('baseAccountId' in parameter && parameter.baseAccountId) {
-            dependencies.add(parameter.baseAccountId);
-          }
-          break;
-        case "formula":
-          if (parameter.dependencies) {
-            parameter.dependencies.forEach(depId => dependencies.add(depId));
-          }
-          break;
+      const config = parameter.config;
+      if (config.type === "比率" || config.type === "他科目連動" || config.type === "参照") {
+        dependencies.add(config.referenceId);
+      } else if (config.type === "計算") {
+        config.references.forEach(ref => dependencies.add(ref.id));
       }
     });
 

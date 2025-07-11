@@ -1,0 +1,329 @@
+[
+  {
+    "id": "revenue-sales",
+    "accountName": "売上高",
+    "parentId": null,
+    "sheet": "PL",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 1,
+      "sectionOrder": 1,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "manualInput",
+      "defaultValue": 1000000,
+      "description": "売上高の手動入力"
+    },
+    "cfImpact": {
+      "type": "isBaseProfit",
+      "description": "営業CFの基準利益"
+    }
+  },
+  {
+    "id": "expense-cogs",
+    "accountName": "売上原価",
+    "parentId": null,
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 1,
+      "sectionOrder": 2,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "percentageOfRevenue",
+      "value": 60,
+      "description": "売上高の60%"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "営業CFへの調整"
+    }
+  },
+  {
+    "id": "expense-sga",
+    "accountName": "販売費及び一般管理費",
+    "parentId": null,
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 1,
+      "sectionOrder": 2,
+      "itemOrder": 2
+    },
+    "parameter": {
+      "type": "percentageOfRevenue",
+      "value": 25,
+      "description": "売上高の25%"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "営業CFへの調整"
+    }
+  },
+  {
+    "id": "asset-cash",
+    "accountName": "現金及び預金",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 1,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "CF_CLOSING_BALANCE",
+      "dependencies": [],
+      "description": "CF計算書の期末残高"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "現金残高"
+    }
+  },
+  {
+    "id": "asset-ar",
+    "accountName": "売掛金",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 1,
+      "itemOrder": 2
+    },
+    "parameter": {
+      "type": "days",
+      "days": 45,
+      "baseAccountId": "revenue-sales",
+      "description": "売上高の45日分"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "targetAccountIds": ["revenue-sales"],
+      "description": "売上債権の増減"
+    }
+  },
+  {
+    "id": "asset-inventory",
+    "accountName": "棚卸資産",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 1,
+      "itemOrder": 3
+    },
+    "parameter": {
+      "type": "days",
+      "days": 60,
+      "baseAccountId": "expense-cogs",
+      "description": "売上原価の60日分"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "targetAccountIds": ["expense-cogs"],
+      "description": "棚卸資産の増減"
+    }
+  },
+  {
+    "id": "asset-ppe-gross",
+    "accountName": "有形固定資産（取得原価）",
+    "parentId": null,
+    "sheet": "PPE",
+    "isCredit": false,
+    "displayOrder": {
+      "sheetOrder": 4,
+      "sectionOrder": 1,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "constant",
+      "value": 5000000,
+      "description": "有形固定資産の取得原価"
+    },
+    "cfImpact": {
+      "type": "reclassification",
+      "description": "投資CFへの振替"
+    }
+  },
+  {
+    "id": "asset-ppe-depreciation",
+    "accountName": "減価償却累計額",
+    "parentId": null,
+    "sheet": "PPE",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 4,
+      "sectionOrder": 1,
+      "itemOrder": 2
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "DEPRECIATION_EXPENSE * PERIODS_ELAPSED",
+      "dependencies": ["expense-depreciation"],
+      "description": "減価償却費の累計"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "非現金費用の調整"
+    }
+  },
+  {
+    "id": "liability-ap",
+    "accountName": "買掛金",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 2,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "days",
+      "days": 30,
+      "baseAccountId": "expense-cogs",
+      "description": "売上原価の30日分"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "targetAccountIds": ["expense-cogs"],
+      "description": "仕入債務の増減"
+    }
+  },
+  {
+    "id": "liability-loan",
+    "accountName": "借入金",
+    "parentId": null,
+    "sheet": "FINANCING",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 5,
+      "sectionOrder": 1,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "constant",
+      "value": 3000000,
+      "description": "借入金残高"
+    },
+    "cfImpact": {
+      "type": "reclassification",
+      "description": "財務CFへの振替"
+    }
+  },
+  {
+    "id": "equity-capital",
+    "accountName": "資本金",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 3,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "constant",
+      "value": 1000000,
+      "description": "資本金"
+    },
+    "cfImpact": {
+      "type": "reclassification",
+      "description": "財務CFへの振替"
+    }
+  },
+  {
+    "id": "equity-retained-earnings",
+    "accountName": "利益剰余金",
+    "parentId": null,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "sheetOrder": 2,
+      "sectionOrder": 3,
+      "itemOrder": 2
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "CUMULATIVE_NET_INCOME",
+      "dependencies": [],
+      "description": "当期純利益の累計"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "利益の内部留保"
+    }
+  },
+  {
+    "id": "cf-operating",
+    "accountName": "営業活動によるキャッシュフロー",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "sheetOrder": 3,
+      "sectionOrder": 1,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "OPERATING_CF_CALCULATION",
+      "dependencies": [],
+      "description": "営業CFの自動計算"
+    },
+    "cfImpact": {
+      "type": "adjustment",
+      "description": "営業CF合計"
+    }
+  },
+  {
+    "id": "cf-investing",
+    "accountName": "投資活動によるキャッシュフロー",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "sheetOrder": 3,
+      "sectionOrder": 2,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "INVESTING_CF_CALCULATION",
+      "dependencies": [],
+      "description": "投資CFの自動計算"
+    },
+    "cfImpact": {
+      "type": "reclassification",
+      "description": "投資CF合計"
+    }
+  },
+  {
+    "id": "cf-financing",
+    "accountName": "財務活動によるキャッシュフロー",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "sheetOrder": 3,
+      "sectionOrder": 3,
+      "itemOrder": 1
+    },
+    "parameter": {
+      "type": "formula",
+      "formula": "FINANCING_CF_CALCULATION",
+      "dependencies": [],
+      "description": "財務CFの自動計算"
+    },
+    "cfImpact": {
+      "type": "reclassification",
+      "description": "財務CF合計"
+    }
+  }
+]

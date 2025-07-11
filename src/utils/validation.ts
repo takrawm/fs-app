@@ -1,20 +1,22 @@
 import type { ValidationError } from "../types/financial";
-import type { AccountCategory, AccountDetailType } from "../types/account";
-import type { ParameterType } from "../types/parameter";
+import type { AccountCategory, AccountDetailType, SheetType } from "../types/account";
+import type { ParameterType, Parameter } from "../types/parameter";
+import { SHEET_TYPES, PARAMETER_TYPES } from "../types/newFinancialTypes";
+import { ACCOUNT_NAME_MAX_LENGTH, FORMULA_MAX_LENGTH } from "../utils/constants";
 
 export const validateAccountName = (name: string): ValidationError | null => {
   if (!name || name.trim().length === 0) {
     return {
-      field: "name",
+      field: "accountName",
       message: "科目名は必須です",
       code: "REQUIRED",
     };
   }
 
-  if (name.length > 100) {
+  if (name.length > ACCOUNT_NAME_MAX_LENGTH) {
     return {
-      field: "name",
-      message: "科目名は100文字以内で入力してください",
+      field: "accountName",
+      message: `科目名は${ACCOUNT_NAME_MAX_LENGTH}文字以内で入力してください`,
       code: "MAX_LENGTH",
     };
   }
@@ -63,7 +65,7 @@ export const validateParameterValue = (
   type: ParameterType,
   value?: number
 ): ValidationError | null => {
-  if (type === "比率" || type === "成長率") {
+  if (type === PARAMETER_TYPES.PERCENTAGE || type === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE) {
     if (value === undefined || value === null) {
       return {
         field: "value",
@@ -72,7 +74,7 @@ export const validateParameterValue = (
       };
     }
 
-    if (type === "比率" && (value < 0 || value > 100)) {
+    if (type === PARAMETER_TYPES.PERCENTAGE && (value < 0 || value > 100)) {
       return {
         field: "value",
         message: "比率は0〜100の範囲で入力してください",
@@ -80,7 +82,7 @@ export const validateParameterValue = (
       };
     }
 
-    if (type === "成長率" && (value < -100 || value > 1000)) {
+    if (type === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE && (value < -100 || value > 1000)) {
       return {
         field: "value",
         message: "成長率は-100〜1000の範囲で入力してください",
@@ -96,7 +98,7 @@ export const validateReferenceId = (
   type: ParameterType,
   referenceId?: string
 ): ValidationError | null => {
-  const typesRequiringReference: ParameterType[] = ["比率", "他科目連動", "参照"];
+  const typesRequiringReference: ParameterType[] = [PARAMETER_TYPES.PERCENTAGE, PARAMETER_TYPES.DAYS];
   
   if (typesRequiringReference.includes(type) && !referenceId) {
     return {

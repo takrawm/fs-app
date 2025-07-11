@@ -6,6 +6,7 @@ import { AccountTable } from "./components/tables/AccountTable";
 import { useFinancialModel } from "./hooks/useFinancialModel";
 import type { AccountCategory, AccountDetailType } from "./types/account";
 import type { ParameterConfig } from "./types/parameter";
+import { PARAMETER_TYPES, CF_IMPACT_TYPES } from "./types/newFinancialTypes";
 
 function App() {
   const {
@@ -36,23 +37,34 @@ function App() {
   }, [initializeSampleData]);
 
   const handleAddAccount = (accountData: {
-    name: string;
+    accountName: string;
     category: AccountCategory;
     detailType?: AccountDetailType;
     parameterConfig?: ParameterConfig;
   }) => {
-    const newAccount = addAccount(accountData);
+    // Convert legacy accountData to new Account structure
+    const newAccountData = {
+      accountName: accountData.accountName,
+      parentId: null,
+      sheet: "BS" as const, // Default sheet type
+      isCredit: null,
+      displayOrder: {
+        sheetOrder: 1,
+        sectionOrder: 1,
+        itemOrder: 1,
+      },
+      parameter: {
+        type: PARAMETER_TYPES.CONSTANT,
+        value: 0,
+        description: "Default parameter",
+      },
+      cfImpact: {
+        type: CF_IMPACT_TYPES.ADJUSTMENT,
+        description: "Default CF impact",
+      },
+    };
     
-    if (accountData.parameterConfig && selectedPeriodId) {
-      setParameter(newAccount.id, selectedPeriodId, {
-        id: `param_${newAccount.id}_${selectedPeriodId}`,
-        accountId: newAccount.id,
-        periodId: selectedPeriodId,
-        config: accountData.parameterConfig,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-    }
+    const newAccount = addAccount(newAccountData);
     
     setShowAccountForm(false);
   };
@@ -62,11 +74,12 @@ function App() {
     const nextOrder = periods.length + 1;
     
     addPeriod({
-      name: `${currentYear + nextOrder - 1}年3月期`,
-      startDate: new Date(currentYear + nextOrder - 2, 3, 1),
-      endDate: new Date(currentYear + nextOrder - 1, 2, 31),
-      order: nextOrder,
-      isActual: false,
+      id: `period_${currentYear + nextOrder - 1}`,
+      year: currentYear + nextOrder - 1,
+      month: 3,
+      displayName: `${currentYear + nextOrder - 1}年3月期`,
+      isHistorical: false,
+      isForecast: true,
     });
   };
 
@@ -100,7 +113,7 @@ function App() {
 
   const availableAccounts = accounts.map(account => ({
     id: account.id,
-    name: account.name,
+    accountName: account.accountName,
   }));
 
   return (

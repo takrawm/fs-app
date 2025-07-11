@@ -1,4 +1,4 @@
-import type { ParameterConfig } from "../types/parameter";
+import type { ParameterConfig, Parameter } from "../types/parameter";
 import {
   BaseCalculationStrategy,
   ProportionateStrategy,
@@ -7,7 +7,9 @@ import {
   CalculationStrategy,
   SubtotalStrategy,
   ReferenceStrategy,
+  NewCalculationStrategy,
 } from "../strategies";
+import { NewStrategyFactory } from "./NewStrategyFactory";
 
 export class StrategyFactory {
   private static strategies = new Map<string, BaseCalculationStrategy>([
@@ -35,5 +37,15 @@ export class StrategyFactory {
 
   static getSubtotalStrategy(): SubtotalStrategy {
     return this.strategies.get("子科目合計") as SubtotalStrategy;
+  }
+
+  // 新しいパラメータ構造に対応したストラテジー取得
+  static getNewStrategy(parameter: Parameter): NewCalculationStrategy {
+    return NewStrategyFactory.getStrategy(parameter);
+  }
+
+  // 新しいファクトリーの参照
+  static getNewStrategyFactory(): typeof NewStrategyFactory {
+    return NewStrategyFactory;
   }
 }
