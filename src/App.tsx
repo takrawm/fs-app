@@ -15,18 +15,16 @@ function App() {
     selectedPeriodId,
     setSelectedPeriodId,
     isCalculating,
-    
+
     addAccount,
     deleteAccount,
-    
+
     addPeriod,
-    
-    setParameter,
-    
+
     calculateCurrentPeriod,
     calculateAllPeriods,
     getAccountValue,
-    
+
     initializeSampleData,
   } = useFinancialModel();
 
@@ -56,23 +54,21 @@ function App() {
       parameter: {
         type: PARAMETER_TYPES.CONSTANT,
         value: 0,
-        description: "Default parameter",
       },
       cfImpact: {
         type: CF_IMPACT_TYPES.ADJUSTMENT,
-        description: "Default CF impact",
       },
     };
-    
+
     const newAccount = addAccount(newAccountData);
-    
+
     setShowAccountForm(false);
   };
 
   const handleAddPeriod = () => {
     const currentYear = new Date().getFullYear();
     const nextOrder = periods.length + 1;
-    
+
     addPeriod({
       id: `period_${currentYear + nextOrder - 1}`,
       year: currentYear + nextOrder - 1,
@@ -88,7 +84,11 @@ function App() {
   };
 
   const handleDeleteAccount = (accountId: string) => {
-    if (window.confirm("この科目を削除しますか？関連するキャッシュフロー項目も削除されます。")) {
+    if (
+      window.confirm(
+        "この科目を削除しますか？関連するキャッシュフロー項目も削除されます。"
+      )
+    ) {
       deleteAccount(accountId);
     }
   };
@@ -111,7 +111,7 @@ function App() {
     }
   };
 
-  const availableAccounts = accounts.map(account => ({
+  const availableAccounts = accounts.map((account) => ({
     id: account.id,
     accountName: account.accountName,
   }));
@@ -119,7 +119,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <ControlPanel
         periods={periods}
         selectedPeriodId={selectedPeriodId}
@@ -136,7 +136,7 @@ function App() {
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">勘定科目一覧</h2>
           </div>
-          
+
           <AccountTable
             accounts={accounts}
             periods={periods}

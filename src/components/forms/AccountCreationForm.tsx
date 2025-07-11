@@ -118,7 +118,6 @@ export const AccountCreationForm: React.FC<AccountCreationFormProps> = ({
     // CFインパクトオブジェクトの構築
     const cfImpact = {
       type: formData.cfImpactType,
-      description: `${formData.accountName}のCFインパクト`,
     };
 
     // 新しいアカウントオブジェクトの構築
@@ -136,16 +135,11 @@ export const AccountCreationForm: React.FC<AccountCreationFormProps> = ({
   };
 
   const buildParameter = (): Parameter => {
-    const baseParams = {
-      description: formData.parameterDescription || undefined,
-    };
-
     switch (formData.parameterType) {
       case PARAMETER_TYPES.CONSTANT:
         return {
           type: PARAMETER_TYPES.CONSTANT,
           value: parseFloat(formData.parameterValue) || 0,
-          ...baseParams,
         };
 
       case PARAMETER_TYPES.PERCENTAGE:
@@ -153,14 +147,12 @@ export const AccountCreationForm: React.FC<AccountCreationFormProps> = ({
           type: PARAMETER_TYPES.PERCENTAGE,
           value: parseFloat(formData.parameterValue) || 0,
           baseAccountId: formData.parameterBaseAccountId,
-          ...baseParams,
         };
 
       case PARAMETER_TYPES.PERCENTAGE_OF_REVENUE:
         return {
           type: PARAMETER_TYPES.PERCENTAGE_OF_REVENUE,
           value: parseFloat(formData.parameterValue) || 0,
-          ...baseParams,
         };
 
       case PARAMETER_TYPES.DAYS:
@@ -168,14 +160,12 @@ export const AccountCreationForm: React.FC<AccountCreationFormProps> = ({
           type: PARAMETER_TYPES.DAYS,
           days: parseInt(formData.parameterDays) || 0,
           baseAccountId: formData.parameterBaseAccountId,
-          ...baseParams,
         };
 
       case PARAMETER_TYPES.MANUAL_INPUT:
         return {
           type: PARAMETER_TYPES.MANUAL_INPUT,
           defaultValue: parseFloat(formData.parameterValue) || 0,
-          ...baseParams,
         };
 
       case PARAMETER_TYPES.FORMULA:
@@ -183,14 +173,12 @@ export const AccountCreationForm: React.FC<AccountCreationFormProps> = ({
           type: PARAMETER_TYPES.FORMULA,
           formula: formData.parameterFormula,
           dependencies: extractDependencies(formData.parameterFormula),
-          ...baseParams,
         };
 
       default:
         return {
           type: PARAMETER_TYPES.CONSTANT,
           value: 0,
-          ...baseParams,
         };
     }
   };

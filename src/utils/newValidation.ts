@@ -2,7 +2,7 @@ import type { ValidationError } from "../types/financial";
 import type { Account, SheetType } from "../types/account";
 import type { Parameter } from "../types/parameter";
 import { SHEET_TYPES, PARAMETER_TYPES } from "../types/newFinancialTypes";
-import { ACCOUNT_NAME_MAX_LENGTH, FORMULA_MAX_LENGTH, DESCRIPTION_MAX_LENGTH } from "../utils/constants";
+import { ACCOUNT_NAME_MAX_LENGTH, FORMULA_MAX_LENGTH } from "../utils/constants";
 
 // 新しいアカウント構造用のバリデーション関数
 
@@ -109,14 +109,6 @@ export const validateParameter = (parameter: Parameter): ValidationError[] => {
     });
   }
 
-  // 説明文の長さ検証
-  if (parameter.description && parameter.description.length > DESCRIPTION_MAX_LENGTH) {
-    errors.push({
-      field: "parameter.description",
-      message: `説明文は${DESCRIPTION_MAX_LENGTH}文字以内で入力してください`,
-      code: "MAX_LENGTH",
-    });
-  }
 
   // パラメータタイプ別の検証
   switch (parameter.type) {

@@ -20,6 +20,15 @@ export {
   isFormulaParameter
 } from './newFinancialTypes';
 
+// Import for internal use
+import {
+  Parameter,
+  ConstantParameter,
+  PercentageParameter,
+  FormulaParameter,
+  PARAMETER_TYPES
+} from './newFinancialTypes';
+
 // 旧ParameterConfig型（互換性のため残す）
 export type LegacyParameterConfig = 
   | { type: "比率"; value: number; referenceId: string }
@@ -59,7 +68,6 @@ export function migrateLegacyParameter(legacy: LegacyParameter): Parameter {
         type: PARAMETER_TYPES.PERCENTAGE,
         value: config.value,
         baseAccountId: config.referenceId,
-        description: "比率パラメータ"
       } as PercentageParameter;
       
     case "成長率":
@@ -67,7 +75,6 @@ export function migrateLegacyParameter(legacy: LegacyParameter): Parameter {
         type: PARAMETER_TYPES.PERCENTAGE,
         value: config.value,
         baseAccountId: legacy.accountId, // 自身の前期値を参照
-        description: "成長率パラメータ"
       } as PercentageParameter;
       
     case "他科目連動":
@@ -76,7 +83,6 @@ export function migrateLegacyParameter(legacy: LegacyParameter): Parameter {
         type: PARAMETER_TYPES.FORMULA,
         formula: `[${config.referenceId}]`,
         dependencies: [config.referenceId],
-        description: config.type === "他科目連動" ? "他科目連動" : "参照"
       } as FormulaParameter;
       
     case "計算":
@@ -87,7 +93,6 @@ export function migrateLegacyParameter(legacy: LegacyParameter): Parameter {
         type: PARAMETER_TYPES.FORMULA,
         formula,
         dependencies: config.references.map(ref => ref.id),
-        description: "計算式"
       } as FormulaParameter;
       
     case "子科目合計":
@@ -95,14 +100,12 @@ export function migrateLegacyParameter(legacy: LegacyParameter): Parameter {
         type: PARAMETER_TYPES.FORMULA,
         formula: "SUM(children)",
         dependencies: [],
-        description: "子科目合計"
       } as FormulaParameter;
       
     default:
       return {
         type: PARAMETER_TYPES.CONSTANT,
         value: 0,
-        description: "デフォルト"
       } as ConstantParameter;
   }
 }

@@ -93,13 +93,11 @@ export const DEFAULT_DISPLAY_ORDER = {
 
 export const DEFAULT_CF_IMPACT = {
   type: CF_IMPACT_TYPES.ADJUSTMENT,
-  description: "デフォルト調整項目",
 };
 
 // バリデーション定数
 export const ACCOUNT_NAME_MAX_LENGTH = 100;
 export const FORMULA_MAX_LENGTH = 500;
-export const DESCRIPTION_MAX_LENGTH = 200;
 
 // 計算関連の定数
 export const MAX_DECIMAL_PLACES = 2;

@@ -44,13 +44,11 @@ export interface CfImpact {
   type: CfImpactType;
   targetAccountIds?: string[];
   formula?: string;
-  description?: string;
 }
 
 // パラメータの基底インターフェース
 interface BaseParameter {
   type: ParameterType;
-  description?: string;
 }
 
 // 定数パラメータ
@@ -196,14 +194,12 @@ export function migrateOldAccountToNew(oldAccount: any): Account {
   // デフォルトのCFインパクト
   const defaultCfImpact: CfImpact = {
     type: CF_IMPACT_TYPES.ADJUSTMENT,
-    description: "Default impact",
   };
 
   // デフォルトのパラメータ
   const defaultParameter: ConstantParameter = {
     type: PARAMETER_TYPES.CONSTANT,
     value: 0,
-    description: "Default constant",
   };
 
   return {

@@ -43,8 +43,7 @@ export class AccountModel implements Account {
     this.displayOrder = data.displayOrder || { ...DEFAULT_DISPLAY_ORDER };
     this.parameter = data.parameter || { 
       type: "constant", 
-      value: 0, 
-      description: "デフォルトパラメータ" 
+      value: 0
     };
     this.cfImpact = data.cfImpact || { ...DEFAULT_CF_IMPACT };
     this.createdAt = new Date();
@@ -164,12 +163,10 @@ export class AccountModel implements Account {
         type: "formula",
         formula: this.generateCFFormula(),
         dependencies: [this.id],
-        description: `${this.accountName}のCF影響`
       },
       cfImpact: {
         type: CF_IMPACT_TYPES.ADJUSTMENT,
         targetAccountIds: [this.id],
-        description: `${this.accountName}の変動によるCF調整`
       }
     };
   }

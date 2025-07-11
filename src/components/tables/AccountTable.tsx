@@ -98,11 +98,6 @@ export const AccountTable: React.FC<AccountTableProps> = ({
                 <div className="text-sm font-medium text-gray-900">
                   {account.accountName}
                 </div>
-                {account.parameter.description && (
-                  <div className="text-xs text-gray-500">
-                    {account.parameter.description}
-                  </div>
-                )}
               </div>
             </div>
           </td>
