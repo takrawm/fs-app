@@ -3,22 +3,24 @@ import type {
   SheetType, 
   DisplayOrder, 
   CfImpact,
-  isPLAccount as isPLAccountType,
-  isBSAccount as isBSAccountType,
-  isCFAccount as isCFAccountType,
-  LegacyAccount
+  Parameter,
+  CalculationContext,
+  CalculationResult
 } from "../types/account";
-import type { Parameter } from "../types/parameter";
 import { 
   SHEET_TYPES, 
-  CF_IMPACT_TYPES,
-  isConstantParameter,
+  CF_IMPACT_TYPES
+} from "../types/account";
+import {
+  PARAMETER_TYPES,
+  OPERATIONS,
+  isGrowthRateParameter,
+  isChildrenSumParameter,
+  isCalculationParameter,
   isPercentageParameter,
-  isFormulaParameter,
-  isDaysParameter,
-  migrateOldAccountToNew
-} from "../types/newFinancialTypes";
-import { DEFAULT_DISPLAY_ORDER, DEFAULT_CF_IMPACT } from "../utils/constants";
+  isProportionateParameter,
+  isNullParameter
+} from "../types/parameter";
 
 export class AccountModel implements Account {
   id: string;
@@ -40,21 +42,17 @@ export class AccountModel implements Account {
     this.parentId = data.parentId ?? null;
     this.sheet = data.sheet;
     this.isCredit = data.isCredit ?? null;
-    this.displayOrder = data.displayOrder || { ...DEFAULT_DISPLAY_ORDER };
+    this.displayOrder = data.displayOrder || { order: "1", prefix: data.sheet };
     this.parameter = data.parameter || { 
-      type: "constant", 
-      value: 0
+      paramType: null, 
+      paramValue: null,
+      paramReferences: null
     };
-    this.cfImpact = data.cfImpact || { ...DEFAULT_CF_IMPACT };
+    this.cfImpact = data.cfImpact || { type: CF_IMPACT_TYPES.ADJUSTMENT };
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }
 
-  // 既存のLegacyAccountからの移行用コンストラクタ
-  static fromLegacy(legacyAccount: LegacyAccount): AccountModel {
-    const newAccount = migrateOldAccountToNew(legacyAccount);
-    return new AccountModel(newAccount);
-  }
 
   private generateId(): string {
     return `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -106,20 +104,28 @@ export class AccountModel implements Account {
   }
 
   // パラメータタイプ判定メソッド
-  hasConstantParameter(): boolean {
-    return isConstantParameter(this.parameter);
+  hasGrowthRateParameter(): boolean {
+    return isGrowthRateParameter(this.parameter);
+  }
+
+  hasChildrenSumParameter(): boolean {
+    return isChildrenSumParameter(this.parameter);
+  }
+
+  hasCalculationParameter(): boolean {
+    return isCalculationParameter(this.parameter);
   }
 
   hasPercentageParameter(): boolean {
     return isPercentageParameter(this.parameter);
   }
 
-  hasFormulaParameter(): boolean {
-    return isFormulaParameter(this.parameter);
+  hasProportionateParameter(): boolean {
+    return isProportionateParameter(this.parameter);
   }
 
-  hasDaysParameter(): boolean {
-    return isDaysParameter(this.parameter);
+  hasNullParameter(): boolean {
+    return isNullParameter(this.parameter);
   }
 
   // CFインパクト判定メソッド
@@ -155,14 +161,17 @@ export class AccountModel implements Account {
       isCredit: null, // CF項目は借方・貸方の概念なし
       parentId: this.id,
       displayOrder: {
-        sheetOrder: 3, // CFシートの順序
-        sectionOrder: this.determinesCFSection(),
-        itemOrder: 1
+        order: `CF${this.determinesCFSection()}01`,
+        prefix: "CF"
       },
       parameter: {
-        type: "formula",
-        formula: this.generateCFFormula(),
-        dependencies: [this.id],
+        paramType: PARAMETER_TYPES.CALCULATION,
+        paramValue: null,
+        paramReferences: [{
+          accountId: this.id,
+          operation: OPERATIONS.ADD,
+          lag: 0
+        }]
       },
       cfImpact: {
         type: CF_IMPACT_TYPES.ADJUSTMENT,
@@ -201,6 +210,99 @@ export class AccountModel implements Account {
     
     // その他の項目
     return `[${this.id}]`;
+  }
+
+  // 計算実行メソッド
+  calculate(context: CalculationContext): CalculationResult | null {
+    if (this.hasNullParameter()) {
+      return null;
+    }
+
+    // 成長率計算
+    if (this.hasGrowthRateParameter() && isGrowthRateParameter(this.parameter)) {
+      const previousValue = context.previousValues.get(this.id) || 0;
+      const growthRate = this.parameter.paramValue;
+      const currentValue = previousValue * (1 + growthRate);
+      
+      return {
+        value: currentValue,
+        formula: `${this.id}[t-1] × (1 + ${growthRate})`,
+        references: [this.id]
+      };
+    }
+
+    // 比率計算
+    if (this.hasPercentageParameter() && isPercentageParameter(this.parameter)) {
+      const baseAccountId = this.parameter.paramReferences.accountId;
+      const baseValue = context.accountValues.get(baseAccountId) || 0;
+      const percentage = this.parameter.paramValue;
+      const currentValue = baseValue * percentage;
+      
+      return {
+        value: currentValue,
+        formula: `${baseAccountId} × ${percentage}`,
+        references: [baseAccountId]
+      };
+    }
+
+    // 連動計算（比率100%）
+    if (this.hasProportionateParameter() && isProportionateParameter(this.parameter)) {
+      const baseAccountId = this.parameter.paramReferences.accountId;
+      const baseValue = context.accountValues.get(baseAccountId) || 0;
+      
+      return {
+        value: baseValue,
+        formula: baseAccountId,
+        references: [baseAccountId]
+      };
+    }
+
+    // 複数科目計算
+    if (this.hasCalculationParameter() && isCalculationParameter(this.parameter)) {
+      let result = 0;
+      const formulaParts: string[] = [];
+      const references: string[] = [];
+
+      this.parameter.paramReferences.forEach((ref, index) => {
+        const accountValue = context.accountValues.get(ref.accountId) || 0;
+        references.push(ref.accountId);
+
+        switch (ref.operation) {
+          case OPERATIONS.ADD:
+            result += accountValue;
+            formulaParts.push(index === 0 ? ref.accountId : `+ ${ref.accountId}`);
+            break;
+          case OPERATIONS.SUB:
+            result -= accountValue;
+            formulaParts.push(`- ${ref.accountId}`);
+            break;
+          case OPERATIONS.MUL:
+            result *= accountValue;
+            formulaParts.push(`× ${ref.accountId}`);
+            break;
+          case OPERATIONS.DIV:
+            if (accountValue !== 0) {
+              result /= accountValue;
+              formulaParts.push(`÷ ${ref.accountId}`);
+            }
+            break;
+        }
+      });
+
+      return {
+        value: result,
+        formula: formulaParts.join(' '),
+        references
+      };
+    }
+
+    // 子科目合計
+    if (this.hasChildrenSumParameter()) {
+      // 子科目の合計ロジックは別途実装が必要
+      return null;
+    }
+
+    return null;
   }
 
   // 表示用メソッド

@@ -5,9 +5,7 @@ import { Select } from "../common/Select";
 import type { 
   Account,
   SheetType,
-  CfImpactType,
-  AccountCategory,
-  AccountDetailType 
+  CfImpactType
 } from "../../types/account";
 import type { 
   Parameter,
@@ -15,11 +13,12 @@ import type {
 } from "../../types/parameter";
 import { 
   SHEET_TYPES,
-  CF_IMPACT_TYPES,
+  CF_IMPACT_TYPES
+} from "../../types/account";
+import {
   PARAMETER_TYPES
-} from "../../types/newFinancialTypes";
+} from "../../types/parameter";
 import { 
-  ACCOUNT_CATEGORIES,
   SHEET_TYPE_LABELS,
   CF_IMPACT_TYPE_LABELS,
   NEW_PARAMETER_TYPE_LABELS,
@@ -28,7 +27,6 @@ import {
 } from "../../utils/constants";
 import { 
   validateAccountName, 
-  validateAccountCategory, 
   validateParameterValue,
   validateReferenceId
 } from "../../utils/validation";

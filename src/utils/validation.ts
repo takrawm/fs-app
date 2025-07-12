@@ -1,7 +1,8 @@
 import type { ValidationError } from "../types/financial";
-import type { AccountCategory, AccountDetailType, SheetType } from "../types/account";
+import type { SheetType } from "../types/account";
 import type { ParameterType, Parameter } from "../types/parameter";
-import { SHEET_TYPES, PARAMETER_TYPES } from "../types/newFinancialTypes";
+import { SHEET_TYPES } from "../types/account";
+import { PARAMETER_TYPES } from "../types/parameter";
 import { ACCOUNT_NAME_MAX_LENGTH, FORMULA_MAX_LENGTH } from "../utils/constants";
 
 export const validateAccountName = (name: string): ValidationError | null => {
@@ -24,13 +25,13 @@ export const validateAccountName = (name: string): ValidationError | null => {
   return null;
 };
 
-export const validateAccountCategory = (category: string): ValidationError | null => {
-  const validCategories: AccountCategory[] = ["資産", "負債", "純資産", "収益", "費用"];
+export const validateSheet = (sheet: string): ValidationError | null => {
+  const validSheets = Object.values(SHEET_TYPES);
   
-  if (!validCategories.includes(category as AccountCategory)) {
+  if (!validSheets.includes(sheet as SheetType)) {
     return {
-      field: "category",
-      message: "無効なカテゴリです",
+      field: "sheet",
+      message: "無効なシートタイプです",
       code: "INVALID_VALUE",
     };
   }
@@ -38,54 +39,58 @@ export const validateAccountCategory = (category: string): ValidationError | nul
   return null;
 };
 
-export const validateDetailType = (
-  category: AccountCategory,
-  detailType?: AccountDetailType
+export const validateIsCredit = (
+  sheet: SheetType,
+  isCredit: boolean | null
 ): ValidationError | null => {
-  if (!detailType) return null;
-
-  if ((category === "資産" || category === "負債") && 
-      (detailType === "流動" || detailType === "固定")) {
-    return null;
+  if (sheet === SHEET_TYPES.CF) {
+    // CFシートの場合はnullであるべき
+    if (isCredit !== null) {
+      return {
+        field: "isCredit",
+        message: "CFシートでは借方・貸方の区別はありません",
+        code: "INVALID_VALUE",
+      };
+    }
+  } else {
+    // その他のシートの場合はboolean値が必要
+    if (isCredit === null) {
+      return {
+        field: "isCredit",
+        message: "借方・貸方の指定が必要です",
+        code: "REQUIRED",
+      };
+    }
   }
 
-  if ((category === "収益" || category === "費用") && 
-      (detailType === "営業" || detailType === "営業外" || detailType === "特別")) {
-    return null;
-  }
-
-  return {
-    field: "detailType",
-    message: `${category}には${detailType}は設定できません`,
-    code: "INVALID_COMBINATION",
-  };
+  return null;
 };
 
 export const validateParameterValue = (
   type: ParameterType,
-  value?: number
+  value?: number | null
 ): ValidationError | null => {
-  if (type === PARAMETER_TYPES.PERCENTAGE || type === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE) {
+  if (type === PARAMETER_TYPES.PERCENTAGE || type === PARAMETER_TYPES.GROWTH_RATE) {
     if (value === undefined || value === null) {
       return {
-        field: "value",
+        field: "paramValue",
         message: `${type}には数値が必須です`,
         code: "REQUIRED",
       };
     }
 
-    if (type === PARAMETER_TYPES.PERCENTAGE && (value < 0 || value > 100)) {
+    if (type === PARAMETER_TYPES.PERCENTAGE && (value < 0 || value > 1)) {
       return {
-        field: "value",
-        message: "比率は0〜100の範囲で入力してください",
+        field: "paramValue",
+        message: "比率は0〜1の範囲で入力してください",
         code: "OUT_OF_RANGE",
       };
     }
 
-    if (type === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE && (value < -100 || value > 1000)) {
+    if (type === PARAMETER_TYPES.GROWTH_RATE && (value < -1 || value > 10)) {
       return {
-        field: "value",
-        message: "成長率は-100〜1000の範囲で入力してください",
+        field: "paramValue",
+        message: "成長率は-100%〜1000%の範囲で入力してください",
         code: "OUT_OF_RANGE",
       };
     }
@@ -98,30 +103,80 @@ export const validateReferenceId = (
   type: ParameterType,
   referenceId?: string
 ): ValidationError | null => {
-  const typesRequiringReference: ParameterType[] = [PARAMETER_TYPES.PERCENTAGE, PARAMETER_TYPES.DAYS];
-  
-  if (typesRequiringReference.includes(type) && !referenceId) {
+  if (type === PARAMETER_TYPES.PERCENTAGE || type === PARAMETER_TYPES.PROPORTIONATE) {
+    if (!referenceId) {
+      return {
+        field: "referenceId",
+        message: "参照先の科目を選択してください",
+        code: "REQUIRED",
+      };
+    }
+  }
+
+  return null;
+};
+
+export const validateFormula = (formula: string): ValidationError | null => {
+  if (!formula || formula.trim().length === 0) {
     return {
-      field: "referenceId",
-      message: `${type}には参照科目が必須です`,
+      field: "formula",
+      message: "計算式は必須です",
       code: "REQUIRED",
+    };
+  }
+
+  if (formula.length > FORMULA_MAX_LENGTH) {
+    return {
+      field: "formula",
+      message: `計算式は${FORMULA_MAX_LENGTH}文字以内で入力してください`,
+      code: "MAX_LENGTH",
+    };
+  }
+
+  // 基本的な構文チェック
+  const allowedChars = /^[a-zA-Z0-9\s\+\-\*\/\(\)\[\]\.@]+$/;
+  if (!allowedChars.test(formula)) {
+    return {
+      field: "formula",
+      message: "計算式に使用できない文字が含まれています",
+      code: "INVALID_FORMAT",
     };
   }
 
   return null;
 };
 
-export const validatePeriodDates = (
-  startDate: Date,
-  endDate: Date
-): ValidationError | null => {
-  if (startDate >= endDate) {
-    return {
-      field: "dates",
-      message: "終了日は開始日より後の日付を指定してください",
-      code: "INVALID_DATE_RANGE",
-    };
+export const validateParameter = (parameter: Parameter): ValidationError[] => {
+  const errors: ValidationError[] = [];
+
+  // パラメータタイプに応じたバリデーション
+  switch (parameter.paramType) {
+    case PARAMETER_TYPES.GROWTH_RATE:
+    case PARAMETER_TYPES.PERCENTAGE:
+      const valueError = validateParameterValue(parameter.paramType, parameter.paramValue);
+      if (valueError) errors.push(valueError);
+      break;
+
+    case PARAMETER_TYPES.CALCULATION:
+      if (!parameter.paramReferences || parameter.paramReferences.length === 0) {
+        errors.push({
+          field: "paramReferences",
+          message: "計算対象の科目を選択してください",
+          code: "REQUIRED",
+        });
+      }
+      break;
+
+    case PARAMETER_TYPES.PROPORTIONATE:
+      if (!parameter.paramReferences) {
+        errors.push({
+          field: "paramReferences",
+          message: "連動する科目を選択してください",
+          code: "REQUIRED",
+        });
+      }
+      break;
   }
 
-  return null;
+  return errors;
 };

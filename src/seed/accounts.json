@@ -6,13 +6,13 @@
     "sheet": "PL",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 1,
-      "sectionOrder": 1,
-      "itemOrder": 1
+      "order": "P01",
+      "prefix": "P"
     },
     "parameter": {
-      "type": "manualInput",
-      "defaultValue": 1000000
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "isBaseProfit"
@@ -25,16 +25,42 @@
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 1,
-      "sectionOrder": 2,
-      "itemOrder": 1
+      "order": "P02",
+      "prefix": "P"
     },
     "parameter": {
-      "type": "percentageOfRevenue",
-      "value": 60
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.6,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
     },
     "cfImpact": {
       "type": "adjustment"
+    }
+  },
+  {
+    "id": "gross-profit",
+    "accountName": "売上総利益",
+    "parentId": null,
+    "sheet": "PL",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "P03",
+      "prefix": "P"
+    },
+    "parameter": {
+      "paramType": "CALCULATION",
+      "paramValue": null,
+      "paramReferences": [
+        { "accountId": "revenue-sales", "operation": "ADD", "lag": 0 },
+        { "accountId": "expense-cogs", "operation": "SUB", "lag": 0 }
+      ]
+    },
+    "cfImpact": {
+      "type": "isBaseProfit"
     }
   },
   {
@@ -44,16 +70,107 @@
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 1,
-      "sectionOrder": 2,
-      "itemOrder": 2
+      "order": "P04",
+      "prefix": "P"
     },
     "parameter": {
-      "type": "percentageOfRevenue",
-      "value": 25
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "adjustment"
+    }
+  },
+  {
+    "id": "expense-advertising",
+    "accountName": "広告宣伝費",
+    "parentId": "expense-sga",
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "P04-01",
+      "prefix": "P"
+    },
+    "parameter": {
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.05,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "cfImpact": {
+      "type": "adjustment"
+    }
+  },
+  {
+    "id": "expense-personnel",
+    "accountName": "人件費",
+    "parentId": "expense-sga",
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "P04-02",
+      "prefix": "P"
+    },
+    "parameter": {
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.15,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "cfImpact": {
+      "type": "adjustment"
+    }
+  },
+  {
+    "id": "expense-other-sga",
+    "accountName": "その他販管費",
+    "parentId": "expense-sga",
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "P04-03",
+      "prefix": "P"
+    },
+    "parameter": {
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.05,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "cfImpact": {
+      "type": "adjustment"
+    }
+  },
+  {
+    "id": "operating-profit",
+    "accountName": "営業利益",
+    "parentId": null,
+    "sheet": "PL",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "P05",
+      "prefix": "P"
+    },
+    "parameter": {
+      "paramType": "CALCULATION",
+      "paramValue": null,
+      "paramReferences": [
+        { "accountId": "gross-profit", "operation": "ADD", "lag": 0 },
+        { "accountId": "expense-sga", "operation": "SUB", "lag": 0 }
+      ]
+    },
+    "cfImpact": {
+      "type": "isBaseProfit"
     }
   },
   {
@@ -63,14 +180,13 @@
     "sheet": "BS",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 1,
-      "itemOrder": 1
+      "order": "B01",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "CF_CLOSING_BALANCE",
-      "dependencies": []
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "adjustment"
@@ -83,14 +199,13 @@
     "sheet": "BS",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 1,
-      "itemOrder": 2
+      "order": "B02",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "days",
-      "days": 45,
-      "baseAccountId": "revenue-sales"
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.05,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "adjustment",
@@ -106,14 +221,17 @@
     "sheet": "BS",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 1,
-      "itemOrder": 3
+      "order": "B03",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "days",
-      "days": 60,
-      "baseAccountId": "expense-cogs"
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.164,
+      "paramReferences": {
+        "accountId": "expense-cogs",
+        "operation": "MUL",
+        "lag": 0
+      }
     },
     "cfImpact": {
       "type": "adjustment",
@@ -129,13 +247,13 @@
     "sheet": "PPE",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 4,
-      "sectionOrder": 1,
-      "itemOrder": 1
+      "order": "PPE01",
+      "prefix": "PPE"
     },
     "parameter": {
-      "type": "constant",
-      "value": 5000000
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "reclassification"
@@ -148,16 +266,13 @@
     "sheet": "PPE",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 4,
-      "sectionOrder": 1,
-      "itemOrder": 2
+      "order": "PPE02",
+      "prefix": "PPE"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "DEPRECIATION_EXPENSE * PERIODS_ELAPSED",
-      "dependencies": [
-        "expense-depreciation"
-      ]
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.1,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "adjustment"
@@ -170,14 +285,17 @@
     "sheet": "BS",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 2,
-      "itemOrder": 1
+      "order": "B10",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "days",
-      "days": 30,
-      "baseAccountId": "expense-cogs"
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.082,
+      "paramReferences": {
+        "accountId": "expense-cogs",
+        "operation": "MUL",
+        "lag": 0
+      }
     },
     "cfImpact": {
       "type": "adjustment",
@@ -193,13 +311,13 @@
     "sheet": "Financing",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 5,
-      "sectionOrder": 1,
-      "itemOrder": 1
+      "order": "F01",
+      "prefix": "F"
     },
     "parameter": {
-      "type": "constant",
-      "value": 3000000
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "reclassification"
@@ -212,13 +330,13 @@
     "sheet": "BS",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 3,
-      "itemOrder": 1
+      "order": "B20",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "constant",
-      "value": 1000000
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "reclassification"
@@ -231,14 +349,17 @@
     "sheet": "BS",
     "isCredit": true,
     "displayOrder": {
-      "sheetOrder": 2,
-      "sectionOrder": 3,
-      "itemOrder": 2
+      "order": "B21",
+      "prefix": "B"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "CUMULATIVE_NET_INCOME",
-      "dependencies": []
+      "paramType": "PROPORTIONATE",
+      "paramValue": null,
+      "paramReferences": {
+        "accountId": "operating-profit",
+        "operation": "ADD",
+        "lag": 0
+      }
     },
     "cfImpact": {
       "type": "adjustment"
@@ -251,14 +372,15 @@
     "sheet": "CF",
     "isCredit": null,
     "displayOrder": {
-      "sheetOrder": 3,
-      "sectionOrder": 1,
-      "itemOrder": 1
+      "order": "CF01",
+      "prefix": "CF"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "OPERATING_CF_CALCULATION",
-      "dependencies": []
+      "paramType": "CALCULATION",
+      "paramValue": null,
+      "paramReferences": [
+        { "accountId": "operating-profit", "operation": "ADD", "lag": 0 }
+      ]
     },
     "cfImpact": {
       "type": "adjustment"
@@ -271,14 +393,13 @@
     "sheet": "CF",
     "isCredit": null,
     "displayOrder": {
-      "sheetOrder": 3,
-      "sectionOrder": 2,
-      "itemOrder": 1
+      "order": "CF02",
+      "prefix": "CF"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "INVESTING_CF_CALCULATION",
-      "dependencies": []
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "reclassification"
@@ -291,14 +412,13 @@
     "sheet": "CF",
     "isCredit": null,
     "displayOrder": {
-      "sheetOrder": 3,
-      "sectionOrder": 3,
-      "itemOrder": 1
+      "order": "CF03",
+      "prefix": "CF"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "FINANCING_CF_CALCULATION",
-      "dependencies": []
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
     },
     "cfImpact": {
       "type": "reclassification"
@@ -311,16 +431,17 @@
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "sheetOrder": 1,
-      "sectionOrder": 2,
-      "itemOrder": 10
+      "order": "P06",
+      "prefix": "P"
     },
     "parameter": {
-      "type": "formula",
-      "formula": "[asset-ppe-depreciation]",
-      "dependencies": [
-        "asset-ppe-depreciation"
-      ]
+      "paramType": "PROPORTIONATE",
+      "paramValue": null,
+      "paramReferences": {
+        "accountId": "asset-ppe-depreciation",
+        "operation": "MUL",
+        "lag": 0
+      }
     },
     "cfImpact": {
       "type": "adjustment"

@@ -1,10 +1,10 @@
 import React, { useMemo, useRef, useCallback } from "react";
-import { HotTable, HotColumn } from "@handsontable/react";
+import { HotTable } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.css";
 import type { Account, SheetType } from "../../types/account";
-import type { Period } from "../../types/newFinancialTypes";
+import type { Period } from "../../types/account";
 import { formatNumber } from "../../utils/formatting";
 import { 
   SHEET_TYPE_COLORS, 
@@ -12,7 +12,6 @@ import {
   CF_IMPACT_TYPE_LABELS,
   NEW_PARAMETER_TYPE_LABELS
 } from "../../utils/constants";
-import { Trash2, Edit, Eye } from "lucide-react";
 
 // Handsontableのモジュールを登録
 registerAllModules();
@@ -234,15 +233,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
     // ルートアカウントから開始
     const rootAccounts = accounts
       .filter(account => !account.parentId)
-      .sort((a, b) => {
-        if (a.displayOrder.sheetOrder !== b.displayOrder.sheetOrder) {
-          return a.displayOrder.sheetOrder - b.displayOrder.sheetOrder;
-        }
-        if (a.displayOrder.sectionOrder !== b.displayOrder.sectionOrder) {
-          return a.displayOrder.sectionOrder - b.displayOrder.sectionOrder;
-        }
-        return a.displayOrder.itemOrder - b.displayOrder.itemOrder;
-      });
+      .sort((a, b) => a.displayOrder.order.localeCompare(b.displayOrder.order));
     
     // シートタイプごとにグループ化
     if (groupBySheet) {

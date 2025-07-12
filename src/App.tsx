@@ -4,9 +4,7 @@ import { ControlPanel } from "./components/layout/ControlPanel";
 import { AccountCreationForm } from "./components/forms/AccountCreationForm";
 import { AccountTable } from "./components/accounts/AccountTable";
 import { useFinancialModel } from "./hooks/useFinancialModel";
-import type { AccountCategory, AccountDetailType } from "./types/account";
-import type { ParameterConfig } from "./types/parameter";
-import { PARAMETER_TYPES, CF_IMPACT_TYPES } from "./types/newFinancialTypes";
+import type { Account } from "./types/account";
 
 function App() {
   const {
@@ -34,34 +32,8 @@ function App() {
     initializeSampleData();
   }, [initializeSampleData]);
 
-  const handleAddAccount = (accountData: {
-    accountName: string;
-    category: AccountCategory;
-    detailType?: AccountDetailType;
-    parameterConfig?: ParameterConfig;
-  }) => {
-    // Convert legacy accountData to new Account structure
-    const newAccountData = {
-      accountName: accountData.accountName,
-      parentId: null,
-      sheet: "BS" as const, // Default sheet type
-      isCredit: null,
-      displayOrder: {
-        sheetOrder: 1,
-        sectionOrder: 1,
-        itemOrder: 1,
-      },
-      parameter: {
-        type: PARAMETER_TYPES.CONSTANT,
-        value: 0,
-      },
-      cfImpact: {
-        type: CF_IMPACT_TYPES.ADJUSTMENT,
-      },
-    };
-
-    const newAccount = addAccount(newAccountData);
-
+  const handleAddAccount = (account: Omit<Account, "id">) => {
+    addAccount(account);
     setShowAccountForm(false);
   };
 
@@ -69,14 +41,16 @@ function App() {
     const currentYear = new Date().getFullYear();
     const nextOrder = periods.length + 1;
 
-    addPeriod({
-      id: `period_${currentYear + nextOrder - 1}`,
+    const newPeriod = {
+      id: `period_${Date.now()}`,
+      name: `${currentYear + nextOrder - 1}年3月期`,
       year: currentYear + nextOrder - 1,
-      month: 3,
-      displayName: `${currentYear + nextOrder - 1}年3月期`,
-      isHistorical: false,
-      isForecast: true,
-    });
+      startDate: new Date(currentYear + nextOrder - 2, 3, 1),
+      endDate: new Date(currentYear + nextOrder - 1, 2, 31),
+      sequence: nextOrder,
+      isActual: false
+    };
+    addPeriod(newPeriod);
   };
 
   const handleEditAccount = (accountId: string) => {
@@ -149,7 +123,7 @@ function App() {
 
       {showAccountForm && (
         <AccountCreationForm
-          onSubmit={handleAddAccount}
+          onSubmit={(account) => handleAddAccount(account as Omit<Account, "id">)}
           onCancel={() => setShowAccountForm(false)}
           availableAccounts={availableAccounts}
         />
