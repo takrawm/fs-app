@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-07-12T01:27:48.720Z",
+  "checksPerformed": [
+    {
+      "name": "ファイル存在チェック",
+      "status": "PASS",
+      "details": "すべての必須ファイルが存在します"
+    },
+    {
+      "name": "データ整合性チェック",
+      "status": "PASS",
+      "details": "すべてのデータが型定義に準拠しています"
+    },
+    {
+      "name": "参照整合性チェック",
+      "status": "PASS",
+      "details": "すべての参照が有効です"
+    },
+    {
+      "name": "パフォーマンスベンチマーク",
+      "status": "PASS",
+      "details": "読込: 0ms, 検証: 2ms, 総レコード: 376"
+    },
+    {
+      "name": "計算結果の妥当性チェック",
+      "status": "PASS",
+      "details": "計算結果は妥当です",
+      "errors": []
+    },
+    {
+      "name": "移行チェックリスト",
+      "status": "PASS",
+      "details": "すべての移行要件を満たしています"
+    }
+  ],
+  "overallStatus": "PASS",
+  "canProceedWithDeletion": true,
+  "recommendations": [
+    "すべてのチェックをパスしました。parameters.jsonの削除が可能です",
+    "削除前に最終バックアップを作成することを推奨します"
+  ]
+}

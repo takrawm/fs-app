@@ -13,8 +13,7 @@
     "month": 2,
     "displayName": "2023年2月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-03",
@@ -22,8 +21,7 @@
     "month": 3,
     "displayName": "2023年3月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-04",
@@ -31,8 +29,7 @@
     "month": 4,
     "displayName": "2023年4月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-05",
@@ -40,8 +37,7 @@
     "month": 5,
     "displayName": "2023年5月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-06",
@@ -49,8 +45,7 @@
     "month": 6,
     "displayName": "2023年6月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-07",
@@ -58,8 +53,7 @@
     "month": 7,
     "displayName": "2023年7月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-08",
@@ -67,8 +61,7 @@
     "month": 8,
     "displayName": "2023年8月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-09",
@@ -76,8 +69,7 @@
     "month": 9,
     "displayName": "2023年9月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-10",
@@ -85,8 +77,7 @@
     "month": 10,
     "displayName": "2023年10月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-11",
@@ -94,8 +85,7 @@
     "month": 11,
     "displayName": "2023年11月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2023-12",
@@ -103,8 +93,7 @@
     "month": 12,
     "displayName": "2023年12月",
     "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
+    "isForecast": false
   },
   {
     "id": "2024-01",
@@ -112,8 +101,7 @@
     "month": 1,
     "displayName": "2024年1月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-02",
@@ -121,8 +109,7 @@
     "month": 2,
     "displayName": "2024年2月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-03",
@@ -130,8 +117,7 @@
     "month": 3,
     "displayName": "2024年3月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-04",
@@ -139,8 +125,7 @@
     "month": 4,
     "displayName": "2024年4月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-05",
@@ -148,8 +133,7 @@
     "month": 5,
     "displayName": "2024年5月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-06",
@@ -157,8 +141,7 @@
     "month": 6,
     "displayName": "2024年6月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-07",
@@ -166,8 +149,7 @@
     "month": 7,
     "displayName": "2024年7月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-08",
@@ -175,8 +157,7 @@
     "month": 8,
     "displayName": "2024年8月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-09",
@@ -184,8 +165,7 @@
     "month": 9,
     "displayName": "2024年9月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-10",
@@ -193,8 +173,7 @@
     "month": 10,
     "displayName": "2024年10月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-11",
@@ -202,8 +181,7 @@
     "month": 11,
     "displayName": "2024年11月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   },
   {
     "id": "2024-12",
@@ -211,7 +189,6 @@
     "month": 12,
     "displayName": "2024年12月",
     "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "isForecast": true
   }
 ]

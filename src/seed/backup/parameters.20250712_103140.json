@@ -1,0 +1,133 @@
+[
+  {
+    "accountId": "revenue-sales",
+    "parameters": {
+      "default": {
+        "type": "manualInput",
+        "defaultValue": 1000000,
+        "description": "売上高の手動入力"
+      },
+      "growth": {
+        "type": "percentage",
+        "value": 5,
+        "baseAccountId": "revenue-sales",
+        "description": "前期比5%成長"
+      }
+    }
+  },
+  {
+    "accountId": "expense-cogs",
+    "parameters": {
+      "default": {
+        "type": "percentageOfRevenue",
+        "value": 60,
+        "description": "売上高の60%"
+      },
+      "efficiency": {
+        "type": "percentageOfRevenue",
+        "value": 58,
+        "description": "効率化により売上高の58%"
+      }
+    }
+  },
+  {
+    "accountId": "expense-sga",
+    "parameters": {
+      "default": {
+        "type": "percentageOfRevenue",
+        "value": 25,
+        "description": "売上高の25%"
+      },
+      "expansion": {
+        "type": "percentageOfRevenue",
+        "value": 28,
+        "description": "事業拡大により売上高の28%"
+      }
+    }
+  },
+  {
+    "accountId": "asset-ar",
+    "parameters": {
+      "default": {
+        "type": "days",
+        "days": 45,
+        "baseAccountId": "revenue-sales",
+        "description": "売上高の45日分"
+      },
+      "improved": {
+        "type": "days",
+        "days": 30,
+        "baseAccountId": "revenue-sales",
+        "description": "回収期間短縮により30日分"
+      }
+    }
+  },
+  {
+    "accountId": "asset-inventory",
+    "parameters": {
+      "default": {
+        "type": "days",
+        "days": 60,
+        "baseAccountId": "expense-cogs",
+        "description": "売上原価の60日分"
+      },
+      "justInTime": {
+        "type": "days",
+        "days": 30,
+        "baseAccountId": "expense-cogs",
+        "description": "在庫削減により30日分"
+      }
+    }
+  },
+  {
+    "accountId": "liability-ap",
+    "parameters": {
+      "default": {
+        "type": "days",
+        "days": 30,
+        "baseAccountId": "expense-cogs",
+        "description": "売上原価の30日分"
+      },
+      "extended": {
+        "type": "days",
+        "days": 45,
+        "baseAccountId": "expense-cogs",
+        "description": "支払条件改善により45日分"
+      }
+    }
+  },
+  {
+    "accountId": "expense-depreciation",
+    "parameters": {
+      "straightLine": {
+        "type": "formula",
+        "formula": "[asset-ppe-gross] / 120",
+        "dependencies": ["asset-ppe-gross"],
+        "description": "10年定額法（月次）"
+      },
+      "accelerated": {
+        "type": "formula",
+        "formula": "[asset-ppe-gross] * 0.02",
+        "dependencies": ["asset-ppe-gross"],
+        "description": "加速償却（月次2%）"
+      }
+    }
+  },
+  {
+    "accountId": "expense-interest",
+    "parameters": {
+      "default": {
+        "type": "percentage",
+        "value": 0.3,
+        "baseAccountId": "liability-loan",
+        "description": "借入金の月利0.3%"
+      },
+      "variable": {
+        "type": "formula",
+        "formula": "[liability-loan] * IF([base-rate] > 0, [base-rate] + 0.5, 0.3) / 100",
+        "dependencies": ["liability-loan", "base-rate"],
+        "description": "変動金利（基準金利+0.5%）"
+      }
+    }
+  }
+]

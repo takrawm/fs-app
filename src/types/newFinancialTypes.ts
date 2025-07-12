@@ -9,7 +9,7 @@ export const SHEET_TYPES = {
   FINANCING: "Financing",
 } as const;
 
-export type SheetType = typeof SHEET_TYPES[keyof typeof SHEET_TYPES];
+export type SheetType = (typeof SHEET_TYPES)[keyof typeof SHEET_TYPES];
 
 // CFインパクトタイプ定数
 export const CF_IMPACT_TYPES = {
@@ -18,7 +18,8 @@ export const CF_IMPACT_TYPES = {
   RECLASSIFICATION: "reclassification",
 } as const;
 
-export type CfImpactType = typeof CF_IMPACT_TYPES[keyof typeof CF_IMPACT_TYPES];
+export type CfImpactType =
+  (typeof CF_IMPACT_TYPES)[keyof typeof CF_IMPACT_TYPES];
 
 // パラメータタイプ定数
 export const PARAMETER_TYPES = {
@@ -30,7 +31,8 @@ export const PARAMETER_TYPES = {
   FORMULA: "formula",
 } as const;
 
-export type ParameterType = typeof PARAMETER_TYPES[keyof typeof PARAMETER_TYPES];
+export type ParameterType =
+  (typeof PARAMETER_TYPES)[keyof typeof PARAMETER_TYPES];
 
 // 表示順序の型定義
 export interface DisplayOrder {
@@ -117,7 +119,7 @@ export interface Period {
   year: number;
   month: number;
   displayName: string;
-  isHistorical: boolean;
+  isAnnual: boolean;
   isForecast: boolean;
 }
 
@@ -132,15 +134,21 @@ export interface FinancialValue {
 }
 
 // 型ガード関数
-export function isConstantParameter(param: Parameter): param is ConstantParameter {
+export function isConstantParameter(
+  param: Parameter
+): param is ConstantParameter {
   return param.type === PARAMETER_TYPES.CONSTANT;
 }
 
-export function isPercentageParameter(param: Parameter): param is PercentageParameter {
+export function isPercentageParameter(
+  param: Parameter
+): param is PercentageParameter {
   return param.type === PARAMETER_TYPES.PERCENTAGE;
 }
 
-export function isPercentageOfRevenueParameter(param: Parameter): param is PercentageOfRevenueParameter {
+export function isPercentageOfRevenueParameter(
+  param: Parameter
+): param is PercentageOfRevenueParameter {
   return param.type === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE;
 }
 
@@ -148,11 +156,15 @@ export function isDaysParameter(param: Parameter): param is DaysParameter {
   return param.type === PARAMETER_TYPES.DAYS;
 }
 
-export function isManualInputParameter(param: Parameter): param is ManualInputParameter {
+export function isManualInputParameter(
+  param: Parameter
+): param is ManualInputParameter {
   return param.type === PARAMETER_TYPES.MANUAL_INPUT;
 }
 
-export function isFormulaParameter(param: Parameter): param is FormulaParameter {
+export function isFormulaParameter(
+  param: Parameter
+): param is FormulaParameter {
   return param.type === PARAMETER_TYPES.FORMULA;
 }
 
@@ -217,14 +229,14 @@ export function migrateOldAccountToNew(oldAccount: any): Account {
 // 旧カテゴリーから新シートタイプへのマッピング
 function mapOldCategoryToSheet(category: string): SheetType {
   const mapping: Record<string, SheetType> = {
-    "PL": SHEET_TYPES.PL,
-    "BS": SHEET_TYPES.BS,
-    "CF": SHEET_TYPES.CF,
-    "revenue": SHEET_TYPES.PL,
-    "expense": SHEET_TYPES.PL,
-    "asset": SHEET_TYPES.BS,
-    "liability": SHEET_TYPES.BS,
-    "equity": SHEET_TYPES.BS,
+    PL: SHEET_TYPES.PL,
+    BS: SHEET_TYPES.BS,
+    CF: SHEET_TYPES.CF,
+    revenue: SHEET_TYPES.PL,
+    expense: SHEET_TYPES.PL,
+    asset: SHEET_TYPES.BS,
+    liability: SHEET_TYPES.BS,
+    equity: SHEET_TYPES.BS,
   };
   return mapping[category] || SHEET_TYPES.BS;
 }
@@ -232,13 +244,13 @@ function mapOldCategoryToSheet(category: string): SheetType {
 // 借方・貸方の判定
 function determineIsCredit(account: any): boolean | null {
   if (account.isCredit !== undefined) return account.isCredit;
-  
+
   // カテゴリーベースの推定
   const creditCategories = ["revenue", "liability", "equity"];
   const debitCategories = ["expense", "asset"];
-  
+
   if (creditCategories.includes(account.category)) return true;
   if (debitCategories.includes(account.category)) return false;
-  
+
   return null;
 }

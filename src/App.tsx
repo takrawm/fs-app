@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "./components/layout/Header";
 import { ControlPanel } from "./components/layout/ControlPanel";
 import { AccountCreationForm } from "./components/forms/AccountCreationForm";
-import { AccountTable } from "./components/tables/AccountTable";
+import { AccountTable } from "./components/accounts/AccountTable";
 import { useFinancialModel } from "./hooks/useFinancialModel";
 import type { AccountCategory, AccountDetailType } from "./types/account";
 import type { ParameterConfig } from "./types/parameter";

@@ -12,10 +12,12 @@
     },
     "parameter": {
       "type": "manualInput",
-      "defaultValue": 1000000
+      "defaultValue": 1000000,
+      "description": "売上高の手動入力"
     },
     "cfImpact": {
-      "type": "isBaseProfit"
+      "type": "isBaseProfit",
+      "description": "営業CFの基準利益"
     }
   },
   {
@@ -31,10 +33,12 @@
     },
     "parameter": {
       "type": "percentageOfRevenue",
-      "value": 60
+      "value": 60,
+      "description": "売上高の60%"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "営業CFへの調整"
     }
   },
   {
@@ -50,10 +54,12 @@
     },
     "parameter": {
       "type": "percentageOfRevenue",
-      "value": 25
+      "value": 25,
+      "description": "売上高の25%"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "営業CFへの調整"
     }
   },
   {
@@ -70,10 +76,12 @@
     "parameter": {
       "type": "formula",
       "formula": "CF_CLOSING_BALANCE",
-      "dependencies": []
+      "dependencies": [],
+      "description": "CF計算書の期末残高"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "現金残高"
     }
   },
   {
@@ -90,13 +98,13 @@
     "parameter": {
       "type": "days",
       "days": 45,
-      "baseAccountId": "revenue-sales"
+      "baseAccountId": "revenue-sales",
+      "description": "売上高の45日分"
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "revenue-sales"
-      ]
+      "targetAccountIds": ["revenue-sales"],
+      "description": "売上債権の増減"
     }
   },
   {
@@ -113,13 +121,13 @@
     "parameter": {
       "type": "days",
       "days": 60,
-      "baseAccountId": "expense-cogs"
+      "baseAccountId": "expense-cogs",
+      "description": "売上原価の60日分"
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "expense-cogs"
-      ]
+      "targetAccountIds": ["expense-cogs"],
+      "description": "棚卸資産の増減"
     }
   },
   {
@@ -135,10 +143,12 @@
     },
     "parameter": {
       "type": "constant",
-      "value": 5000000
+      "value": 5000000,
+      "description": "有形固定資産の取得原価"
     },
     "cfImpact": {
-      "type": "reclassification"
+      "type": "reclassification",
+      "description": "投資CFへの振替"
     }
   },
   {
@@ -155,12 +165,12 @@
     "parameter": {
       "type": "formula",
       "formula": "DEPRECIATION_EXPENSE * PERIODS_ELAPSED",
-      "dependencies": [
-        "expense-depreciation"
-      ]
+      "dependencies": ["expense-depreciation"],
+      "description": "減価償却費の累計"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "非現金費用の調整"
     }
   },
   {
@@ -177,20 +187,20 @@
     "parameter": {
       "type": "days",
       "days": 30,
-      "baseAccountId": "expense-cogs"
+      "baseAccountId": "expense-cogs",
+      "description": "売上原価の30日分"
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "expense-cogs"
-      ]
+      "targetAccountIds": ["expense-cogs"],
+      "description": "仕入債務の増減"
     }
   },
   {
     "id": "liability-loan",
     "accountName": "借入金",
     "parentId": null,
-    "sheet": "Financing",
+    "sheet": "FINANCING",
     "isCredit": true,
     "displayOrder": {
       "sheetOrder": 5,
@@ -199,10 +209,12 @@
     },
     "parameter": {
       "type": "constant",
-      "value": 3000000
+      "value": 3000000,
+      "description": "借入金残高"
     },
     "cfImpact": {
-      "type": "reclassification"
+      "type": "reclassification",
+      "description": "財務CFへの振替"
     }
   },
   {
@@ -218,10 +230,12 @@
     },
     "parameter": {
       "type": "constant",
-      "value": 1000000
+      "value": 1000000,
+      "description": "資本金"
     },
     "cfImpact": {
-      "type": "reclassification"
+      "type": "reclassification",
+      "description": "財務CFへの振替"
     }
   },
   {
@@ -238,10 +252,12 @@
     "parameter": {
       "type": "formula",
       "formula": "CUMULATIVE_NET_INCOME",
-      "dependencies": []
+      "dependencies": [],
+      "description": "当期純利益の累計"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "利益の内部留保"
     }
   },
   {
@@ -258,10 +274,12 @@
     "parameter": {
       "type": "formula",
       "formula": "OPERATING_CF_CALCULATION",
-      "dependencies": []
+      "dependencies": [],
+      "description": "営業CFの自動計算"
     },
     "cfImpact": {
-      "type": "adjustment"
+      "type": "adjustment",
+      "description": "営業CF合計"
     }
   },
   {
@@ -278,10 +296,12 @@
     "parameter": {
       "type": "formula",
       "formula": "INVESTING_CF_CALCULATION",
-      "dependencies": []
+      "dependencies": [],
+      "description": "投資CFの自動計算"
     },
     "cfImpact": {
-      "type": "reclassification"
+      "type": "reclassification",
+      "description": "投資CF合計"
     }
   },
   {
@@ -298,32 +318,12 @@
     "parameter": {
       "type": "formula",
       "formula": "FINANCING_CF_CALCULATION",
-      "dependencies": []
+      "dependencies": [],
+      "description": "財務CFの自動計算"
     },
     "cfImpact": {
-      "type": "reclassification"
-    }
-  },
-  {
-    "id": "expense-depreciation",
-    "accountName": "減価償却費",
-    "parentId": null,
-    "sheet": "PL",
-    "isCredit": false,
-    "displayOrder": {
-      "sheetOrder": 1,
-      "sectionOrder": 2,
-      "itemOrder": 10
-    },
-    "parameter": {
-      "type": "formula",
-      "formula": "[asset-ppe-depreciation]",
-      "dependencies": [
-        "asset-ppe-depreciation"
-      ]
-    },
-    "cfImpact": {
-      "type": "adjustment"
+      "type": "reclassification",
+      "description": "財務CF合計"
     }
   }
 ]

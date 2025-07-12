@@ -1,0 +1,2474 @@
+[
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-01",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-01",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-01",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-01",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-01",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-01",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-01",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-01",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.747Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-01",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.744Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-02",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-02",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-02",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-02",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-02",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-02",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-02",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-02",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-02",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.748Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-03",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-03",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-03",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-03",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-03",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-03",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-03",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-03",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-03",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.749Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-04",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-04",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-04",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-04",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-04",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-04",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-04",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-04",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-04",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.750Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-05",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-05",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-05",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-05",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-05",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-05",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-05",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-05",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-05",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.751Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-06",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-06",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-06",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-06",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-06",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-06",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-06",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-06",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-06",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.752Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-07",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-07",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-07",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-07",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-07",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-07",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-07",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-07",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-07",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.753Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-08",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.755Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-08",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-08",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.755Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-08",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.755Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.755Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-08",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-08",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-08",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-08",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.755Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-08",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.754Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-09",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-09",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-09",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-09",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-09",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-09",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-09",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-09",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-09",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.756Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-10",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-10",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-10",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-10",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-10",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-10",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-10",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-10",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-10",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-11",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-11",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-11",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-11",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-11",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-11",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-11",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-11",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-11",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2023-12",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2023-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2023-12",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2023-12",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2023-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2023-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2023-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2023-12",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2023-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2023-12",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2023-12",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2023-12",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2023-12",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2023-12",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.757Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-01",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-01",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-01",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-01",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-01",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-01",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-01",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-01",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-01",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.759Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-01",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.758Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-02",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-02",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-02",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-02",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-02",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-02",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-02",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-02",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-02",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-02",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-03",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-03",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-03",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-03",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-03",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-03",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-03",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-03",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-03",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-03",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.760Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-04",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-04",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-04",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-04",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-04",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-04",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-04",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-04",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-04",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-04",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.761Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-05",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-05",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-05",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-05",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-05",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-05",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-05",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-05",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-05",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-05",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.762Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-06",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-06",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-06",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-06",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-06",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-06",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-06",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-06",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-06",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-06",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.763Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-07",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-07",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-07",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-07",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-07",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-07",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-07",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-07",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-07",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-07",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-08",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-08",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-08",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-08",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-08",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-08",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-08",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-08",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-08",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-08",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.764Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-09",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-09",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-09",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-09",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-09",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-09",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-09",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-09",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-09",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-09",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.765Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-10",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-10",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-10",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-10",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-10",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-10",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-10",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-10",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-10",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-10",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.766Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-11",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-11",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-11",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-11",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-11",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-11",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-11",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-11",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-11",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-11",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "asset-ar",
+    "periodId": "2024-12",
+    "value": 1479452.0547945206,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z"
+  },
+  {
+    "accountId": "asset-cash",
+    "periodId": "2024-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "CF_CLOSING_BALANCE"
+  },
+  {
+    "accountId": "asset-inventory",
+    "periodId": "2024-12",
+    "value": 1183561.6438356165,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z"
+  },
+  {
+    "accountId": "asset-ppe-gross",
+    "periodId": "2024-12",
+    "value": 5000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "cf-financing",
+    "periodId": "2024-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z",
+    "formula": "FINANCING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-investing",
+    "periodId": "2024-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "INVESTING_CF_CALCULATION"
+  },
+  {
+    "accountId": "cf-operating",
+    "periodId": "2024-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "OPERATING_CF_CALCULATION"
+  },
+  {
+    "accountId": "equity-capital",
+    "periodId": "2024-12",
+    "value": 1000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "equity-retained-earnings",
+    "periodId": "2024-12",
+    "value": 0,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z",
+    "formula": "CUMULATIVE_NET_INCOME"
+  },
+  {
+    "accountId": "expense-cogs",
+    "periodId": "2024-12",
+    "value": 600000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z"
+  },
+  {
+    "accountId": "expense-sga",
+    "periodId": "2024-12",
+    "value": 250000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z"
+  },
+  {
+    "accountId": "liability-ap",
+    "periodId": "2024-12",
+    "value": 591780.8219178083,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.768Z"
+  },
+  {
+    "accountId": "liability-loan",
+    "periodId": "2024-12",
+    "value": 3000000,
+    "isManualInput": false,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  },
+  {
+    "accountId": "revenue-sales",
+    "periodId": "2024-12",
+    "value": 1000000,
+    "isManualInput": true,
+    "lastUpdated": "2025-07-12T01:24:15.767Z"
+  }
+]
