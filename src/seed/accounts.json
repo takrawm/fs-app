@@ -209,9 +209,7 @@
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "revenue-sales"
-      ]
+      "targetAccountIds": ["revenue-sales"]
     }
   },
   {
@@ -235,9 +233,7 @@
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "expense-cogs"
-      ]
+      "targetAccountIds": ["expense-cogs"]
     }
   },
   {
@@ -299,9 +295,7 @@
     },
     "cfImpact": {
       "type": "adjustment",
-      "targetAccountIds": [
-        "expense-cogs"
-      ]
+      "targetAccountIds": ["expense-cogs"]
     }
   },
   {

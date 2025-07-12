@@ -3,7 +3,7 @@
 /** パラメータタイプの定数定義 */
 export const PARAMETER_TYPES = {
   GROWTH_RATE: "GROWTH_RATE",
-  CHILDREN_SUM: "CHILDREN_SUM", 
+  CHILDREN_SUM: "CHILDREN_SUM",
   CALCULATION: "CALCULATION",
   PERCENTAGE: "PERCENTAGE",
   PROPORTIONATE: "PROPORTIONATE",
@@ -12,7 +12,7 @@ export const PARAMETER_TYPES = {
 /** 操作タイプの定数定義 */
 export const OPERATIONS = {
   ADD: "ADD",
-  SUB: "SUB", 
+  SUB: "SUB",
   MUL: "MUL",
   DIV: "DIV",
 } as const;
@@ -30,14 +30,16 @@ export const SHEET_TYPES = {
 export const CF_IMPACT_TYPES = {
   IS_BASE_PROFIT: "isBaseProfit",
   ADJUSTMENT: "adjustment",
-  RECLASSIFICATION: "reclassification"
+  RECLASSIFICATION: "reclassification",
 } as const;
 
 // 型エイリアスの作成
-export type ParameterType = typeof PARAMETER_TYPES[keyof typeof PARAMETER_TYPES];
-export type Operation = typeof OPERATIONS[keyof typeof OPERATIONS];
-export type SheetType = typeof SHEET_TYPES[keyof typeof SHEET_TYPES];
-export type CfImpactType = typeof CF_IMPACT_TYPES[keyof typeof CF_IMPACT_TYPES];
+export type ParameterType =
+  (typeof PARAMETER_TYPES)[keyof typeof PARAMETER_TYPES];
+export type Operation = (typeof OPERATIONS)[keyof typeof OPERATIONS];
+export type SheetType = (typeof SHEET_TYPES)[keyof typeof SHEET_TYPES];
+export type CfImpactType =
+  (typeof CF_IMPACT_TYPES)[keyof typeof CF_IMPACT_TYPES];
 
 // ========== 共通インターフェース ==========
 
@@ -104,11 +106,11 @@ interface NullParameter {
   paramReferences: null;
 }
 
-/** 
+/**
  * メインのパラメータ型（Discriminated Union）
  * TypeScriptコンパイラが型を自動で絞り込める
  */
-export type Parameter = 
+export type Parameter =
   | GrowthRateParameter
   | ChildrenSumParameter
   | CalculationParameter
@@ -124,32 +126,32 @@ export interface CfImpact {
 
 // ========== Account オブジェクトの完全な型定義 ==========
 
-/** 
+/**
  * 財務科目の完全な型定義
  * 共通項目 + パラメータを統合した構造
  */
 export interface Account {
   /** 科目の一意識別子 */
   id: string;
-  
+
   /** 科目名 */
   accountName: string;
-  
+
   /** 親科目のID（親がない場合はnull） */
   parentId: string | null;
-  
+
   /** 所属するシート */
   sheet: SheetType;
-  
+
   /** 貸方科目かどうか（借方：false, 貸方：true, 適用外：null） */
   isCredit: boolean | null;
-  
+
   /** 表示順序情報 */
   displayOrder: DisplayOrder;
-  
+
   /** 計算パラメータ */
   parameter: Parameter;
-  
+
   /** CFへの影響タイプ */
   cfImpact: CfImpact;
 }
@@ -157,27 +159,37 @@ export interface Account {
 // ========== 型ガード関数（型の判定用） ==========
 
 /** 成長率パラメータかどうかを判定 */
-export function isGrowthRateParameter(param: Parameter): param is GrowthRateParameter {
+export function isGrowthRateParameter(
+  param: Parameter
+): param is GrowthRateParameter {
   return param.paramType === PARAMETER_TYPES.GROWTH_RATE;
 }
 
 /** 子科目合計パラメータかどうかを判定 */
-export function isChildrenSumParameter(param: Parameter): param is ChildrenSumParameter {
+export function isChildrenSumParameter(
+  param: Parameter
+): param is ChildrenSumParameter {
   return param.paramType === PARAMETER_TYPES.CHILDREN_SUM;
 }
 
 /** 計算パラメータかどうかを判定 */
-export function isCalculationParameter(param: Parameter): param is CalculationParameter {
+export function isCalculationParameter(
+  param: Parameter
+): param is CalculationParameter {
   return param.paramType === PARAMETER_TYPES.CALCULATION;
 }
 
 /** 比率パラメータかどうかを判定 */
-export function isPercentageParameter(param: Parameter): param is PercentageParameter {
+export function isPercentageParameter(
+  param: Parameter
+): param is PercentageParameter {
   return param.paramType === PARAMETER_TYPES.PERCENTAGE;
 }
 
 /** 連動パラメータかどうかを判定 */
-export function isProportionateParameter(param: Parameter): param is ProportionateParameter {
+export function isProportionateParameter(
+  param: Parameter
+): param is ProportionateParameter {
   return param.paramType === PARAMETER_TYPES.PROPORTIONATE;
 }
 
