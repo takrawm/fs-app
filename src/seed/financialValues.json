@@ -1,2150 +1,877 @@
 [
   {
-    "id": "revenue-sales_2023-04",
+    "id": "revenue-sales_2021-03-A",
     "accountId": "revenue-sales",
-    "periodId": "2023-04",
-    "value": 977584,
+    "periodId": "2021-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "revenue-sales_2023-05",
+    "id": "revenue-sales_2022-03-A",
     "accountId": "revenue-sales",
-    "periodId": "2023-05",
-    "value": 977584,
+    "periodId": "2022-03-A",
+    "value": 110,
     "isCalculated": false
   },
   {
-    "id": "revenue-sales_2023-06",
+    "id": "revenue-sales_2023-03-A",
     "accountId": "revenue-sales",
-    "periodId": "2023-06",
-    "value": 977584,
+    "periodId": "2023-03-A",
+    "value": 121,
     "isCalculated": false
   },
   {
-    "id": "revenue-sales_2023-07",
+    "id": "revenue-sales_2024-03-A",
     "accountId": "revenue-sales",
-    "periodId": "2023-07",
-    "value": 977584,
+    "periodId": "2024-03-A",
+    "value": 133.1,
     "isCalculated": false
   },
   {
-    "id": "revenue-sales_2023-08",
+    "id": "revenue-sales_2025-03-A",
     "accountId": "revenue-sales",
-    "periodId": "2023-08",
-    "value": 977584,
+    "periodId": "2025-03-A",
+    "value": 146.41,
     "isCalculated": false
   },
   {
-    "id": "revenue-sales_2023-09",
-    "accountId": "revenue-sales",
-    "periodId": "2023-09",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2023-10",
-    "accountId": "revenue-sales",
-    "periodId": "2023-10",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2023-11",
-    "accountId": "revenue-sales",
-    "periodId": "2023-11",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2023-12",
-    "accountId": "revenue-sales",
-    "periodId": "2023-12",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2024-01",
-    "accountId": "revenue-sales",
-    "periodId": "2024-01",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2024-02",
-    "accountId": "revenue-sales",
-    "periodId": "2024-02",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "revenue-sales_2024-03",
-    "accountId": "revenue-sales",
-    "periodId": "2024-03",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2023-04",
+    "id": "expense-cogs_2021-03-A",
     "accountId": "expense-cogs",
-    "periodId": "2023-04",
-    "value": 347649,
+    "periodId": "2021-03-A",
+    "value": 60,
     "isCalculated": false
   },
   {
-    "id": "expense-cogs_2023-05",
+    "id": "expense-cogs_2022-03-A",
     "accountId": "expense-cogs",
-    "periodId": "2023-05",
-    "value": 347649,
+    "periodId": "2022-03-A",
+    "value": 66,
     "isCalculated": false
   },
   {
-    "id": "expense-cogs_2023-06",
+    "id": "expense-cogs_2023-03-A",
     "accountId": "expense-cogs",
-    "periodId": "2023-06",
-    "value": 347649,
+    "periodId": "2023-03-A",
+    "value": 72.6,
     "isCalculated": false
   },
   {
-    "id": "expense-cogs_2023-07",
+    "id": "expense-cogs_2024-03-A",
     "accountId": "expense-cogs",
-    "periodId": "2023-07",
-    "value": 347649,
+    "periodId": "2024-03-A",
+    "value": 79.86,
     "isCalculated": false
   },
   {
-    "id": "expense-cogs_2023-08",
+    "id": "expense-cogs_2025-03-A",
     "accountId": "expense-cogs",
-    "periodId": "2023-08",
-    "value": 347649,
+    "periodId": "2025-03-A",
+    "value": 87.85,
     "isCalculated": false
   },
   {
-    "id": "expense-cogs_2023-09",
-    "accountId": "expense-cogs",
-    "periodId": "2023-09",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2023-10",
-    "accountId": "expense-cogs",
-    "periodId": "2023-10",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2023-11",
-    "accountId": "expense-cogs",
-    "periodId": "2023-11",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2023-12",
-    "accountId": "expense-cogs",
-    "periodId": "2023-12",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2024-01",
-    "accountId": "expense-cogs",
-    "periodId": "2024-01",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2024-02",
-    "accountId": "expense-cogs",
-    "periodId": "2024-02",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-cogs_2024-03",
-    "accountId": "expense-cogs",
-    "periodId": "2024-03",
-    "value": 347649,
-    "isCalculated": false
-  },
-  {
-    "id": "gross-profit_2023-04",
+    "id": "gross-profit_2021-03-A",
     "accountId": "gross-profit",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 40,
+    "isCalculated": false
   },
   {
-    "id": "gross-profit_2023-05",
+    "id": "gross-profit_2022-03-A",
     "accountId": "gross-profit",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 44,
+    "isCalculated": false
   },
   {
-    "id": "gross-profit_2023-06",
+    "id": "gross-profit_2023-03-A",
     "accountId": "gross-profit",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 48.4,
+    "isCalculated": false
   },
   {
-    "id": "gross-profit_2023-07",
+    "id": "gross-profit_2024-03-A",
     "accountId": "gross-profit",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 53.24,
+    "isCalculated": false
   },
   {
-    "id": "gross-profit_2023-08",
+    "id": "gross-profit_2025-03-A",
     "accountId": "gross-profit",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 58.56,
+    "isCalculated": false
   },
   {
-    "id": "gross-profit_2023-09",
-    "accountId": "gross-profit",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2023-10",
-    "accountId": "gross-profit",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2023-11",
-    "accountId": "gross-profit",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2023-12",
-    "accountId": "gross-profit",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2024-01",
-    "accountId": "gross-profit",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2024-02",
-    "accountId": "gross-profit",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "gross-profit_2024-03",
-    "accountId": "gross-profit",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-advertising_2023-04",
+    "id": "expense-advertising_2021-03-A",
     "accountId": "expense-advertising",
-    "periodId": "2023-04",
-    "value": 878589,
+    "periodId": "2021-03-A",
+    "value": 3,
     "isCalculated": false
   },
   {
-    "id": "expense-advertising_2023-05",
+    "id": "expense-advertising_2022-03-A",
     "accountId": "expense-advertising",
-    "periodId": "2023-05",
-    "value": 878589,
+    "periodId": "2022-03-A",
+    "value": 3.3,
     "isCalculated": false
   },
   {
-    "id": "expense-advertising_2023-06",
+    "id": "expense-advertising_2023-03-A",
     "accountId": "expense-advertising",
-    "periodId": "2023-06",
-    "value": 878589,
+    "periodId": "2023-03-A",
+    "value": 3.63,
     "isCalculated": false
   },
   {
-    "id": "expense-advertising_2023-07",
+    "id": "expense-advertising_2024-03-A",
     "accountId": "expense-advertising",
-    "periodId": "2023-07",
-    "value": 878589,
+    "periodId": "2024-03-A",
+    "value": 3.99,
     "isCalculated": false
   },
   {
-    "id": "expense-advertising_2023-08",
+    "id": "expense-advertising_2025-03-A",
     "accountId": "expense-advertising",
-    "periodId": "2023-08",
-    "value": 878589,
+    "periodId": "2025-03-A",
+    "value": 4.39,
     "isCalculated": false
   },
   {
-    "id": "expense-advertising_2023-09",
-    "accountId": "expense-advertising",
-    "periodId": "2023-09",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2023-10",
-    "accountId": "expense-advertising",
-    "periodId": "2023-10",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2023-11",
-    "accountId": "expense-advertising",
-    "periodId": "2023-11",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2023-12",
-    "accountId": "expense-advertising",
-    "periodId": "2023-12",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2024-01",
-    "accountId": "expense-advertising",
-    "periodId": "2024-01",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2024-02",
-    "accountId": "expense-advertising",
-    "periodId": "2024-02",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-advertising_2024-03",
-    "accountId": "expense-advertising",
-    "periodId": "2024-03",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2023-04",
+    "id": "expense-personnel_2021-03-A",
     "accountId": "expense-personnel",
-    "periodId": "2023-04",
-    "value": 802134,
+    "periodId": "2021-03-A",
+    "value": 5,
     "isCalculated": false
   },
   {
-    "id": "expense-personnel_2023-05",
+    "id": "expense-personnel_2022-03-A",
     "accountId": "expense-personnel",
-    "periodId": "2023-05",
-    "value": 802134,
+    "periodId": "2022-03-A",
+    "value": 5.5,
     "isCalculated": false
   },
   {
-    "id": "expense-personnel_2023-06",
+    "id": "expense-personnel_2023-03-A",
     "accountId": "expense-personnel",
-    "periodId": "2023-06",
-    "value": 802134,
+    "periodId": "2023-03-A",
+    "value": 6.05,
     "isCalculated": false
   },
   {
-    "id": "expense-personnel_2023-07",
+    "id": "expense-personnel_2024-03-A",
     "accountId": "expense-personnel",
-    "periodId": "2023-07",
-    "value": 802134,
+    "periodId": "2024-03-A",
+    "value": 6.66,
     "isCalculated": false
   },
   {
-    "id": "expense-personnel_2023-08",
+    "id": "expense-personnel_2025-03-A",
     "accountId": "expense-personnel",
-    "periodId": "2023-08",
-    "value": 802134,
+    "periodId": "2025-03-A",
+    "value": 7.32,
     "isCalculated": false
   },
   {
-    "id": "expense-personnel_2023-09",
-    "accountId": "expense-personnel",
-    "periodId": "2023-09",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2023-10",
-    "accountId": "expense-personnel",
-    "periodId": "2023-10",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2023-11",
-    "accountId": "expense-personnel",
-    "periodId": "2023-11",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2023-12",
-    "accountId": "expense-personnel",
-    "periodId": "2023-12",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2024-01",
-    "accountId": "expense-personnel",
-    "periodId": "2024-01",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2024-02",
-    "accountId": "expense-personnel",
-    "periodId": "2024-02",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-personnel_2024-03",
-    "accountId": "expense-personnel",
-    "periodId": "2024-03",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2023-04",
+    "id": "expense-depreciation_2021-03-A",
     "accountId": "expense-depreciation",
-    "periodId": "2023-04",
-    "value": 878575,
+    "periodId": "2021-03-A",
+    "value": 7,
     "isCalculated": false
   },
   {
-    "id": "expense-depreciation_2023-05",
+    "id": "expense-depreciation_2022-03-A",
     "accountId": "expense-depreciation",
-    "periodId": "2023-05",
-    "value": 878575,
+    "periodId": "2022-03-A",
+    "value": 7,
     "isCalculated": false
   },
   {
-    "id": "expense-depreciation_2023-06",
+    "id": "expense-depreciation_2023-03-A",
     "accountId": "expense-depreciation",
-    "periodId": "2023-06",
-    "value": 878575,
+    "periodId": "2023-03-A",
+    "value": 7,
     "isCalculated": false
   },
   {
-    "id": "expense-depreciation_2023-07",
+    "id": "expense-depreciation_2024-03-A",
     "accountId": "expense-depreciation",
-    "periodId": "2023-07",
-    "value": 878575,
+    "periodId": "2024-03-A",
+    "value": 7,
     "isCalculated": false
   },
   {
-    "id": "expense-depreciation_2023-08",
+    "id": "expense-depreciation_2025-03-A",
     "accountId": "expense-depreciation",
-    "periodId": "2023-08",
-    "value": 878575,
+    "periodId": "2025-03-A",
+    "value": 7,
     "isCalculated": false
   },
   {
-    "id": "expense-depreciation_2023-09",
-    "accountId": "expense-depreciation",
-    "periodId": "2023-09",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2023-10",
-    "accountId": "expense-depreciation",
-    "periodId": "2023-10",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2023-11",
-    "accountId": "expense-depreciation",
-    "periodId": "2023-11",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2023-12",
-    "accountId": "expense-depreciation",
-    "periodId": "2023-12",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2024-01",
-    "accountId": "expense-depreciation",
-    "periodId": "2024-01",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2024-02",
-    "accountId": "expense-depreciation",
-    "periodId": "2024-02",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-depreciation_2024-03",
-    "accountId": "expense-depreciation",
-    "periodId": "2024-03",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2023-04",
+    "id": "expense-amortization_2021-03-A",
     "accountId": "expense-amortization",
-    "periodId": "2023-04",
-    "value": 878575,
+    "periodId": "2021-03-A",
+    "value": 4,
     "isCalculated": false
   },
   {
-    "id": "expense-amortization_2023-05",
+    "id": "expense-amortization_2022-03-A",
     "accountId": "expense-amortization",
-    "periodId": "2023-05",
-    "value": 878575,
+    "periodId": "2022-03-A",
+    "value": 4.4,
     "isCalculated": false
   },
   {
-    "id": "expense-amortization_2023-06",
+    "id": "expense-amortization_2023-03-A",
     "accountId": "expense-amortization",
-    "periodId": "2023-06",
-    "value": 878575,
+    "periodId": "2023-03-A",
+    "value": 4.84,
     "isCalculated": false
   },
   {
-    "id": "expense-amortization_2023-07",
+    "id": "expense-amortization_2024-03-A",
     "accountId": "expense-amortization",
-    "periodId": "2023-07",
-    "value": 878575,
+    "periodId": "2024-03-A",
+    "value": 5.32,
     "isCalculated": false
   },
   {
-    "id": "expense-amortization_2023-08",
+    "id": "expense-amortization_2025-03-A",
     "accountId": "expense-amortization",
-    "periodId": "2023-08",
-    "value": 878575,
+    "periodId": "2025-03-A",
+    "value": 5.86,
     "isCalculated": false
   },
   {
-    "id": "expense-amortization_2023-09",
-    "accountId": "expense-amortization",
-    "periodId": "2023-09",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2023-10",
-    "accountId": "expense-amortization",
-    "periodId": "2023-10",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2023-11",
-    "accountId": "expense-amortization",
-    "periodId": "2023-11",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2023-12",
-    "accountId": "expense-amortization",
-    "periodId": "2023-12",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2024-01",
-    "accountId": "expense-amortization",
-    "periodId": "2024-01",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2024-02",
-    "accountId": "expense-amortization",
-    "periodId": "2024-02",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-amortization_2024-03",
-    "accountId": "expense-amortization",
-    "periodId": "2024-03",
-    "value": 878575,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2023-04",
+    "id": "expense-other-sga_2021-03-A",
     "accountId": "expense-other-sga",
-    "periodId": "2023-04",
-    "value": 802134,
+    "periodId": "2021-03-A",
+    "value": 2,
     "isCalculated": false
   },
   {
-    "id": "expense-other-sga_2023-05",
+    "id": "expense-other-sga_2022-03-A",
     "accountId": "expense-other-sga",
-    "periodId": "2023-05",
-    "value": 802134,
+    "periodId": "2022-03-A",
+    "value": 2,
     "isCalculated": false
   },
   {
-    "id": "expense-other-sga_2023-06",
+    "id": "expense-other-sga_2023-03-A",
     "accountId": "expense-other-sga",
-    "periodId": "2023-06",
-    "value": 802134,
+    "periodId": "2023-03-A",
+    "value": 2,
     "isCalculated": false
   },
   {
-    "id": "expense-other-sga_2023-07",
+    "id": "expense-other-sga_2024-03-A",
     "accountId": "expense-other-sga",
-    "periodId": "2023-07",
-    "value": 802134,
+    "periodId": "2024-03-A",
+    "value": 2,
     "isCalculated": false
   },
   {
-    "id": "expense-other-sga_2023-08",
+    "id": "expense-other-sga_2025-03-A",
     "accountId": "expense-other-sga",
-    "periodId": "2023-08",
-    "value": 802134,
+    "periodId": "2025-03-A",
+    "value": 2,
     "isCalculated": false
   },
   {
-    "id": "expense-other-sga_2023-09",
-    "accountId": "expense-other-sga",
-    "periodId": "2023-09",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2023-10",
-    "accountId": "expense-other-sga",
-    "periodId": "2023-10",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2023-11",
-    "accountId": "expense-other-sga",
-    "periodId": "2023-11",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2023-12",
-    "accountId": "expense-other-sga",
-    "periodId": "2023-12",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2024-01",
-    "accountId": "expense-other-sga",
-    "periodId": "2024-01",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2024-02",
-    "accountId": "expense-other-sga",
-    "periodId": "2024-02",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-other-sga_2024-03",
-    "accountId": "expense-other-sga",
-    "periodId": "2024-03",
-    "value": 802134,
-    "isCalculated": false
-  },
-  {
-    "id": "expense-sga_2023-04",
+    "id": "expense-sga_2021-03-A",
     "accountId": "expense-sga",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 21,
+    "isCalculated": false
   },
   {
-    "id": "expense-sga_2023-05",
+    "id": "expense-sga_2022-03-A",
     "accountId": "expense-sga",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 22.2,
+    "isCalculated": false
   },
   {
-    "id": "expense-sga_2023-06",
+    "id": "expense-sga_2023-03-A",
     "accountId": "expense-sga",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 23.52,
+    "isCalculated": false
   },
   {
-    "id": "expense-sga_2023-07",
+    "id": "expense-sga_2024-03-A",
     "accountId": "expense-sga",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 24.97,
+    "isCalculated": false
   },
   {
-    "id": "expense-sga_2023-08",
+    "id": "expense-sga_2025-03-A",
     "accountId": "expense-sga",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 26.57,
+    "isCalculated": false
   },
   {
-    "id": "expense-sga_2023-09",
-    "accountId": "expense-sga",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2023-10",
-    "accountId": "expense-sga",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2023-11",
-    "accountId": "expense-sga",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2023-12",
-    "accountId": "expense-sga",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2024-01",
-    "accountId": "expense-sga",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2024-02",
-    "accountId": "expense-sga",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "expense-sga_2024-03",
-    "accountId": "expense-sga",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2023-04",
+    "id": "operating-profit_2021-03-A",
     "accountId": "operating-profit",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 19,
+    "isCalculated": false
   },
   {
-    "id": "operating-profit_2023-05",
+    "id": "operating-profit_2022-03-A",
     "accountId": "operating-profit",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 21.8,
+    "isCalculated": false
   },
   {
-    "id": "operating-profit_2023-06",
+    "id": "operating-profit_2023-03-A",
     "accountId": "operating-profit",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 24.88,
+    "isCalculated": false
   },
   {
-    "id": "operating-profit_2023-07",
+    "id": "operating-profit_2024-03-A",
     "accountId": "operating-profit",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 28.27,
+    "isCalculated": false
   },
   {
-    "id": "operating-profit_2023-08",
+    "id": "operating-profit_2025-03-A",
     "accountId": "operating-profit",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 31.99,
+    "isCalculated": false
   },
   {
-    "id": "operating-profit_2023-09",
-    "accountId": "operating-profit",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2023-10",
-    "accountId": "operating-profit",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2023-11",
-    "accountId": "operating-profit",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2023-12",
-    "accountId": "operating-profit",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2024-01",
-    "accountId": "operating-profit",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2024-02",
-    "accountId": "operating-profit",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "operating-profit_2024-03",
-    "accountId": "operating-profit",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2023-04",
+    "id": "asset-cash_2021-03-A",
     "accountId": "asset-cash",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 50,
+    "isCalculated": false
   },
   {
-    "id": "asset-cash_2023-05",
+    "id": "asset-cash_2022-03-A",
     "accountId": "asset-cash",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 55,
+    "isCalculated": false
   },
   {
-    "id": "asset-cash_2023-06",
+    "id": "asset-cash_2023-03-A",
     "accountId": "asset-cash",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 60.5,
+    "isCalculated": false
   },
   {
-    "id": "asset-cash_2023-07",
+    "id": "asset-cash_2024-03-A",
     "accountId": "asset-cash",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 66.55,
+    "isCalculated": false
   },
   {
-    "id": "asset-cash_2023-08",
+    "id": "asset-cash_2025-03-A",
     "accountId": "asset-cash",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 73.21,
+    "isCalculated": false
   },
   {
-    "id": "asset-cash_2023-09",
-    "accountId": "asset-cash",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2023-10",
-    "accountId": "asset-cash",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2023-11",
-    "accountId": "asset-cash",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2023-12",
-    "accountId": "asset-cash",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2024-01",
-    "accountId": "asset-cash",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2024-02",
-    "accountId": "asset-cash",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-cash_2024-03",
-    "accountId": "asset-cash",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-ar_2023-04",
+    "id": "asset-ar_2021-03-A",
     "accountId": "asset-ar",
-    "periodId": "2023-04",
-    "value": 979450,
+    "periodId": "2021-03-A",
+    "value": 20,
     "isCalculated": false
   },
   {
-    "id": "asset-ar_2023-05",
+    "id": "asset-ar_2022-03-A",
     "accountId": "asset-ar",
-    "periodId": "2023-05",
-    "value": 979450,
+    "periodId": "2022-03-A",
+    "value": 22,
     "isCalculated": false
   },
   {
-    "id": "asset-ar_2023-06",
+    "id": "asset-ar_2023-03-A",
     "accountId": "asset-ar",
-    "periodId": "2023-06",
-    "value": 979450,
+    "periodId": "2023-03-A",
+    "value": 24.2,
     "isCalculated": false
   },
   {
-    "id": "asset-ar_2023-07",
+    "id": "asset-ar_2024-03-A",
     "accountId": "asset-ar",
-    "periodId": "2023-07",
-    "value": 979450,
+    "periodId": "2024-03-A",
+    "value": 26.62,
     "isCalculated": false
   },
   {
-    "id": "asset-ar_2023-08",
+    "id": "asset-ar_2025-03-A",
     "accountId": "asset-ar",
-    "periodId": "2023-08",
-    "value": 979450,
+    "periodId": "2025-03-A",
+    "value": 29.28,
     "isCalculated": false
   },
   {
-    "id": "asset-ar_2023-09",
-    "accountId": "asset-ar",
-    "periodId": "2023-09",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2023-10",
-    "accountId": "asset-ar",
-    "periodId": "2023-10",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2023-11",
-    "accountId": "asset-ar",
-    "periodId": "2023-11",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2023-12",
-    "accountId": "asset-ar",
-    "periodId": "2023-12",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2024-01",
-    "accountId": "asset-ar",
-    "periodId": "2024-01",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2024-02",
-    "accountId": "asset-ar",
-    "periodId": "2024-02",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-ar_2024-03",
-    "accountId": "asset-ar",
-    "periodId": "2024-03",
-    "value": 979450,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2023-04",
+    "id": "asset-inventory_2021-03-A",
     "accountId": "asset-inventory",
-    "periodId": "2023-04",
-    "value": 602999,
+    "periodId": "2021-03-A",
+    "value": 15,
     "isCalculated": false
   },
   {
-    "id": "asset-inventory_2023-05",
+    "id": "asset-inventory_2022-03-A",
     "accountId": "asset-inventory",
-    "periodId": "2023-05",
-    "value": 602999,
+    "periodId": "2022-03-A",
+    "value": 16.5,
     "isCalculated": false
   },
   {
-    "id": "asset-inventory_2023-06",
+    "id": "asset-inventory_2023-03-A",
     "accountId": "asset-inventory",
-    "periodId": "2023-06",
-    "value": 602999,
+    "periodId": "2023-03-A",
+    "value": 18.15,
     "isCalculated": false
   },
   {
-    "id": "asset-inventory_2023-07",
+    "id": "asset-inventory_2024-03-A",
     "accountId": "asset-inventory",
-    "periodId": "2023-07",
-    "value": 602999,
+    "periodId": "2024-03-A",
+    "value": 19.97,
     "isCalculated": false
   },
   {
-    "id": "asset-inventory_2023-08",
+    "id": "asset-inventory_2025-03-A",
     "accountId": "asset-inventory",
-    "periodId": "2023-08",
-    "value": 602999,
+    "periodId": "2025-03-A",
+    "value": 21.96,
     "isCalculated": false
   },
   {
-    "id": "asset-inventory_2023-09",
-    "accountId": "asset-inventory",
-    "periodId": "2023-09",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2023-10",
-    "accountId": "asset-inventory",
-    "periodId": "2023-10",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2023-11",
-    "accountId": "asset-inventory",
-    "periodId": "2023-11",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2023-12",
-    "accountId": "asset-inventory",
-    "periodId": "2023-12",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2024-01",
-    "accountId": "asset-inventory",
-    "periodId": "2024-01",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2024-02",
-    "accountId": "asset-inventory",
-    "periodId": "2024-02",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-inventory_2024-03",
-    "accountId": "asset-inventory",
-    "periodId": "2024-03",
-    "value": 602999,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2023-04",
+    "id": "tangible-fixed-asset_2021-03-A",
     "accountId": "tangible-fixed-asset",
-    "periodId": "2023-04",
-    "value": 979456,
+    "periodId": "2021-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "tangible-fixed-asset_2023-05",
+    "id": "tangible-fixed-asset_2022-03-A",
     "accountId": "tangible-fixed-asset",
-    "periodId": "2023-05",
-    "value": 979456,
+    "periodId": "2022-03-A",
+    "value": 103,
     "isCalculated": false
   },
   {
-    "id": "tangible-fixed-asset_2023-06",
+    "id": "tangible-fixed-asset_2023-03-A",
     "accountId": "tangible-fixed-asset",
-    "periodId": "2023-06",
-    "value": 979456,
+    "periodId": "2023-03-A",
+    "value": 106.09,
     "isCalculated": false
   },
   {
-    "id": "tangible-fixed-asset_2023-07",
+    "id": "tangible-fixed-asset_2024-03-A",
     "accountId": "tangible-fixed-asset",
-    "periodId": "2023-07",
-    "value": 979456,
+    "periodId": "2024-03-A",
+    "value": 109.27,
     "isCalculated": false
   },
   {
-    "id": "tangible-fixed-asset_2023-08",
+    "id": "tangible-fixed-asset_2025-03-A",
     "accountId": "tangible-fixed-asset",
-    "periodId": "2023-08",
-    "value": 979456,
+    "periodId": "2025-03-A",
+    "value": 112.55,
     "isCalculated": false
   },
   {
-    "id": "tangible-fixed-asset_2023-09",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2023-09",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2023-10",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2023-10",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2023-11",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2023-11",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2023-12",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2023-12",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2024-01",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2024-01",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2024-02",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2024-02",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "tangible-fixed-asset_2024-03",
-    "accountId": "tangible-fixed-asset",
-    "periodId": "2024-03",
-    "value": 979456,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2023-04",
+    "id": "intangible-fixed-asset_2021-03-A",
     "accountId": "intangible-fixed-asset",
-    "periodId": "2023-04",
-    "value": 977584,
+    "periodId": "2021-03-A",
+    "value": 30,
     "isCalculated": false
   },
   {
-    "id": "intangible-fixed-asset_2023-05",
+    "id": "intangible-fixed-asset_2022-03-A",
     "accountId": "intangible-fixed-asset",
-    "periodId": "2023-05",
-    "value": 977584,
+    "periodId": "2022-03-A",
+    "value": 33,
     "isCalculated": false
   },
   {
-    "id": "intangible-fixed-asset_2023-06",
+    "id": "intangible-fixed-asset_2023-03-A",
     "accountId": "intangible-fixed-asset",
-    "periodId": "2023-06",
-    "value": 977584,
+    "periodId": "2023-03-A",
+    "value": 36.3,
     "isCalculated": false
   },
   {
-    "id": "intangible-fixed-asset_2023-07",
+    "id": "intangible-fixed-asset_2024-03-A",
     "accountId": "intangible-fixed-asset",
-    "periodId": "2023-07",
-    "value": 977584,
+    "periodId": "2024-03-A",
+    "value": 39.93,
     "isCalculated": false
   },
   {
-    "id": "intangible-fixed-asset_2023-08",
+    "id": "intangible-fixed-asset_2025-03-A",
     "accountId": "intangible-fixed-asset",
-    "periodId": "2023-08",
-    "value": 977584,
+    "periodId": "2025-03-A",
+    "value": 43.92,
     "isCalculated": false
   },
   {
-    "id": "intangible-fixed-asset_2023-09",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2023-09",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2023-10",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2023-10",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2023-11",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2023-11",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2023-12",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2023-12",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2024-01",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2024-01",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2024-02",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2024-02",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "intangible-fixed-asset_2024-03",
-    "accountId": "intangible-fixed-asset",
-    "periodId": "2024-03",
-    "value": 977584,
-    "isCalculated": false
-  },
-  {
-    "id": "asset-total_2023-04",
+    "id": "asset-total_2021-03-A",
     "accountId": "asset-total",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 215,
+    "isCalculated": false
   },
   {
-    "id": "asset-total_2023-05",
+    "id": "asset-total_2022-03-A",
     "accountId": "asset-total",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 229.5,
+    "isCalculated": false
   },
   {
-    "id": "asset-total_2023-06",
+    "id": "asset-total_2023-03-A",
     "accountId": "asset-total",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 245.14,
+    "isCalculated": false
   },
   {
-    "id": "asset-total_2023-07",
+    "id": "asset-total_2024-03-A",
     "accountId": "asset-total",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 262.34,
+    "isCalculated": false
   },
   {
-    "id": "asset-total_2023-08",
+    "id": "asset-total_2025-03-A",
     "accountId": "asset-total",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 280.92,
+    "isCalculated": false
   },
   {
-    "id": "asset-total_2023-09",
-    "accountId": "asset-total",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2023-10",
-    "accountId": "asset-total",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2023-11",
-    "accountId": "asset-total",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2023-12",
-    "accountId": "asset-total",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2024-01",
-    "accountId": "asset-total",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2024-02",
-    "accountId": "asset-total",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "asset-total_2024-03",
-    "accountId": "asset-total",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-ap_2023-04",
+    "id": "liability-ap_2021-03-A",
     "accountId": "liability-ap",
-    "periodId": "2023-04",
-    "value": 878589,
+    "periodId": "2021-03-A",
+    "value": 12,
     "isCalculated": false
   },
   {
-    "id": "liability-ap_2023-05",
+    "id": "liability-ap_2022-03-A",
     "accountId": "liability-ap",
-    "periodId": "2023-05",
-    "value": 878589,
+    "periodId": "2022-03-A",
+    "value": 13.2,
     "isCalculated": false
   },
   {
-    "id": "liability-ap_2023-06",
+    "id": "liability-ap_2023-03-A",
     "accountId": "liability-ap",
-    "periodId": "2023-06",
-    "value": 878589,
+    "periodId": "2023-03-A",
+    "value": 14.52,
     "isCalculated": false
   },
   {
-    "id": "liability-ap_2023-07",
+    "id": "liability-ap_2024-03-A",
     "accountId": "liability-ap",
-    "periodId": "2023-07",
-    "value": 878589,
+    "periodId": "2024-03-A",
+    "value": 15.97,
     "isCalculated": false
   },
   {
-    "id": "liability-ap_2023-08",
+    "id": "liability-ap_2025-03-A",
     "accountId": "liability-ap",
-    "periodId": "2023-08",
-    "value": 878589,
+    "periodId": "2025-03-A",
+    "value": 17.57,
     "isCalculated": false
   },
   {
-    "id": "liability-ap_2023-09",
-    "accountId": "liability-ap",
-    "periodId": "2023-09",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2023-10",
-    "accountId": "liability-ap",
-    "periodId": "2023-10",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2023-11",
-    "accountId": "liability-ap",
-    "periodId": "2023-11",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2023-12",
-    "accountId": "liability-ap",
-    "periodId": "2023-12",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2024-01",
-    "accountId": "liability-ap",
-    "periodId": "2024-01",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2024-02",
-    "accountId": "liability-ap",
-    "periodId": "2024-02",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-ap_2024-03",
-    "accountId": "liability-ap",
-    "periodId": "2024-03",
-    "value": 878589,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2023-04",
+    "id": "liability-loan_2021-03-A",
     "accountId": "liability-loan",
-    "periodId": "2023-04",
-    "value": 71722,
+    "periodId": "2021-03-A",
+    "value": 80,
     "isCalculated": false
   },
   {
-    "id": "liability-loan_2023-05",
+    "id": "liability-loan_2022-03-A",
     "accountId": "liability-loan",
-    "periodId": "2023-05",
-    "value": 71722,
+    "periodId": "2022-03-A",
+    "value": 80,
     "isCalculated": false
   },
   {
-    "id": "liability-loan_2023-06",
+    "id": "liability-loan_2023-03-A",
     "accountId": "liability-loan",
-    "periodId": "2023-06",
-    "value": 71722,
+    "periodId": "2023-03-A",
+    "value": 80,
     "isCalculated": false
   },
   {
-    "id": "liability-loan_2023-07",
+    "id": "liability-loan_2024-03-A",
     "accountId": "liability-loan",
-    "periodId": "2023-07",
-    "value": 71722,
+    "periodId": "2024-03-A",
+    "value": 80,
     "isCalculated": false
   },
   {
-    "id": "liability-loan_2023-08",
+    "id": "liability-loan_2025-03-A",
     "accountId": "liability-loan",
-    "periodId": "2023-08",
-    "value": 71722,
+    "periodId": "2025-03-A",
+    "value": 80,
     "isCalculated": false
   },
   {
-    "id": "liability-loan_2023-09",
-    "accountId": "liability-loan",
-    "periodId": "2023-09",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2023-10",
-    "accountId": "liability-loan",
-    "periodId": "2023-10",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2023-11",
-    "accountId": "liability-loan",
-    "periodId": "2023-11",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2023-12",
-    "accountId": "liability-loan",
-    "periodId": "2023-12",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2024-01",
-    "accountId": "liability-loan",
-    "periodId": "2024-01",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2024-02",
-    "accountId": "liability-loan",
-    "periodId": "2024-02",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-loan_2024-03",
-    "accountId": "liability-loan",
-    "periodId": "2024-03",
-    "value": 71722,
-    "isCalculated": false
-  },
-  {
-    "id": "liability-total_2023-04",
+    "id": "liability-total_2021-03-A",
     "accountId": "liability-total",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2021-03-A",
+    "value": 92,
+    "isCalculated": false
   },
   {
-    "id": "liability-total_2023-05",
+    "id": "liability-total_2022-03-A",
     "accountId": "liability-total",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2022-03-A",
+    "value": 93.2,
+    "isCalculated": false
   },
   {
-    "id": "liability-total_2023-06",
+    "id": "liability-total_2023-03-A",
     "accountId": "liability-total",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 94.52,
+    "isCalculated": false
   },
   {
-    "id": "liability-total_2023-07",
+    "id": "liability-total_2024-03-A",
     "accountId": "liability-total",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 95.97,
+    "isCalculated": false
   },
   {
-    "id": "liability-total_2023-08",
+    "id": "liability-total_2025-03-A",
     "accountId": "liability-total",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 97.57,
+    "isCalculated": false
   },
   {
-    "id": "liability-total_2023-09",
-    "accountId": "liability-total",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2023-10",
-    "accountId": "liability-total",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2023-11",
-    "accountId": "liability-total",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2023-12",
-    "accountId": "liability-total",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2024-01",
-    "accountId": "liability-total",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2024-02",
-    "accountId": "liability-total",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "liability-total_2024-03",
-    "accountId": "liability-total",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-capital_2023-04",
+    "id": "equity-capital_2021-03-A",
     "accountId": "equity-capital",
-    "periodId": "2023-04",
-    "value": 709659,
+    "periodId": "2021-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "equity-capital_2023-05",
+    "id": "equity-capital_2022-03-A",
     "accountId": "equity-capital",
-    "periodId": "2023-05",
-    "value": 709659,
+    "periodId": "2022-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "equity-capital_2023-06",
+    "id": "equity-capital_2023-03-A",
     "accountId": "equity-capital",
-    "periodId": "2023-06",
-    "value": 709659,
+    "periodId": "2023-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "equity-capital_2023-07",
+    "id": "equity-capital_2024-03-A",
     "accountId": "equity-capital",
-    "periodId": "2023-07",
-    "value": 709659,
+    "periodId": "2024-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "equity-capital_2023-08",
+    "id": "equity-capital_2025-03-A",
     "accountId": "equity-capital",
-    "periodId": "2023-08",
-    "value": 709659,
+    "periodId": "2025-03-A",
+    "value": 100,
     "isCalculated": false
   },
   {
-    "id": "equity-capital_2023-09",
-    "accountId": "equity-capital",
-    "periodId": "2023-09",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2023-10",
-    "accountId": "equity-capital",
-    "periodId": "2023-10",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2023-11",
-    "accountId": "equity-capital",
-    "periodId": "2023-11",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2023-12",
-    "accountId": "equity-capital",
-    "periodId": "2023-12",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2024-01",
-    "accountId": "equity-capital",
-    "periodId": "2024-01",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2024-02",
-    "accountId": "equity-capital",
-    "periodId": "2024-02",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-capital_2024-03",
-    "accountId": "equity-capital",
-    "periodId": "2024-03",
-    "value": 709659,
-    "isCalculated": false
-  },
-  {
-    "id": "equity-retained-earnings_2023-04",
+    "id": "equity-retained-earnings_2021-03-A",
     "accountId": "equity-retained-earnings",
-    "periodId": "2023-04",
-    "value": 211781,
+    "periodId": "2021-03-A",
+    "value": 23,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-05",
+    "id": "equity-retained-earnings_2022-03-A",
     "accountId": "equity-retained-earnings",
-    "periodId": "2023-05",
-    "value": 211781,
+    "periodId": "2022-03-A",
+    "value": 36.3,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-06",
+    "id": "equity-retained-earnings_2023-03-A",
     "accountId": "equity-retained-earnings",
-    "periodId": "2023-06",
-    "value": 211781,
+    "periodId": "2023-03-A",
+    "value": 50.62,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-07",
+    "id": "equity-retained-earnings_2024-03-A",
     "accountId": "equity-retained-earnings",
-    "periodId": "2023-07",
-    "value": 211781,
+    "periodId": "2024-03-A",
+    "value": 66.37,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-08",
+    "id": "equity-retained-earnings_2025-03-A",
     "accountId": "equity-retained-earnings",
-    "periodId": "2023-08",
-    "value": 211781,
+    "periodId": "2025-03-A",
+    "value": 83.35,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-09",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2023-09",
-    "value": 211781,
+    "id": "equity-total_2021-03-A",
+    "accountId": "equity-total",
+    "periodId": "2021-03-A",
+    "value": 123,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-10",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2023-10",
-    "value": 211781,
+    "id": "equity-total_2022-03-A",
+    "accountId": "equity-total",
+    "periodId": "2022-03-A",
+    "value": 136.3,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-11",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2023-11",
-    "value": 211781,
+    "id": "equity-total_2023-03-A",
+    "accountId": "equity-total",
+    "periodId": "2023-03-A",
+    "value": 150.62,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2023-12",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2023-12",
-    "value": 211781,
+    "id": "equity-total_2024-03-A",
+    "accountId": "equity-total",
+    "periodId": "2024-03-A",
+    "value": 166.37,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2024-01",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2024-01",
-    "value": 211781,
+    "id": "equity-total_2025-03-A",
+    "accountId": "equity-total",
+    "periodId": "2025-03-A",
+    "value": 183.35,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2024-02",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2024-02",
-    "value": 211781,
+    "id": "equity-liability-total_2021-03-A",
+    "accountId": "equity-liability-total",
+    "periodId": "2021-03-A",
+    "value": 215,
     "isCalculated": false
   },
   {
-    "id": "equity-retained-earnings_2024-03",
-    "accountId": "equity-retained-earnings",
-    "periodId": "2024-03",
-    "value": 211781,
+    "id": "equity-liability-total_2022-03-A",
+    "accountId": "equity-liability-total",
+    "periodId": "2022-03-A",
+    "value": 229.5,
     "isCalculated": false
   },
   {
-    "id": "equity-total_2023-04",
-    "accountId": "equity-total",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-05",
-    "accountId": "equity-total",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-06",
-    "accountId": "equity-total",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-07",
-    "accountId": "equity-total",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-08",
-    "accountId": "equity-total",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-09",
-    "accountId": "equity-total",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-10",
-    "accountId": "equity-total",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-11",
-    "accountId": "equity-total",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2023-12",
-    "accountId": "equity-total",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2024-01",
-    "accountId": "equity-total",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2024-02",
-    "accountId": "equity-total",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-total_2024-03",
-    "accountId": "equity-total",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
-  },
-  {
-    "id": "equity-liability-total_2023-04",
+    "id": "equity-liability-total_2023-03-A",
     "accountId": "equity-liability-total",
-    "periodId": "2023-04",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2023-03-A",
+    "value": 245.14,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-05",
+    "id": "equity-liability-total_2024-03-A",
     "accountId": "equity-liability-total",
-    "periodId": "2023-05",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2024-03-A",
+    "value": 262.34,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-06",
+    "id": "equity-liability-total_2025-03-A",
     "accountId": "equity-liability-total",
-    "periodId": "2023-06",
-    "value": 0,
-    "isCalculated": true
+    "periodId": "2025-03-A",
+    "value": 280.92,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-07",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-07",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-tangible-investment_2021-03-A",
+    "accountId": "ppe-tangible-investment",
+    "periodId": "2021-03-A",
+    "value": 10,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-08",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-08",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-tangible-investment_2022-03-A",
+    "accountId": "ppe-tangible-investment",
+    "periodId": "2022-03-A",
+    "value": 11,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-09",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-09",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-tangible-investment_2023-03-A",
+    "accountId": "ppe-tangible-investment",
+    "periodId": "2023-03-A",
+    "value": 12.1,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-10",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-10",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-tangible-investment_2024-03-A",
+    "accountId": "ppe-tangible-investment",
+    "periodId": "2024-03-A",
+    "value": 13.31,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-11",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-11",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-tangible-investment_2025-03-A",
+    "accountId": "ppe-tangible-investment",
+    "periodId": "2025-03-A",
+    "value": 14.64,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2023-12",
-    "accountId": "equity-liability-total",
-    "periodId": "2023-12",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-intangible-investment_2021-03-A",
+    "accountId": "ppe-intangible-investment",
+    "periodId": "2021-03-A",
+    "value": 3,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2024-01",
-    "accountId": "equity-liability-total",
-    "periodId": "2024-01",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-intangible-investment_2022-03-A",
+    "accountId": "ppe-intangible-investment",
+    "periodId": "2022-03-A",
+    "value": 3.3,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2024-02",
-    "accountId": "equity-liability-total",
-    "periodId": "2024-02",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-intangible-investment_2023-03-A",
+    "accountId": "ppe-intangible-investment",
+    "periodId": "2023-03-A",
+    "value": 3.63,
+    "isCalculated": false
   },
   {
-    "id": "equity-liability-total_2024-03",
-    "accountId": "equity-liability-total",
-    "periodId": "2024-03",
-    "value": 0,
-    "isCalculated": true
+    "id": "ppe-intangible-investment_2024-03-A",
+    "accountId": "ppe-intangible-investment",
+    "periodId": "2024-03-A",
+    "value": 3.99,
+    "isCalculated": false
   },
   {
-    "id": "cf-operating_2023-04",
-    "accountId": "cf-operating",
-    "periodId": "2023-04",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-05",
-    "accountId": "cf-operating",
-    "periodId": "2023-05",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-06",
-    "accountId": "cf-operating",
-    "periodId": "2023-06",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-07",
-    "accountId": "cf-operating",
-    "periodId": "2023-07",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-08",
-    "accountId": "cf-operating",
-    "periodId": "2023-08",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-09",
-    "accountId": "cf-operating",
-    "periodId": "2023-09",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-10",
-    "accountId": "cf-operating",
-    "periodId": "2023-10",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-11",
-    "accountId": "cf-operating",
-    "periodId": "2023-11",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2023-12",
-    "accountId": "cf-operating",
-    "periodId": "2023-12",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2024-01",
-    "accountId": "cf-operating",
-    "periodId": "2024-01",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2024-02",
-    "accountId": "cf-operating",
-    "periodId": "2024-02",
-    "value": 998173
-  },
-  {
-    "id": "cf-operating_2024-03",
-    "accountId": "cf-operating",
-    "periodId": "2024-03",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-04",
-    "accountId": "cf-investing",
-    "periodId": "2023-04",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-05",
-    "accountId": "cf-investing",
-    "periodId": "2023-05",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-06",
-    "accountId": "cf-investing",
-    "periodId": "2023-06",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-07",
-    "accountId": "cf-investing",
-    "periodId": "2023-07",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-08",
-    "accountId": "cf-investing",
-    "periodId": "2023-08",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-09",
-    "accountId": "cf-investing",
-    "periodId": "2023-09",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-10",
-    "accountId": "cf-investing",
-    "periodId": "2023-10",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-11",
-    "accountId": "cf-investing",
-    "periodId": "2023-11",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2023-12",
-    "accountId": "cf-investing",
-    "periodId": "2023-12",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2024-01",
-    "accountId": "cf-investing",
-    "periodId": "2024-01",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2024-02",
-    "accountId": "cf-investing",
-    "periodId": "2024-02",
-    "value": 998173
-  },
-  {
-    "id": "cf-investing_2024-03",
-    "accountId": "cf-investing",
-    "periodId": "2024-03",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-04",
-    "accountId": "cf-financing",
-    "periodId": "2023-04",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-05",
-    "accountId": "cf-financing",
-    "periodId": "2023-05",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-06",
-    "accountId": "cf-financing",
-    "periodId": "2023-06",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-07",
-    "accountId": "cf-financing",
-    "periodId": "2023-07",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-08",
-    "accountId": "cf-financing",
-    "periodId": "2023-08",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-09",
-    "accountId": "cf-financing",
-    "periodId": "2023-09",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-10",
-    "accountId": "cf-financing",
-    "periodId": "2023-10",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-11",
-    "accountId": "cf-financing",
-    "periodId": "2023-11",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2023-12",
-    "accountId": "cf-financing",
-    "periodId": "2023-12",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2024-01",
-    "accountId": "cf-financing",
-    "periodId": "2024-01",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2024-02",
-    "accountId": "cf-financing",
-    "periodId": "2024-02",
-    "value": 998173
-  },
-  {
-    "id": "cf-financing_2024-03",
-    "accountId": "cf-financing",
-    "periodId": "2024-03",
-    "value": 998173
+    "id": "ppe-intangible-investment_2025-03-A",
+    "accountId": "ppe-intangible-investment",
+    "periodId": "2025-03-A",
+    "value": 4.39,
+    "isCalculated": false
   }
 ]

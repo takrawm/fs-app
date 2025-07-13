@@ -533,11 +533,11 @@ export function validateFinancialValue(
     });
   }
 
-  if (typeof value.isManualInput !== "boolean") {
+  if (typeof value.isCalculated !== "boolean") {
     errors.push({
-      field: "isManualInput",
-      message: "isManualInputはbooleanである必要があります",
-      value: value.isManualInput,
+      field: "isCalculated",
+      message: "isCalculatedはbooleanである必要があります",
+      value: value.isCalculated,
       context,
     });
   }
@@ -551,16 +551,12 @@ export function validateFinancialValue(
     });
   }
 
-  if (
-    !value.lastUpdated ||
-    !(
-      value.lastUpdated instanceof Date || typeof value.lastUpdated === "string"
-    )
-  ) {
+  // idフィールドの検証
+  if (!value.id || typeof value.id !== "string") {
     errors.push({
-      field: "lastUpdated",
-      message: "lastUpdatedは日付である必要があります",
-      value: value.lastUpdated,
+      field: "id",
+      message: "idは必須の文字列フィールドです",
+      value: value.id,
       context,
     });
   }
@@ -933,11 +929,11 @@ export function exampleUsage(): void {
   };
 
   const sampleFinancialValue: FinancialValue = {
+    id: "revenue-sales_2024-01",
     accountId: "revenue-sales",
     periodId: "2024-01",
     value: 1000000,
-    isManualInput: true,
-    lastUpdated: new Date(),
+    isCalculated: false,
   };
 
   // 検証実行
