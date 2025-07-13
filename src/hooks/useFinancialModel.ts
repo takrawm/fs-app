@@ -1,7 +1,7 @@
-// @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { FinancialModelManager } from "../models/FinancialModelManager";
+import { AccountModel } from "../models/Account";
 import type { Account, SheetType } from "../types/accountTypes";
 import type { Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
@@ -11,7 +11,7 @@ import { seedDataLoader } from "../seed";
 
 export const useFinancialModel = () => {
   const [manager] = useState(() => new FinancialModelManager());
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accounts, setAccounts] = useState<AccountModel[]>([]);
   const [periods, setPeriods] = useState<Period[]>([]);
   const [calculationResults, setCalculationResults] = useState<
     Map<string, CalculationResult>
@@ -62,7 +62,9 @@ export const useFinancialModel = () => {
   }, [manager]);
 
   const addAccount = useCallback(
-    (accountData: Omit<Account, "id">) => {
+    (
+      accountData: Partial<Account> & { accountName: string; sheet: SheetType }
+    ) => {
       const newAccount = manager.addAccount(accountData);
       setAccounts(manager.getAllAccounts());
       return newAccount;
@@ -187,14 +189,14 @@ export const useFinancialModel = () => {
   );
 
   const getAccountsBySheet = useCallback(
-    (sheet: SheetType): Account[] => {
+    (sheet: SheetType): AccountModel[] => {
       return accounts.filter((account) => account.sheet === sheet);
     },
     [accounts]
   );
 
   const getAccountsByParent = useCallback(
-    (parentId: string | null): Account[] => {
+    (parentId: string | null): AccountModel[] => {
       return accounts.filter((account) => account.parentId === parentId);
     },
     [accounts]
@@ -274,7 +276,8 @@ export const useFinancialModel = () => {
     }, {} as Record<SheetType, number>);
 
     const byParameter = accounts.reduce((acc, account) => {
-      acc[account.parameter.type] = (acc[account.parameter.type] || 0) + 1;
+      const paramType = account.parameter.paramType || "NULL";
+      acc[paramType] = (acc[paramType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
@@ -324,6 +327,6 @@ export const useFinancialModel = () => {
 
 // 型定義
 interface AccountHierarchyNode {
-  account: Account;
+  account: AccountModel;
   children: AccountHierarchyNode[];
 }

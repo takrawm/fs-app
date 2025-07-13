@@ -34,10 +34,6 @@ export class AccountModel implements Account {
   parameter: Parameter;
   flowAccountCfImpact: FlowAccountCfImpact;
 
-  // 追加のメタデータ
-  createdAt: Date;
-  updatedAt: Date;
-
   constructor(
     data: Partial<Account> & { accountName: string; sheet: SheetType }
   ) {
@@ -54,8 +50,6 @@ export class AccountModel implements Account {
       paramReferences: null,
     };
     this.flowAccountCfImpact = data.flowAccountCfImpact || { type: null };
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
   }
 
   private generateId(): string {
@@ -73,7 +67,6 @@ export class AccountModel implements Account {
     if (data.parameter !== undefined) this.parameter = data.parameter;
     if (data.flowAccountCfImpact !== undefined)
       this.flowAccountCfImpact = data.flowAccountCfImpact;
-    this.updatedAt = new Date();
   }
 
   // シートタイプ判定メソッド

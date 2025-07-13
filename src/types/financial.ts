@@ -1,4 +1,4 @@
-// financial.ts - 分離された型定義ファイルから財務関連の型定義をエクスポート
+// 財務関連の型定義の再エクスポート
 export type {
   CalculationResult,
   CalculationContext,
@@ -12,10 +12,11 @@ export type { FinancialValue } from "./financialValueTypes";
 
 export type { Period } from "./periodTypes";
 
-// 不足している型定義を追加
+// バリデーション関連の型定義
 export interface ValidationError {
   field: string;
   message: string;
+  code: string;
 }
 
 export interface AccountValue {

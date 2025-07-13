@@ -237,16 +237,17 @@ export const AccountTable: React.FC<AccountTableProps> = ({
       accountMap.set(account.id, account);
     });
 
-    // 階層を構築する再帰関数
+    // 階層を構築する再帰関数（子科目を先に表示）
     const addAccountWithChildren = (account: Account, level: number) => {
-      result.push({ account, level });
-
-      // 子アカウントを検索して追加
+      // 子アカウントを検索して先に追加
       const children = accounts
         .filter((a) => a.parentId === account.id)
         .sort((a, b) => a.displayOrder.itemOrder - b.displayOrder.itemOrder);
 
       children.forEach((child) => addAccountWithChildren(child, level + 1));
+
+      // 親科目を子科目の後に追加
+      result.push({ account, level });
     };
 
     // ルートアカウントから開始

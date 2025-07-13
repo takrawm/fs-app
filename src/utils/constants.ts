@@ -7,11 +7,11 @@ import { PARAMETER_TYPES } from "../types/accountTypes";
 
 // シートタイプのラベル
 export const SHEET_TYPE_LABELS: Record<SheetType, string> = {
-  [SHEET_TYPES.PL]: "損益計算書",
-  [SHEET_TYPES.BS]: "貸借対照表",
-  [SHEET_TYPES.CF]: "キャッシュフロー計算書",
-  [SHEET_TYPES.PPE]: "有形固定資産",
-  [SHEET_TYPES.FINANCING]: "資金調達",
+  [SHEET_TYPES.PL]: "PL",
+  [SHEET_TYPES.BS]: "BS",
+  [SHEET_TYPES.CF]: "CF",
+  [SHEET_TYPES.PPE]: "PP&E",
+  [SHEET_TYPES.FINANCING]: "FINANCING",
 };
 
 // シートタイプの色

@@ -24,8 +24,8 @@ import type { FinancialValue } from "../types/financialValueTypes";
 export interface ValidationError {
   field: string;
   message: string;
-  value?: any;
-  context?: string;
+  code: string;
+  severity: "error" | "warning";
 }
 
 export interface ValidationResult {
@@ -36,8 +36,7 @@ export interface ValidationResult {
 
 export interface ParameterOverride {
   accountId: string;
-  periodId: string;
-  parameter: Parameter;
+  parameter: any;
 }
 
 // 型ガード関数
@@ -64,7 +63,8 @@ function validateDisplayOrder(
     errors.push({
       field: "displayOrder",
       message: "DisplayOrderが必須です",
-      context,
+      code: "MISSING_DISPLAY_ORDER",
+      severity: "error",
     });
     return errors;
   }
@@ -77,7 +77,8 @@ function validateDisplayOrder(
       field: "displayOrder.sheetOrder",
       message: "sheetOrderは0以上の数値である必要があります",
       value: displayOrder.sheetOrder,
-      context,
+      code: "INVALID_SHEET_ORDER",
+      severity: "error",
     });
   }
 
@@ -89,7 +90,8 @@ function validateDisplayOrder(
       field: "displayOrder.sectionOrder",
       message: "sectionOrderは0以上の数値である必要があります",
       value: displayOrder.sectionOrder,
-      context,
+      code: "INVALID_SECTION_ORDER",
+      severity: "error",
     });
   }
 
@@ -101,7 +103,8 @@ function validateDisplayOrder(
       field: "displayOrder.itemOrder",
       message: "itemOrderは0以上の数値である必要があります",
       value: displayOrder.itemOrder,
-      context,
+      code: "INVALID_ITEM_ORDER",
+      severity: "error",
     });
   }
 
@@ -116,7 +119,8 @@ function validateCfImpact(cfImpact: any, context: string): ValidationError[] {
     errors.push({
       field: "cfImpact",
       message: "CfImpactが必須です",
-      context,
+      code: "MISSING_CF_IMPACT",
+      severity: "error",
     });
     return errors;
   }
@@ -126,7 +130,8 @@ function validateCfImpact(cfImpact: any, context: string): ValidationError[] {
       field: "cfImpact.type",
       message: `無効なCfImpactTypeです: ${cfImpact.type}`,
       value: cfImpact.type,
-      context,
+      code: "INVALID_CF_IMPACT_TYPE",
+      severity: "error",
     });
   }
 
@@ -135,7 +140,8 @@ function validateCfImpact(cfImpact: any, context: string): ValidationError[] {
       field: "cfImpact.targetAccountIds",
       message: "targetAccountIdsは配列である必要があります",
       value: cfImpact.targetAccountIds,
-      context,
+      code: "INVALID_TARGET_ACCOUNT_IDS",
+      severity: "error",
     });
   }
 
@@ -144,7 +150,8 @@ function validateCfImpact(cfImpact: any, context: string): ValidationError[] {
       field: "cfImpact.formula",
       message: "formulaは文字列である必要があります",
       value: cfImpact.formula,
-      context,
+      code: "INVALID_CF_IMPACT_FORMULA",
+      severity: "error",
     });
   }
 
@@ -164,7 +171,8 @@ function validateParameter(
     errors.push({
       field: "parameter",
       message: "Parameterが必須です",
-      context,
+      code: "MISSING_PARAMETER",
+      severity: "error",
     });
     return errors;
   }
@@ -174,7 +182,8 @@ function validateParameter(
       field: "parameter.type",
       message: `無効なParameterTypeです: ${parameter.type}`,
       value: parameter.type,
-      context,
+      code: "INVALID_PARAMETER_TYPE",
+      severity: "error",
     });
     return errors;
   }
@@ -187,7 +196,8 @@ function validateParameter(
           field: "parameter.value",
           message: "ConstantParameterのvalueは数値である必要があります",
           value: parameter.value,
-          context,
+          code: "INVALID_CONSTANT_VALUE",
+          severity: "error",
         });
       }
       break;
@@ -198,28 +208,32 @@ function validateParameter(
           field: "parameter.value",
           message: "PercentageParameterのvalueは数値である必要があります",
           value: parameter.value,
-          context,
+          code: "INVALID_PERCENTAGE_VALUE",
+          severity: "error",
         });
       } else if (parameter.value < 0 || parameter.value > 100) {
         warnings.push({
           field: "parameter.value",
           message: "PercentageParameterのvalueは通常0-100の範囲です",
           value: parameter.value,
-          context,
+          code: "PERCENTAGE_VALUE_OUT_OF_RANGE",
+          severity: "warning",
         });
       }
       if (!parameter.baseAccountId) {
         errors.push({
           field: "parameter.baseAccountId",
           message: "PercentageParameterのbaseAccountIdが必須です",
-          context,
+          code: "MISSING_PERCENTAGE_BASE_ACCOUNT_ID",
+          severity: "error",
         });
       } else if (accountIds && !accountIds.includes(parameter.baseAccountId)) {
         errors.push({
           field: "parameter.baseAccountId",
           message: `参照先アカウントが存在しません: ${parameter.baseAccountId}`,
           value: parameter.baseAccountId,
-          context,
+          code: "REFERENCE_ACCOUNT_NOT_FOUND",
+          severity: "error",
         });
       }
       break;
@@ -231,14 +245,16 @@ function validateParameter(
           message:
             "PercentageOfRevenueParameterのvalueは数値である必要があります",
           value: parameter.value,
-          context,
+          code: "INVALID_PERCENTAGE_OF_REVENUE_VALUE",
+          severity: "error",
         });
       } else if (parameter.value < 0 || parameter.value > 100) {
         warnings.push({
           field: "parameter.value",
           message: "PercentageOfRevenueParameterのvalueは通常0-100の範囲です",
           value: parameter.value,
-          context,
+          code: "PERCENTAGE_OF_REVENUE_VALUE_OUT_OF_RANGE",
+          severity: "warning",
         });
       }
       break;
@@ -249,28 +265,32 @@ function validateParameter(
           field: "parameter.days",
           message: "DaysParameterのdaysは数値である必要があります",
           value: parameter.days,
-          context,
+          code: "INVALID_DAYS_VALUE",
+          severity: "error",
         });
       } else if (parameter.days < 0 || parameter.days > 365) {
         warnings.push({
           field: "parameter.days",
           message: "DaysParameterのdaysは通常0-365の範囲です",
           value: parameter.days,
-          context,
+          code: "DAYS_VALUE_OUT_OF_RANGE",
+          severity: "warning",
         });
       }
       if (!parameter.baseAccountId) {
         errors.push({
           field: "parameter.baseAccountId",
           message: "DaysParameterのbaseAccountIdが必須です",
-          context,
+          code: "MISSING_DAYS_BASE_ACCOUNT_ID",
+          severity: "error",
         });
       } else if (accountIds && !accountIds.includes(parameter.baseAccountId)) {
         errors.push({
           field: "parameter.baseAccountId",
           message: `参照先アカウントが存在しません: ${parameter.baseAccountId}`,
           value: parameter.baseAccountId,
-          context,
+          code: "REFERENCE_ACCOUNT_NOT_FOUND",
+          severity: "error",
         });
       }
       break;
@@ -285,7 +305,8 @@ function validateParameter(
           message:
             "ManualInputParameterのdefaultValueは数値である必要があります",
           value: parameter.defaultValue,
-          context,
+          code: "INVALID_MANUAL_INPUT_DEFAULT_VALUE",
+          severity: "error",
         });
       }
       break;
@@ -296,7 +317,8 @@ function validateParameter(
           field: "parameter.formula",
           message: "FormulaParameterのformulaは文字列で必須です",
           value: parameter.formula,
-          context,
+          code: "MISSING_FORMULA_PARAMETER_FORMULA",
+          severity: "error",
         });
       }
       if (!parameter.dependencies || !Array.isArray(parameter.dependencies)) {
@@ -304,7 +326,8 @@ function validateParameter(
           field: "parameter.dependencies",
           message: "FormulaParameterのdependenciesは配列で必須です",
           value: parameter.dependencies,
-          context,
+          code: "MISSING_FORMULA_PARAMETER_DEPENDENCIES",
+          severity: "error",
         });
       } else if (accountIds) {
         parameter.dependencies.forEach((dep: any) => {
@@ -313,7 +336,8 @@ function validateParameter(
               field: "parameter.dependencies",
               message: `依存先アカウントが存在しません: ${dep}`,
               value: dep,
-              context,
+              code: "REFERENCE_ACCOUNT_NOT_FOUND",
+              severity: "error",
             });
           }
         });
@@ -340,7 +364,8 @@ export function validateAccount(
       field: "id",
       message: "idは必須の文字列フィールドです",
       value: account.id,
-      context,
+      code: "MISSING_ACCOUNT_ID",
+      severity: "error",
     });
   }
 
@@ -349,7 +374,8 @@ export function validateAccount(
       field: "accountName",
       message: "accountNameは必須の文字列フィールドです",
       value: account.accountName,
-      context,
+      code: "MISSING_ACCOUNT_NAME",
+      severity: "error",
     });
   }
 
@@ -358,7 +384,8 @@ export function validateAccount(
       field: "parentId",
       message: "parentIdはnullまたは文字列である必要があります",
       value: account.parentId,
-      context,
+      code: "INVALID_PARENT_ID",
+      severity: "error",
     });
   } else if (
     account.parentId &&
@@ -369,7 +396,8 @@ export function validateAccount(
       field: "parentId",
       message: `親アカウントが存在しません: ${account.parentId}`,
       value: account.parentId,
-      context,
+      code: "REFERENCE_ACCOUNT_NOT_FOUND",
+      severity: "error",
     });
   }
 
@@ -378,7 +406,8 @@ export function validateAccount(
       field: "sheet",
       message: `無効なSheetTypeです: ${account.sheet}`,
       value: account.sheet,
-      context,
+      code: "INVALID_SHEET_TYPE",
+      severity: "error",
     });
   }
 
@@ -387,7 +416,8 @@ export function validateAccount(
       field: "isCredit",
       message: "isCreditはnullまたはbooleanである必要があります",
       value: account.isCredit,
-      context,
+      code: "INVALID_IS_CREDIT",
+      severity: "error",
     });
   }
 
@@ -400,8 +430,8 @@ export function validateAccount(
     context,
     allAccountIds
   );
-  errors.push(...paramErrors.filter((e) => !e.message.includes("通常")));
-  warnings.push(...paramErrors.filter((e) => e.message.includes("通常")));
+  errors.push(...paramErrors.filter((e) => e.severity === "error"));
+  warnings.push(...paramErrors.filter((e) => e.severity === "warning"));
 
   // CfImpactの検証
   errors.push(...validateCfImpact(account.flowAccountCfImpact, context));
@@ -424,7 +454,8 @@ export function validatePeriod(period: any, index: number): ValidationResult {
       field: "id",
       message: "idは必須の文字列フィールドです",
       value: period.id,
-      context,
+      code: "MISSING_PERIOD_ID",
+      severity: "error",
     });
   }
 
@@ -437,7 +468,8 @@ export function validatePeriod(period: any, index: number): ValidationResult {
       field: "year",
       message: "yearは1900-2100の範囲の数値である必要があります",
       value: period.year,
-      context,
+      code: "INVALID_YEAR",
+      severity: "error",
     });
   }
 
@@ -450,7 +482,8 @@ export function validatePeriod(period: any, index: number): ValidationResult {
       field: "month",
       message: "monthは1-12の範囲の数値である必要があります",
       value: period.month,
-      context,
+      code: "INVALID_MONTH",
+      severity: "error",
     });
   }
 
@@ -459,7 +492,8 @@ export function validatePeriod(period: any, index: number): ValidationResult {
       field: "name",
       message: "nameは必須の文字列フィールドです",
       value: period.name,
-      context,
+      code: "MISSING_PERIOD_NAME",
+      severity: "error",
     });
   }
 
@@ -468,7 +502,8 @@ export function validatePeriod(period: any, index: number): ValidationResult {
       field: "isForecast",
       message: "isForecastはbooleanである必要があります",
       value: period.isForecast,
-      context,
+      code: "INVALID_IS_FORECAST",
+      severity: "error",
     });
   }
 
@@ -497,14 +532,16 @@ export function validateFinancialValue(
       field: "accountId",
       message: "accountIdは必須の文字列フィールドです",
       value: value.accountId,
-      context,
+      code: "MISSING_FINANCIAL_VALUE_ACCOUNT_ID",
+      severity: "error",
     });
   } else if (accountIds && !accountIds.includes(value.accountId)) {
     errors.push({
       field: "accountId",
       message: `アカウントが存在しません: ${value.accountId}`,
       value: value.accountId,
-      context,
+      code: "REFERENCE_ACCOUNT_NOT_FOUND",
+      severity: "error",
     });
   }
 
@@ -513,14 +550,16 @@ export function validateFinancialValue(
       field: "periodId",
       message: "periodIdは必須の文字列フィールドです",
       value: value.periodId,
-      context,
+      code: "MISSING_FINANCIAL_VALUE_PERIOD_ID",
+      severity: "error",
     });
   } else if (periodIds && !periodIds.includes(value.periodId)) {
     errors.push({
       field: "periodId",
       message: `期間が存在しません: ${value.periodId}`,
       value: value.periodId,
-      context,
+      code: "REFERENCE_PERIOD_NOT_FOUND",
+      severity: "error",
     });
   }
 
@@ -529,7 +568,8 @@ export function validateFinancialValue(
       field: "value",
       message: "valueは数値である必要があります",
       value: value.value,
-      context,
+      code: "INVALID_FINANCIAL_VALUE_VALUE",
+      severity: "error",
     });
   }
 
@@ -538,7 +578,8 @@ export function validateFinancialValue(
       field: "isCalculated",
       message: "isCalculatedはbooleanである必要があります",
       value: value.isCalculated,
-      context,
+      code: "INVALID_FINANCIAL_VALUE_IS_CALCULATED",
+      severity: "error",
     });
   }
 
@@ -547,7 +588,8 @@ export function validateFinancialValue(
       field: "formula",
       message: "formulaは文字列である必要があります",
       value: value.formula,
-      context,
+      code: "INVALID_FINANCIAL_VALUE_FORMULA",
+      severity: "error",
     });
   }
 
@@ -557,7 +599,8 @@ export function validateFinancialValue(
       field: "id",
       message: "idは必須の文字列フィールドです",
       value: value.id,
-      context,
+      code: "MISSING_FINANCIAL_VALUE_ID",
+      severity: "error",
     });
   }
 
@@ -600,7 +643,8 @@ export function validateReferentialIntegrity(
         field: "parentId",
         message: "親子関係に循環参照が存在します",
         value: account.id,
-        context: `Account[${index}] (${account.id})`,
+        code: "CIRCULAR_PARENT_REFERENCE",
+        severity: "error",
       });
     }
   });
@@ -623,7 +667,8 @@ export function validateReferentialIntegrity(
           ", "
         )}`,
         value: key,
-        context: "ReferentialIntegrity",
+        code: "DUPLICATE_DISPLAY_ORDER",
+        severity: "warning",
       });
     }
   });
@@ -637,7 +682,8 @@ export function validateReferentialIntegrity(
         field: "accountId/periodId",
         message: `同じアカウント・期間の組み合わせが複数存在します`,
         value: key,
-        context: `FinancialValue[${index}]`,
+        code: "DUPLICATE_FINANCIAL_VALUE",
+        severity: "error",
       });
     }
     valueMap.set(key, index);
@@ -665,7 +711,8 @@ export function validateBusinessRules(
         field: "isCredit",
         message: "PL科目はisCreditを設定することを推奨します",
         value: account.id,
-        context: `Account[${index}] (${account.id})`,
+        code: "RECOMMEND_IS_CREDIT_FOR_PL",
+        severity: "warning",
       });
     }
   });
@@ -679,7 +726,8 @@ export function validateBusinessRules(
       field: "accounts",
       message:
         "売上高アカウントが見つかりません。PercentageOfRevenueパラメータを使用する場合は必要です",
-      context: "BusinessRules",
+      code: "MISSING_REVENUE_ACCOUNT",
+      severity: "warning",
     });
   }
 
@@ -700,7 +748,8 @@ export function validateBusinessRules(
       warnings.push({
         field: "periods",
         message: `期間に連続性がありません: ${prev.name} と ${curr.name}`,
-        context: "BusinessRules",
+        code: "NON_CONTINUOUS_PERIODS",
+        severity: "warning",
       });
     }
   }
