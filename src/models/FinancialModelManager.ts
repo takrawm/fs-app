@@ -381,6 +381,15 @@ export class FinancialModelManager {
     return { errors, warnings };
   }
 
+  // 財務数値を取得するメソッド（外部からアクセス可能）
+  getFinancialValue(
+    accountId: string,
+    periodId: string
+  ): FinancialValue | undefined {
+    const key = FinancialValue.createKey(accountId, periodId);
+    return this.values.get(key);
+  }
+
   private getValue(
     accountId: string,
     periodId: string

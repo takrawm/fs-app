@@ -191,10 +191,17 @@ export const useFinancialModel = () => {
 
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
+      // 1. 計算結果を優先して取得
       const result = calculationResults.get(`${accountId}_${periodId}`);
-      return result?.value || 0;
+      if (result !== undefined) {
+        return result.value;
+      }
+
+      // 2. 計算結果がない場合、初期ロードした値を取得
+      const initialValue = manager.getFinancialValue(accountId, periodId);
+      return initialValue?.value || 0;
     },
-    [calculationResults]
+    [calculationResults, manager]
   );
 
   const getAccountsBySheet = useCallback(
