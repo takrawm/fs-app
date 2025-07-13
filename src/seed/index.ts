@@ -163,8 +163,8 @@ export class SeedDataLoader {
       }
 
       // CF影響の対象アカウント確認
-      if (account.cfImpact.targetAccountIds) {
-        account.cfImpact.targetAccountIds.forEach((targetId) => {
+      if (account.flowAccountCfImpact.targetAccountIds) {
+        account.flowAccountCfImpact.targetAccountIds.forEach((targetId) => {
           if (!this.getAccountById(targetId)) {
             warnings.push(
               `Account ${account.id} has CF impact on non-existent account: ${targetId}`

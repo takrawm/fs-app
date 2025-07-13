@@ -404,7 +404,7 @@ export function validateAccount(
   warnings.push(...paramErrors.filter((e) => e.message.includes("通常")));
 
   // CfImpactの検証
-  errors.push(...validateCfImpact(account.cfImpact, context));
+  errors.push(...validateCfImpact(account.flowAccountCfImpact, context));
 
   return {
     isValid: errors.length === 0,

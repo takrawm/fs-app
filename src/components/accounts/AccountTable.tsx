@@ -131,7 +131,7 @@ const detailsRenderer = (
 
   const cfDiv = document.createElement("div");
   cfDiv.textContent = `CFインパクト: ${
-    CF_IMPACT_TYPE_LABELS[account.cfImpact.type]
+    CF_IMPACT_TYPE_LABELS[account.flowAccountCfImpact.type]
   }`;
   container.appendChild(cfDiv);
 

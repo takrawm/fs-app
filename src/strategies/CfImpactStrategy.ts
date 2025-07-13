@@ -2,7 +2,7 @@
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
 // @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { CfImpact, CfImpactType } from "../types/accountTypes";
+import type { FlowAccountCfImpact, CfImpactType } from "../types/accountTypes";
 import type { CalculationContext } from "../types/accountTypes";
 import type { CalculationResult } from "../types/financial";
 import { CF_IMPACT_TYPES } from "../types/accountTypes";
@@ -23,7 +23,7 @@ export class CfImpactStrategy {
   // CFインパクトの計算
   calculateCfImpact(
     accountId: string,
-    cfImpact: CfImpact,
+    cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     switch (cfImpact.type) {
@@ -40,7 +40,7 @@ export class CfImpactStrategy {
 
   private calculateBaseProfit(
     accountId: string,
-    cfImpact: CfImpact,
+    cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     // 基準利益の場合、そのまま値を使用
@@ -58,7 +58,7 @@ export class CfImpactStrategy {
 
   private calculateAdjustment(
     accountId: string,
-    cfImpact: CfImpact,
+    cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     // 調整項目の場合、BS項目の増減を計算
@@ -94,7 +94,7 @@ export class CfImpactStrategy {
 
   private calculateReclassification(
     accountId: string,
-    cfImpact: CfImpact,
+    cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     // 振替項目の場合、対象アカウントの値を使用

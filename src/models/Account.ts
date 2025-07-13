@@ -4,7 +4,7 @@ import type {
   Account,
   SheetType,
   DisplayOrder,
-  CfImpact,
+  FlowAccountCfImpact,
   Parameter,
   CalculationContext,
   CalculationResult,
@@ -25,11 +25,12 @@ export class AccountModel implements Account {
   id: string;
   accountName: string;
   parentId: string | null;
+  isSummaryAccount: boolean;
   sheet: SheetType;
   isCredit: boolean | null;
   displayOrder: DisplayOrder;
   parameter: Parameter;
-  cfImpact: CfImpact;
+  flowAccountCfImpact: FlowAccountCfImpact;
 
   // 追加のメタデータ
   createdAt: Date;
@@ -41,6 +42,7 @@ export class AccountModel implements Account {
     this.id = data.id || this.generateId();
     this.accountName = data.accountName;
     this.parentId = data.parentId ?? null;
+    this.isSummaryAccount = data.isSummaryAccount ?? false;
     this.sheet = data.sheet;
     this.isCredit = data.isCredit ?? null;
     this.displayOrder = data.displayOrder || { order: "1", prefix: data.sheet };
@@ -49,7 +51,7 @@ export class AccountModel implements Account {
       paramValue: null,
       paramReferences: null,
     };
-    this.cfImpact = data.cfImpact || { type: CF_IMPACT_TYPES.ADJUSTMENT };
+    this.flowAccountCfImpact = data.flowAccountCfImpact || { type: null };
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }
@@ -61,32 +63,35 @@ export class AccountModel implements Account {
   update(data: Partial<Account>): void {
     if (data.accountName !== undefined) this.accountName = data.accountName;
     if (data.parentId !== undefined) this.parentId = data.parentId;
+    if (data.isSummaryAccount !== undefined)
+      this.isSummaryAccount = data.isSummaryAccount;
     if (data.sheet !== undefined) this.sheet = data.sheet;
     if (data.isCredit !== undefined) this.isCredit = data.isCredit;
     if (data.displayOrder !== undefined) this.displayOrder = data.displayOrder;
     if (data.parameter !== undefined) this.parameter = data.parameter;
-    if (data.cfImpact !== undefined) this.cfImpact = data.cfImpact;
+    if (data.flowAccountCfImpact !== undefined)
+      this.flowAccountCfImpact = data.flowAccountCfImpact;
     this.updatedAt = new Date();
   }
 
   // シートタイプ判定メソッド
-  isPL(): boolean {
+  isPLSheet(): boolean {
     return this.sheet === SHEET_TYPES.PL;
   }
 
-  isBS(): boolean {
+  isBSSheet(): boolean {
     return this.sheet === SHEET_TYPES.BS;
   }
 
-  isCF(): boolean {
+  isCFSheet(): boolean {
     return this.sheet === SHEET_TYPES.CF;
   }
 
-  isPPE(): boolean {
+  isPPESheet(): boolean {
     return this.sheet === SHEET_TYPES.PPE;
   }
 
-  isFinancing(): boolean {
+  isFinancingSheet(): boolean {
     return this.sheet === SHEET_TYPES.FINANCING;
   }
 
@@ -128,29 +133,45 @@ export class AccountModel implements Account {
     return isNullParameter(this.parameter);
   }
 
-  // CFインパクト判定メソッド
+  // フローアカウントCFインパクト判定メソッド
   isBaseProfitForCF(): boolean {
-    return this.cfImpact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT;
+    return this.flowAccountCfImpact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT;
   }
 
   isAdjustmentForCF(): boolean {
-    return this.cfImpact.type === CF_IMPACT_TYPES.ADJUSTMENT;
+    return this.flowAccountCfImpact.type === CF_IMPACT_TYPES.ADJUSTMENT;
   }
 
   isReclassificationForCF(): boolean {
-    return this.cfImpact.type === CF_IMPACT_TYPES.RECLASSIFICATION;
+    return this.flowAccountCfImpact.type === CF_IMPACT_TYPES.RECLASSIFICATION;
   }
 
   // CFアイテム生成メソッド（新しい構造に対応）
   generateCFItem(): Partial<Account> | null {
-    // CF科目自体や、CFインパクトが設定されていない場合はnull
-    if (this.isCF() || !this.cfImpact) {
+    // 1. サマリー科目は対象外
+    if (this.isSummaryAccount) {
       return null;
     }
 
-    // 調整項目の場合のみCFアイテムを生成
-    if (this.cfImpact.type !== CF_IMPACT_TYPES.ADJUSTMENT) {
+    // 4. CF科目は対象外
+    if (this.isCFSheet()) {
       return null;
+    }
+
+    // 2. FlowAccount（PL、PPE、FINANCING）の場合
+    if (this.isPLSheet() || this.isPPESheet() || this.isFinancingSheet()) {
+      // FlowAccountCfImpactが設定されていない場合は対象外
+      if (this.flowAccountCfImpact.type === null) {
+        return null;
+      }
+    }
+
+    // 3. BS科目の場合
+    if (this.isBSSheet()) {
+      // ParameterがNullParameterの場合は対象外
+      if (this.parameter.paramType === null) {
+        return null;
+      }
     }
 
     const cfItemName = this.generateCFItemName();
@@ -158,55 +179,58 @@ export class AccountModel implements Account {
     return {
       accountName: cfItemName,
       sheet: SHEET_TYPES.CF,
+      isSummaryAccount: false,
       isCredit: null, // CF項目は借方・貸方の概念なし
-      parentId: this.id,
+      parentId: "cf-operating",
       displayOrder: {
-        order: `CF${this.determinesCFSection()}01`,
-        prefix: "CF",
+        order: `J${this.determinesCFSection()}01`,
+        prefix: "J",
       },
       parameter: {
-        paramType: PARAMETER_TYPES.CALCULATION,
+        paramType: null,
         paramValue: null,
-        paramReferences: [
-          {
-            accountId: this.id,
-            operation: OPERATIONS.ADD,
-            lag: 0,
-          },
-        ],
+        paramReferences: null,
       },
-      cfImpact: {
-        type: CF_IMPACT_TYPES.ADJUSTMENT,
-        targetAccountIds: [this.id],
+      flowAccountCfImpact: {
+        type: null,
       },
     };
   }
 
   private generateCFItemName(): string {
-    // BS項目の場合
-    if (this.isBS()) {
-      const prefix = this.isDebitAccount() ? "増加" : "減少";
-      return `${this.accountName}の${prefix}`;
+    // BS科目の場合
+    if (this.isBSSheet()) {
+      return `${this.accountName}の変動`;
     }
 
-    // PL項目の場合
-    if (this.isPL()) {
-      return `${this.accountName}（非現金項目）`;
+    // FlowAccount（PL、PPE、FINANCING）の場合
+    if (this.isPLSheet() || this.isPPESheet() || this.isFinancingSheet()) {
+      return `${this.accountName}（CF）`;
     }
 
+    // デフォルト（念のため）
     return `${this.accountName}の変動`;
   }
 
-  private determinesCFSection(): number {
-    // 営業CF: 1, 投資CF: 2, 財務CF: 3
-    if (this.sheet === SHEET_TYPES.PPE) return 2; // 投資CF
-    if (this.sheet === SHEET_TYPES.FINANCING) return 3; // 財務CF
-    return 1; // デフォルトは営業CF
+  private determinesCFSection(): string {
+    // FlowAccount（PL、PPE、FINANCING）の場合
+    if (this.isPLSheet() || this.isPPESheet() || this.isFinancingSheet()) {
+      if (this.sheet === SHEET_TYPES.PPE) return "2"; // 投資CF
+      if (this.sheet === SHEET_TYPES.FINANCING) return "3"; // 財務CF
+      return "1"; // PL項目は営業CF
+    }
+
+    // BSAccount の場合
+    if (this.isBSSheet()) {
+      return "4"; // BS変動項目は最後
+    }
+
+    return "1"; // デフォルト
   }
 
   private generateCFFormula(): string {
     // BS項目の増減を計算する式
-    if (this.isBS()) {
+    if (this.isBSSheet()) {
       return `[${this.id}@current] - [${this.id}@previous]`;
     }
 
@@ -355,7 +379,7 @@ export class AccountModel implements Account {
       errors.push("パラメータは必須です");
     }
 
-    if (!this.cfImpact) {
+    if (!this.flowAccountCfImpact) {
       errors.push("CFインパクトは必須です");
     }
 
@@ -368,11 +392,12 @@ export class AccountModel implements Account {
       id: this.id,
       accountName: this.accountName,
       parentId: this.parentId,
+      isSummaryAccount: this.isSummaryAccount,
       sheet: this.sheet,
       isCredit: this.isCredit,
       displayOrder: this.displayOrder,
       parameter: this.parameter,
-      cfImpact: this.cfImpact,
+      flowAccountCfImpact: this.flowAccountCfImpact,
     };
   }
 }

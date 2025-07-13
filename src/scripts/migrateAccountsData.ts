@@ -12,7 +12,7 @@ import type {
   Account,
   SheetType,
   DisplayOrder,
-  CfImpact,
+  FlowAccountCfImpact,
 } from "../types/accountTypes";
 import type { Parameter } from "../types/accountTypes";
 import {
@@ -162,7 +162,7 @@ class AccountDataMigrator {
       isCredit: oldAccount.isCredit ?? null,
       displayOrder: this.migrateDisplayOrder(oldAccount.displayOrder),
       parameter: this.migrateParameter(oldAccount, paramMap),
-      cfImpact: this.migrateCfImpact(oldAccount.cfImpact),
+      flowAccountCfImpact: this.migrateCfImpact(oldAccount.cfImpact),
     };
 
     this.log("アカウント移行", {
@@ -354,7 +354,7 @@ class AccountDataMigrator {
     return deps;
   }
 
-  private migrateCfImpact(oldCfImpact: any): CfImpact {
+  private migrateCfImpact(oldCfImpact: any): FlowAccountCfImpact {
     if (!oldCfImpact) {
       return {
         type: CF_IMPACT_TYPES.ADJUSTMENT,
@@ -362,7 +362,7 @@ class AccountDataMigrator {
     }
 
     // タイプの正規化
-    const typeMap: Record<string, CfImpact["type"]> = {
+    const typeMap: Record<string, FlowAccountCfImpact["type"]> = {
       isBaseProfit: CF_IMPACT_TYPES.IS_BASE_PROFIT,
       adjustment: CF_IMPACT_TYPES.ADJUSTMENT,
       reclassification: CF_IMPACT_TYPES.RECLASSIFICATION,
@@ -370,7 +370,7 @@ class AccountDataMigrator {
 
     const newType = typeMap[oldCfImpact.type] || CF_IMPACT_TYPES.ADJUSTMENT;
 
-    const cfImpact: CfImpact = {
+    const cfImpact: FlowAccountCfImpact = {
       type: newType,
     };
 

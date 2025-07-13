@@ -397,7 +397,7 @@ class FinalValidator {
         account.accountName &&
         account.sheet &&
         account.parameter &&
-        account.cfImpact
+        account.flowAccountCfImpact
     );
   }
 

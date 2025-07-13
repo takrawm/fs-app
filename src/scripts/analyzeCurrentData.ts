@@ -182,7 +182,7 @@ class CurrentDataAnalyzer {
         "sheet",
         "displayOrder",
         "parameter",
-        "cfImpact",
+        "flowAccountCfImpact",
       ];
       requiredFields.forEach((field) => {
         if (!account[field] && !analysis.missingFields.includes(field)) {

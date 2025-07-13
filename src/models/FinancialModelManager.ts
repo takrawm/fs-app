@@ -3,7 +3,7 @@
 import type {
   Account,
   SheetType,
-  CfImpact,
+  FlowAccountCfImpact,
   FinancialValue as FinancialValueType,
   Parameter,
   CalculationContext,
@@ -42,20 +42,32 @@ export class FinancialModelManager {
     const newAccount = new AccountModel(account);
     this.accounts.set(newAccount.id, newAccount);
 
-    const cfItem = newAccount.generateCFItem();
-    if (cfItem && cfItem.accountName && cfItem.sheet) {
-      const cfAccount = new AccountModel({
-        ...cfItem,
-        accountName: cfItem.accountName,
-        sheet: cfItem.sheet,
-      } as Account);
-      this.accounts.set(cfAccount.id, cfAccount);
+    // CF科目でない場合のみCF科目生成をチェック
+    if (newAccount.sheet !== SHEET_TYPES.CF) {
+      const cfItem = newAccount.generateCFItem();
+      if (cfItem && cfItem.accountName && cfItem.sheet) {
+        // 同じ名前のCF科目が既に存在するかチェック
+        const existingCF = Array.from(this.accounts.values()).find(
+          (acc) =>
+            acc.sheet === SHEET_TYPES.CF &&
+            acc.accountName === cfItem.accountName
+        );
 
-      this.addRelation({
-        fromAccountId: newAccount.id,
-        toAccountId: cfAccount.id,
-        relationType: "cf-mapping",
-      });
+        if (!existingCF) {
+          const cfAccount = new AccountModel({
+            ...cfItem,
+            accountName: cfItem.accountName,
+            sheet: cfItem.sheet,
+          } as Account);
+          this.accounts.set(cfAccount.id, cfAccount);
+
+          this.addRelation({
+            fromAccountId: newAccount.id,
+            toAccountId: cfAccount.id,
+            relationType: "cf-mapping",
+          });
+        }
+      }
     }
 
     if (account.parentId) {
@@ -280,7 +292,8 @@ export class FinancialModelManager {
     // 基準利益の計算
     const baseProfitAccounts = accounts.filter(
       (acc) =>
-        acc.cfImpact && acc.cfImpact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT
+        acc.flowAccountCfImpact &&
+        acc.flowAccountCfImpact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT
     );
 
     let baseProfit = 0;
@@ -293,7 +306,9 @@ export class FinancialModelManager {
 
     // CF調整項目の計算
     const adjustmentAccounts = accounts.filter(
-      (acc) => acc.cfImpact && acc.cfImpact.type === CF_IMPACT_TYPES.ADJUSTMENT
+      (acc) =>
+        acc.flowAccountCfImpact &&
+        acc.flowAccountCfImpact.type === CF_IMPACT_TYPES.ADJUSTMENT
     );
 
     adjustmentAccounts.forEach((account) => {

@@ -16,7 +16,7 @@
       "description": "売上高の手動入力"
     },
     "cfImpact": {
-      "type": "isBaseProfit",
+      "type": "IS_BASE_PROFIT",
       "description": "営業CFの基準利益"
     }
   },
@@ -37,7 +37,7 @@
       "description": "売上高の60%"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "営業CFへの調整"
     }
   },
@@ -58,7 +58,7 @@
       "description": "売上高の25%"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "営業CFへの調整"
     }
   },
@@ -80,7 +80,7 @@
       "description": "CF計算書の期末残高"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "現金残高"
     }
   },
@@ -102,8 +102,8 @@
       "description": "売上高の45日分"
     },
     "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["revenue-sales"],
+      "type": "ADJUSTMENT",
+      "targetAccountId": "revenue-sales",
       "description": "売上債権の増減"
     }
   },
@@ -125,8 +125,8 @@
       "description": "売上原価の60日分"
     },
     "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["expense-cogs"],
+      "type": "ADJUSTMENT",
+      "targetAccountId": "expense-cogs",
       "description": "棚卸資産の増減"
     }
   },
@@ -147,7 +147,7 @@
       "description": "有形固定資産の取得原価"
     },
     "cfImpact": {
-      "type": "reclassification",
+      "type": "RECLASSIFICATION",
       "description": "投資CFへの振替"
     }
   },
@@ -169,7 +169,7 @@
       "description": "減価償却費の累計"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "非現金費用の調整"
     }
   },
@@ -191,8 +191,8 @@
       "description": "売上原価の30日分"
     },
     "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["expense-cogs"],
+      "type": "ADJUSTMENT",
+      "targetAccountId": "expense-cogs",
       "description": "仕入債務の増減"
     }
   },
@@ -213,7 +213,7 @@
       "description": "借入金残高"
     },
     "cfImpact": {
-      "type": "reclassification",
+      "type": "RECLASSIFICATION",
       "description": "財務CFへの振替"
     }
   },
@@ -234,7 +234,7 @@
       "description": "資本金"
     },
     "cfImpact": {
-      "type": "reclassification",
+      "type": "RECLASSIFICATION",
       "description": "財務CFへの振替"
     }
   },
@@ -256,7 +256,7 @@
       "description": "当期純利益の累計"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "利益の内部留保"
     }
   },
@@ -278,7 +278,7 @@
       "description": "営業CFの自動計算"
     },
     "cfImpact": {
-      "type": "adjustment",
+      "type": "ADJUSTMENT",
       "description": "営業CF合計"
     }
   },
@@ -300,7 +300,7 @@
       "description": "投資CFの自動計算"
     },
     "cfImpact": {
-      "type": "reclassification",
+      "type": "RECLASSIFICATION",
       "description": "投資CF合計"
     }
   },
@@ -322,7 +322,7 @@
       "description": "財務CFの自動計算"
     },
     "cfImpact": {
-      "type": "reclassification",
+      "type": "RECLASSIFICATION",
       "description": "財務CF合計"
     }
   }

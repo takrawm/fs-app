@@ -59,9 +59,9 @@ export const validateAccount = (
   }
 
   // CFインパクトの検証
-  if (!account.cfImpact) {
+  if (!account.flowAccountCfImpact) {
     errors.push({
-      field: "cfImpact",
+      field: "flowAccountCfImpact",
       message: "CFインパクトは必須です",
       code: "REQUIRED",
     });

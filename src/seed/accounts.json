@@ -3,30 +3,32 @@
     "id": "revenue-sales",
     "accountName": "売上高",
     "parentId": null,
+    "isSummaryAccount": false,
     "sheet": "PL",
     "isCredit": true,
     "displayOrder": {
-      "order": "P01",
-      "prefix": "P"
+      "order": "A99",
+      "prefix": "A"
     },
     "parameter": {
       "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
-    "cfImpact": {
-      "type": "isBaseProfit"
+    "flowAccountCfImpact": {
+      "type": null
     }
   },
   {
     "id": "expense-cogs",
     "accountName": "売上原価",
     "parentId": null,
+    "isSummaryAccount": false,
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "order": "P02",
-      "prefix": "P"
+      "order": "B99",
+      "prefix": "B"
     },
     "parameter": {
       "paramType": "PERCENTAGE",
@@ -37,19 +39,20 @@
         "lag": 0
       }
     },
-    "cfImpact": {
-      "type": "adjustment"
+    "flowAccountCfImpact": {
+      "type": null
     }
   },
   {
     "id": "gross-profit",
     "accountName": "売上総利益",
     "parentId": null,
+    "isSummaryAccount": true,
     "sheet": "PL",
     "isCredit": true,
     "displayOrder": {
-      "order": "P03",
-      "prefix": "P"
+      "order": "C01",
+      "prefix": "C"
     },
     "parameter": {
       "paramType": "CALCULATION",
@@ -59,38 +62,20 @@
         { "accountId": "expense-cogs", "operation": "SUB", "lag": 0 }
       ]
     },
-    "cfImpact": {
-      "type": "isBaseProfit"
-    }
-  },
-  {
-    "id": "expense-sga",
-    "accountName": "販売費及び一般管理費",
-    "parentId": null,
-    "sheet": "PL",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "P04",
-      "prefix": "P"
-    },
-    "parameter": {
-      "paramType": "CHILDREN_SUM",
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "adjustment"
+    "flowAccountCfImpact": {
+      "type": null
     }
   },
   {
     "id": "expense-advertising",
     "accountName": "広告宣伝費",
     "parentId": "expense-sga",
+    "isSummaryAccount": false,
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "order": "P04-01",
-      "prefix": "P"
+      "order": "D01",
+      "prefix": "D"
     },
     "parameter": {
       "paramType": "PERCENTAGE",
@@ -101,332 +86,44 @@
         "lag": 0
       }
     },
-    "cfImpact": {
-      "type": "adjustment"
+    "flowAccountCfImpact": {
+      "type": null
     }
   },
   {
     "id": "expense-personnel",
     "accountName": "人件費",
     "parentId": "expense-sga",
+    "isSummaryAccount": false,
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "order": "P04-02",
-      "prefix": "P"
+      "order": "D02",
+      "prefix": "D"
     },
     "parameter": {
       "paramType": "PERCENTAGE",
-      "paramValue": 0.15,
+      "paramValue": 0.02,
       "paramReferences": {
         "accountId": "revenue-sales",
         "operation": "MUL",
         "lag": 0
       }
     },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "expense-other-sga",
-    "accountName": "その他販管費",
-    "parentId": "expense-sga",
-    "sheet": "PL",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "P04-03",
-      "prefix": "P"
-    },
-    "parameter": {
-      "paramType": "PERCENTAGE",
-      "paramValue": 0.05,
-      "paramReferences": {
-        "accountId": "revenue-sales",
-        "operation": "MUL",
-        "lag": 0
-      }
-    },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "operating-profit",
-    "accountName": "営業利益",
-    "parentId": null,
-    "sheet": "PL",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "P05",
-      "prefix": "P"
-    },
-    "parameter": {
-      "paramType": "CALCULATION",
-      "paramValue": null,
-      "paramReferences": [
-        { "accountId": "gross-profit", "operation": "ADD", "lag": 0 },
-        { "accountId": "expense-sga", "operation": "SUB", "lag": 0 }
-      ]
-    },
-    "cfImpact": {
-      "type": "isBaseProfit"
-    }
-  },
-  {
-    "id": "asset-cash",
-    "accountName": "現金及び預金",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "B01",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "asset-ar",
-    "accountName": "売掛金",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "B02",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": "GROWTH_RATE",
-      "paramValue": 0.05,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["revenue-sales"]
-    }
-  },
-  {
-    "id": "asset-inventory",
-    "accountName": "棚卸資産",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "B03",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": "PERCENTAGE",
-      "paramValue": 0.164,
-      "paramReferences": {
-        "accountId": "expense-cogs",
-        "operation": "MUL",
-        "lag": 0
-      }
-    },
-    "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["expense-cogs"]
-    }
-  },
-  {
-    "id": "asset-ppe-gross",
-    "accountName": "有形固定資産（取得原価）",
-    "parentId": null,
-    "sheet": "PPE",
-    "isCredit": false,
-    "displayOrder": {
-      "order": "PPE01",
-      "prefix": "PPE"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "reclassification"
-    }
-  },
-  {
-    "id": "asset-ppe-depreciation",
-    "accountName": "減価償却累計額",
-    "parentId": null,
-    "sheet": "PPE",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "PPE02",
-      "prefix": "PPE"
-    },
-    "parameter": {
-      "paramType": "GROWTH_RATE",
-      "paramValue": 0.1,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "liability-ap",
-    "accountName": "買掛金",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "B10",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": "PERCENTAGE",
-      "paramValue": 0.082,
-      "paramReferences": {
-        "accountId": "expense-cogs",
-        "operation": "MUL",
-        "lag": 0
-      }
-    },
-    "cfImpact": {
-      "type": "adjustment",
-      "targetAccountIds": ["expense-cogs"]
-    }
-  },
-  {
-    "id": "liability-loan",
-    "accountName": "借入金",
-    "parentId": null,
-    "sheet": "Financing",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "F01",
-      "prefix": "F"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "reclassification"
-    }
-  },
-  {
-    "id": "equity-capital",
-    "accountName": "資本金",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "B20",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "reclassification"
-    }
-  },
-  {
-    "id": "equity-retained-earnings",
-    "accountName": "利益剰余金",
-    "parentId": null,
-    "sheet": "BS",
-    "isCredit": true,
-    "displayOrder": {
-      "order": "B21",
-      "prefix": "B"
-    },
-    "parameter": {
-      "paramType": "PROPORTIONATE",
-      "paramValue": null,
-      "paramReferences": {
-        "accountId": "operating-profit",
-        "operation": "ADD",
-        "lag": 0
-      }
-    },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "cf-operating",
-    "accountName": "営業活動によるキャッシュフロー",
-    "parentId": null,
-    "sheet": "CF",
-    "isCredit": null,
-    "displayOrder": {
-      "order": "CF01",
-      "prefix": "CF"
-    },
-    "parameter": {
-      "paramType": "CALCULATION",
-      "paramValue": null,
-      "paramReferences": [
-        { "accountId": "operating-profit", "operation": "ADD", "lag": 0 }
-      ]
-    },
-    "cfImpact": {
-      "type": "adjustment"
-    }
-  },
-  {
-    "id": "cf-investing",
-    "accountName": "投資活動によるキャッシュフロー",
-    "parentId": null,
-    "sheet": "CF",
-    "isCredit": null,
-    "displayOrder": {
-      "order": "CF02",
-      "prefix": "CF"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "reclassification"
-    }
-  },
-  {
-    "id": "cf-financing",
-    "accountName": "財務活動によるキャッシュフロー",
-    "parentId": null,
-    "sheet": "CF",
-    "isCredit": null,
-    "displayOrder": {
-      "order": "CF03",
-      "prefix": "CF"
-    },
-    "parameter": {
-      "paramType": null,
-      "paramValue": null,
-      "paramReferences": null
-    },
-    "cfImpact": {
-      "type": "reclassification"
+    "flowAccountCfImpact": {
+      "type": null
     }
   },
   {
     "id": "expense-depreciation",
     "accountName": "減価償却費",
-    "parentId": null,
+    "isSummaryAccount": false,
+    "parentId": "expense-sga",
     "sheet": "PL",
     "isCredit": false,
     "displayOrder": {
-      "order": "P06",
-      "prefix": "P"
+      "order": "D03",
+      "prefix": "D"
     },
     "parameter": {
       "paramType": "PROPORTIONATE",
@@ -437,8 +134,423 @@
         "lag": 0
       }
     },
-    "cfImpact": {
-      "type": "adjustment"
+    "flowAccountCfImpact": {
+      "type": "ADJUSTMENT"
+    }
+  },
+  {
+    "id": "expense-amortization",
+    "accountName": "無形固定資産償却費",
+    "isSummaryAccount": false,
+    "parentId": "expense-sga",
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "D04",
+      "prefix": "D"
+    },
+    "parameter": {
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.02,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": "ADJUSTMENT"
+    }
+  },
+  {
+    "id": "expense-other-sga",
+    "accountName": "その他販管費",
+    "parentId": "expense-sga",
+    "isSummaryAccount": false,
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "D04",
+      "prefix": "D"
+    },
+    "parameter": {
+      "paramType": "PERCENTAGE",
+      "paramValue": 0.05,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "expense-sga",
+    "accountName": "販売費及び一般管理費",
+    "parentId": null,
+    "isSummaryAccount": true,
+    "sheet": "PL",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "D99",
+      "prefix": "D"
+    },
+    "parameter": {
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": "ADJUSTMENT"
+    }
+  },
+  {
+    "id": "operating-profit",
+    "accountName": "営業利益",
+    "parentId": null,
+    "isSummaryAccount": true,
+    "sheet": "PL",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "E01",
+      "prefix": "E"
+    },
+    "parameter": {
+      "paramType": "CALCULATION",
+      "paramValue": null,
+      "paramReferences": [
+        { "accountId": "gross-profit", "operation": "ADD", "lag": 0 },
+        { "accountId": "expense-sga", "operation": "SUB", "lag": 0 }
+      ]
+    },
+    "flowAccountCfImpact": {
+      "type": "IS_BASE_PROFIT"
+    }
+  },
+  {
+    "id": "asset-cash",
+    "accountName": "現金及び預金",
+    "parentId": "asset-total",
+    "isSummaryAccount": true,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F01",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "asset-ar",
+    "accountName": "売掛金",
+    "parentId": "asset-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F02",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.01,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "asset-inventory",
+    "accountName": "棚卸資産",
+    "parentId": "asset-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F03",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": "PROPORTIONATE",
+      "paramValue": null,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "tangible-fixed-asset",
+    "accountName": "有形固定資産",
+    "parentId": "asset-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F04",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "intangible-fixed-asset",
+    "accountName": "無形固定資産",
+    "parentId": "asset-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F05",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "asset-total",
+    "accountName": "資産合計",
+    "parentId": null,
+    "isSummaryAccount": true,
+    "sheet": "BS",
+    "isCredit": false,
+    "displayOrder": {
+      "order": "F99",
+      "prefix": "F"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "liability-ap",
+    "accountName": "買掛金",
+    "parentId": "liability-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "G01",
+      "prefix": "G"
+    },
+    "parameter": {
+      "paramType": "PROPORTIONATE",
+      "paramValue": null,
+      "paramReferences": {
+        "accountId": "expense-cogs",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "liability-loan",
+    "accountName": "借入金",
+    "parentId": "liability-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "G02",
+      "prefix": "G"
+    },
+    "parameter": {
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "liability-total",
+    "accountName": "負債合計",
+    "parentId": "equity-liability-total",
+    "isSummaryAccount": true,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "G99",
+      "prefix": "G"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "equity-capital",
+    "accountName": "資本金",
+    "parentId": "equity-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "H01",
+      "prefix": "H"
+    },
+    "parameter": {
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "equity-retained-earnings",
+    "accountName": "利益剰余金",
+    "parentId": "equity-total",
+    "isSummaryAccount": false,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "H02",
+      "prefix": "H"
+    },
+    "parameter": {
+      "paramType": null,
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "equity-total",
+    "accountName": "純資産合計",
+    "parentId": "equity-liability-total",
+    "isSummaryAccount": true,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "H99",
+      "prefix": "H"
+    },
+    "parameter": {
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "equity-liability-total",
+    "accountName": "負債・純資産合計",
+    "parentId": null,
+    "isSummaryAccount": true,
+    "sheet": "BS",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "I01",
+      "prefix": "I"
+    },
+    "parameter": {
+      "paramType": "CALCULATION",
+      "paramValue": null,
+      "paramReferences": [
+        { "accountId": "liability-total", "operation": "ADD", "lag": 0 },
+        { "accountId": "equity-total", "operation": "ADD", "lag": 0 }
+      ]
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "cf-operating",
+    "accountName": "営業CF合計",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "order": "J99",
+      "prefix": "J"
+    },
+    "parameter": {
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "cf-investing",
+    "accountName": "投資CF合計",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "order": "K99",
+      "prefix": "K"
+    },
+    "parameter": {
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
+    }
+  },
+  {
+    "id": "cf-financing",
+    "accountName": "財務CF合計",
+    "parentId": null,
+    "sheet": "CF",
+    "isCredit": null,
+    "displayOrder": {
+      "order": "L99",
+      "prefix": "L"
+    },
+    "parameter": {
+      "paramType": "CHILDREN_SUM",
+      "paramValue": null,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": null
     }
   }
 ]
