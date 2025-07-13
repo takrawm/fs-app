@@ -1,110 +1,53 @@
 [
   {
-    "id": "2023-04",
-    "year": 2023,
-    "month": 4,
-    "displayName": "2023年4月",
-    "isAnnual": false,
+    "id": "2021-3-A",
+    "name": "2021年3月",
+    "year": 2021,
+    "month": 3,
+    "financialYear": 2021,
+    "isAnnual": true,
     "isForecast": false,
-    "isHistorical": true
+    "sequence": 1
   },
   {
-    "id": "2023-05",
-    "year": 2023,
-    "month": 5,
-    "displayName": "2023年5月",
-    "isAnnual": false,
+    "id": "2022-03-A",
+    "name": "2022年3月",
+    "year": 2022,
+    "month": 3,
+    "financialYear": 2022,
+    "isAnnual": true,
     "isForecast": false,
-    "isHistorical": true
+    "sequence": 2
   },
   {
-    "id": "2023-06",
+    "id": "2023-3-A",
+    "name": "2023年3月",
     "year": 2023,
-    "month": 6,
-    "displayName": "2023年6月",
-    "isAnnual": false,
+    "month": 3,
+    "financialYear": 2023,
+    "isAnnual": true,
     "isForecast": false,
-    "isHistorical": true
+    "sequence": 3
   },
+
   {
-    "id": "2023-07",
-    "year": 2023,
-    "month": 7,
-    "displayName": "2023年7月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2023-08",
-    "year": 2023,
-    "month": 8,
-    "displayName": "2023年8月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2023-09",
-    "year": 2023,
-    "month": 9,
-    "displayName": "2023年9月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2023-10",
-    "year": 2023,
-    "month": 10,
-    "displayName": "2023年10月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2023-11",
-    "year": 2023,
-    "month": 11,
-    "displayName": "2023年11月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2023-12",
-    "year": 2023,
-    "month": 12,
-    "displayName": "2023年12月",
-    "isAnnual": false,
-    "isForecast": false,
-    "isHistorical": true
-  },
-  {
-    "id": "2024-01",
-    "year": 2024,
-    "month": 1,
-    "displayName": "2024年1月",
-    "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
-  },
-  {
-    "id": "2024-02",
-    "year": 2024,
-    "month": 2,
-    "displayName": "2024年2月",
-    "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
-  },
-  {
-    "id": "2024-03",
+    "id": "2024-03-A",
+    "name": "2024年3月",
     "year": 2024,
     "month": 3,
-    "displayName": "2024年3月",
-    "isAnnual": false,
-    "isForecast": true,
-    "isHistorical": false
+    "financialYear": 2024,
+    "isAnnual": true,
+    "isForecast": false,
+    "sequence": 4
+  },
+  {
+    "id": "2025-3-A",
+    "name": "2025年3月",
+    "year": 2025,
+    "month": 3,
+    "financialYear": 2025,
+    "isAnnual": true,
+    "isForecast": false,
+    "sequence": 5
   }
 ]

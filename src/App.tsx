@@ -7,7 +7,7 @@ import { ControlPanel } from "./components/layout/ControlPanel";
 
 import { AccountTable } from "./components/accounts/AccountTable";
 import { useFinancialModel } from "./hooks/useFinancialModel";
-import type { Account } from "./types/account";
+import type { Account } from "./types/accountTypes";
 
 function App() {
   const {
@@ -42,10 +42,11 @@ function App() {
       id: `period_${Date.now()}`,
       name: `${currentYear + nextOrder - 1}年3月期`,
       year: currentYear + nextOrder - 1,
-      startDate: new Date(currentYear + nextOrder - 2, 3, 1),
-      endDate: new Date(currentYear + nextOrder - 1, 2, 31),
+      month: 3,
+      financialYear: currentYear + nextOrder - 1,
+      isAnnual: false,
+      isForecast: true,
       sequence: nextOrder,
-      isActual: false,
     };
     addPeriod(newPeriod);
   };

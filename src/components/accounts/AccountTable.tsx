@@ -1,12 +1,13 @@
 // @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
-import React, { useMemo, useRef, useCallback } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
+import Handsontable from "handsontable";
 import { HotTable } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
-import Handsontable from "handsontable";
-import "handsontable/dist/handsontable.full.css";
-import type { Account, SheetType } from "../../types/account";
-import type { Period } from "../../types/account";
+import type { Account, SheetType } from "../../types/accountTypes";
+import type { Period } from "../../types/periodTypes";
+import { SHEET_TYPES } from "../../types/accountTypes";
+import "handsontable/dist/handsontable.full.min.css";
 import { formatNumber } from "../../utils/formatting";
 import {
   SHEET_TYPE_COLORS,
@@ -341,7 +342,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
       },
       ...periods.map((period) => ({
         data: `period_${period.id}`,
-        title: period.displayName,
+        title: period.name,
         type: "numeric" as const,
         renderer: numberRenderer,
         readOnly: !onValueChange,
@@ -533,9 +534,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
 
               return (
                 <div key={period.id} className="text-right">
-                  <div className="text-xs text-gray-500">
-                    {period.displayName}
-                  </div>
+                  <div className="text-xs text-gray-500">{period.name}</div>
                   <div className="text-sm font-medium text-gray-900">
                     {formatNumber(total)}
                   </div>

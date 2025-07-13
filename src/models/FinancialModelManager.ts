@@ -14,7 +14,6 @@ import type {
 import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
 import { AccountModel } from "./Account";
 import { FinancialValue } from "./FinancialValue";
-import { PeriodModel } from "./Period";
 import { NewStrategyFactory } from "../factories/NewStrategyFactory";
 import { NewFormulaStrategy } from "../strategies/NewFormulaStrategy";
 import { ASTBuilder } from "../ast/ASTBuilder";
@@ -23,7 +22,7 @@ import { CF_IMPACT_TYPES, SHEET_TYPES } from "../types/accountTypes";
 
 export class FinancialModelManager {
   private accounts: Map<string, AccountModel>;
-  private periods: Map<string, PeriodModel>;
+  private periods: Map<string, Period>;
   private parameters: Map<string, Parameter>;
   private values: Map<string, FinancialValue>;
   private relations: Map<string, AccountRelation[]>;
@@ -144,25 +143,18 @@ export class FinancialModelManager {
     return Array.from(this.accounts.values());
   }
 
-  addPeriod(period: Period): PeriodModel {
-    const newPeriod = new PeriodModel({
-      id: period.id,
-      name: period.displayName,
-      startDate: new Date(period.year, period.month - 1, 1),
-      endDate: new Date(period.year, period.month, 0),
-      order: period.year * 12 + period.month,
-      isActual: period.isHistorical,
-    });
-    this.periods.set(newPeriod.id, newPeriod);
-    return newPeriod;
+  addPeriod(period: Period): void {
+    this.periods.set(period.id, period);
   }
 
-  getPeriod(id: string): PeriodModel | undefined {
+  getPeriod(id: string): Period | undefined {
     return this.periods.get(id);
   }
 
-  getAllPeriods(): PeriodModel[] {
-    return Array.from(this.periods.values()).sort((a, b) => a.order - b.order);
+  getAllPeriods(): Period[] {
+    return Array.from(this.periods.values()).sort(
+      (a, b) => a.sequence - b.sequence
+    );
   }
 
   setParameter(
@@ -417,7 +409,7 @@ export class FinancialModelManager {
     return childRelations.map((r) => r.toAccountId);
   }
 
-  private getPreviousPeriod(period: PeriodModel): PeriodModel | undefined {
+  private getPreviousPeriod(period: Period): Period | undefined {
     const periods = this.getAllPeriods();
     const index = periods.findIndex((p) => p.id === period.id);
     return index > 0 ? periods[index - 1] : undefined;

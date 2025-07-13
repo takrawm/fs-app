@@ -8,25 +8,19 @@
 import type {
   Account,
   SheetType,
-  CfImpact,
+  Parameter,
+  ParameterType,
+  CfImpactType,
+  FlowAccountCfImpact,
   DisplayOrder,
-  FinancialValue,
-} from "../types/accountTypes";
-import type { Parameter } from "../types/accountTypes";
-import type { Period } from "../types/newFinancialTypes";
-import {
   SHEET_TYPES,
   CF_IMPACT_TYPES,
   PARAMETER_TYPES,
-  isConstantParameter,
-  isPercentageParameter,
-  isPercentageOfRevenueParameter,
-  isDaysParameter,
-  isManualInputParameter,
-  isFormulaParameter,
-} from "../types/newFinancialTypes";
+} from "../types/accountTypes";
+import type { Period } from "../types/periodTypes";
+import type { FinancialValue } from "../types/financialValueTypes";
 
-// 検証エラーの型定義
+// 検証結果の型定義
 export interface ValidationError {
   field: string;
   message: string;
@@ -40,16 +34,22 @@ export interface ValidationResult {
   warnings: ValidationError[];
 }
 
+export interface ParameterOverride {
+  accountId: string;
+  periodId: string;
+  parameter: Parameter;
+}
+
 // 型ガード関数
 function isValidSheetType(value: any): value is SheetType {
   return Object.values(SHEET_TYPES).includes(value);
 }
 
-function isValidCfImpactType(value: any): value is CfImpact["type"] {
+function isValidCfImpactType(value: any): value is CfImpactType {
   return Object.values(CF_IMPACT_TYPES).includes(value);
 }
 
-function isValidParameterType(value: any): value is Parameter["type"] {
+function isValidParameterType(value: any): value is ParameterType {
   return Object.values(PARAMETER_TYPES).includes(value);
 }
 
@@ -454,20 +454,11 @@ export function validatePeriod(period: any, index: number): ValidationResult {
     });
   }
 
-  if (!period.displayName || typeof period.displayName !== "string") {
+  if (!period.name || typeof period.name !== "string") {
     errors.push({
-      field: "displayName",
-      message: "displayNameは必須の文字列フィールドです",
-      value: period.displayName,
-      context,
-    });
-  }
-
-  if (typeof period.isHistorical !== "boolean") {
-    errors.push({
-      field: "isHistorical",
-      message: "isHistoricalはbooleanである必要があります",
-      value: period.isHistorical,
+      field: "name",
+      message: "nameは必須の文字列フィールドです",
+      value: period.name,
       context,
     });
   }
@@ -712,7 +703,7 @@ export function validateBusinessRules(
     if (currMonths - prevMonths !== 1) {
       warnings.push({
         field: "periods",
-        message: `期間に連続性がありません: ${prev.displayName} と ${curr.displayName}`,
+        message: `期間に連続性がありません: ${prev.name} と ${curr.name}`,
         context: "BusinessRules",
       });
     }
@@ -932,11 +923,13 @@ export function exampleUsage(): void {
 
   const samplePeriod: Period = {
     id: "2024-01",
+    name: "2024年1月",
     year: 2024,
     month: 1,
-    displayName: "2024年1月",
-    isHistorical: false,
+    financialYear: 2024,
+    isAnnual: false,
     isForecast: true,
+    sequence: 1,
   };
 
   const sampleFinancialValue: FinancialValue = {

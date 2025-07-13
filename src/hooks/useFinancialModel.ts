@@ -44,16 +44,7 @@ export const useFinancialModel = () => {
 
         // 状態を更新
         setAccounts(manager.getAllAccounts());
-        const periodModels = manager.getAllPeriods();
-        // PeriodModelを新しいPeriod型に変換
-        const periods = periodModels.map((pm) => ({
-          id: pm.id,
-          year: pm.startDate.getFullYear(),
-          month: pm.startDate.getMonth() + 1,
-          displayName: pm.name,
-          isAnnual: false,
-          isForecast: !pm.isActual,
-        }));
+        const periods = manager.getAllPeriods();
         setPeriods(periods);
 
         // 最初の期間を選択
@@ -97,24 +88,15 @@ export const useFinancialModel = () => {
 
   const addPeriod = useCallback(
     (periodData: Period) => {
-      const newPeriod = manager.addPeriod(periodData);
-      const periodModels = manager.getAllPeriods();
-      // PeriodModelを新しいPeriod型に変換
-      const periods = periodModels.map((pm) => ({
-        id: pm.id,
-        year: pm.startDate.getFullYear(),
-        month: pm.startDate.getMonth() + 1,
-        displayName: pm.name,
-        isAnnual: false,
-        isForecast: !pm.isActual,
-      }));
+      manager.addPeriod(periodData);
+      const periods = manager.getAllPeriods();
       setPeriods(periods);
 
       if (!selectedPeriodId) {
-        setSelectedPeriodId(newPeriod.id);
+        setSelectedPeriodId(periodData.id);
       }
 
-      return newPeriod;
+      return periodData;
     },
     [manager, selectedPeriodId]
   );
