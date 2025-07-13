@@ -129,13 +129,17 @@
       "paramType": "PROPORTIONATE",
       "paramValue": null,
       "paramReferences": {
-        "accountId": "asset-ppe-depreciation",
+        "accountId": "revenue-sales",
         "operation": "MUL",
         "lag": 0
       }
     },
     "flowAccountCfImpact": {
-      "type": "ADJUSTMENT"
+      "type": "ADJUSTMENT",
+      "adjustment": {
+        "targetId": "tangible-fixed-asset",
+        "operation": "SUB"
+      }
     }
   },
   {
@@ -155,7 +159,11 @@
       "paramReferences": null
     },
     "flowAccountCfImpact": {
-      "type": "ADJUSTMENT"
+      "type": "ADJUSTMENT",
+      "adjustment": {
+        "targetId": "intangible-fixed-asset",
+        "operation": "SUB"
+      }
     }
   },
   {
@@ -494,6 +502,58 @@
     },
     "flowAccountCfImpact": {
       "type": null
+    }
+  },
+  {
+    "id": "ppe-tangible-investment",
+    "accountName": "有権資産投資",
+    "isSummaryAccount": false,
+    "parentId": null,
+    "sheet": "PPE",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "J01",
+      "prefix": "J"
+    },
+    "parameter": {
+      "paramType": "PROPORTIONATE",
+      "paramValue": null,
+      "paramReferences": {
+        "accountId": "revenue-sales",
+        "operation": "MUL",
+        "lag": 0
+      }
+    },
+    "flowAccountCfImpact": {
+      "type": "ADJUSTMENT",
+      "adjustment": {
+        "targetId": "tangible-fixed-asset",
+        "operation": "ADD"
+      }
+    }
+  },
+  {
+    "id": "ppe-intangible-investment",
+    "accountName": "無形資産投資",
+    "isSummaryAccount": false,
+    "parentId": null,
+    "sheet": "PPE",
+    "isCredit": true,
+    "displayOrder": {
+      "order": "J02",
+      "prefix": "J"
+    },
+    "parameter": {
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.02,
+      "paramReferences": null
+    },
+    "flowAccountCfImpact": {
+      "type": "ADJUSTMENT",
+      "adjustment": {
+        "targetId": "intangible-fixed-asset",
+        "operation": "ADD"
+      }
     }
   },
   {
