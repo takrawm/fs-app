@@ -4,12 +4,14 @@ import type {
   Account,
   SheetType,
   FlowAccountCfImpact,
-  FinancialValue as FinancialValueType,
   Parameter,
+} from "../types/accountTypes";
+import type { Period } from "../types/periodTypes";
+import type {
   CalculationContext,
   CalculationResult,
-  Period,
-} from "../types/accountTypes";
+} from "../types/calculationTypes";
+import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
 import { AccountModel } from "./Account";
 import { FinancialValue } from "./FinancialValue";
 import { PeriodModel } from "./Period";
@@ -34,6 +36,19 @@ export class FinancialModelManager {
     this.values = new Map();
     this.relations = new Map();
     this.astBuilder = new ASTBuilder();
+  }
+
+  // シードデータから財務数値を読み込む
+  loadFinancialValues(financialValues: FinancialValueType[]): void {
+    financialValues.forEach((fv) => {
+      const financialValue = new FinancialValue(
+        fv.accountId,
+        fv.periodId,
+        fv.value,
+        fv.isCalculated
+      );
+      this.values.set(financialValue.getKey(), financialValue);
+    });
   }
 
   addAccount(
@@ -175,18 +190,28 @@ export class FinancialModelManager {
 
     const previousPeriod = this.getPreviousPeriod(period);
     const context: CalculationContext = {
-      currentPeriodId: periodId,
-      previousPeriodId: previousPeriod?.id,
-      accounts: new Map(),
-      parameters: this.parameters,
+      accountId: "", // 計算対象のアカウントIDは後で設定
+      accountValues: new Map(),
+      previousValues: new Map(),
     };
 
+    // 現在の期間の値を設定
     this.accounts.forEach((account) => {
       const value = this.getValue(account.id, periodId);
       if (value) {
-        context.accounts.set(account.id, value.value);
+        context.accountValues.set(account.id, value.value);
       }
     });
+
+    // 前期の値を設定
+    if (previousPeriod) {
+      this.accounts.forEach((account) => {
+        const value = this.getValue(account.id, previousPeriod.id);
+        if (value) {
+          context.previousValues.set(account.id, value.value);
+        }
+      });
+    }
 
     const sortedAccounts = this.topologicalSort();
 
@@ -200,7 +225,8 @@ export class FinancialModelManager {
           const financialValue = new FinancialValue(
             account.id,
             periodId,
-            result.value
+            result.value,
+            true // 計算された値なのでisCalculated = true
           );
           this.values.set(financialValue.getKey(), financialValue);
         }
@@ -251,7 +277,7 @@ export class FinancialModelManager {
       // 依存関係から変数を設定
       if (parameter.dependencies) {
         parameter.dependencies.forEach((depId) => {
-          const value = context.accounts.get(depId) || 0;
+          const value = context.accountValues.get(depId) || 0;
           astContext.variables.set(depId, value);
         });
       }
@@ -263,12 +289,9 @@ export class FinancialModelManager {
         const value = evaluator.evaluate(ast);
 
         return {
-          accountId: account.id,
-          periodId,
           value,
           formula: parameter.formula,
-          dependencies: evaluator.extractDependencies(ast),
-          calculatedAt: new Date(),
+          references: evaluator.extractDependencies(ast),
         };
       } catch (error) {
         console.error("AST evaluation error:", error);
@@ -276,7 +299,8 @@ export class FinancialModelManager {
     }
 
     // 新しいパラメータ構造に対応したストラテジー呼び出し
-    return strategy.calculate(account.id, parameter, context);
+    context.accountId = account.id;
+    return strategy.calculate(context);
   }
 
   // CFインパクトに基づいたCF計算メソッド
@@ -323,12 +347,9 @@ export class FinancialModelManager {
         const cfAdjustment = account.isDebitAccount() ? -change : change;
 
         cfResults.set(account.id, {
-          accountId: account.id,
-          periodId,
           value: cfAdjustment,
           formula: `${account.accountName}の変動`,
-          dependencies: [account.id],
-          calculatedAt: new Date(),
+          references: [account.id],
         });
       }
     });

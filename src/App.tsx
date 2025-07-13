@@ -25,15 +25,9 @@ function App() {
     calculateCurrentPeriod,
     calculateAllPeriods,
     getAccountValue,
-
-    initializeSampleData,
   } = useFinancialModel();
 
   const [showAccountForm, setShowAccountForm] = useState(false);
-
-  useEffect(() => {
-    initializeSampleData();
-  }, [initializeSampleData]);
 
   const handleAddAccount = (account: Omit<Account, "id">) => {
     addAccount(account);

@@ -3,8 +3,8 @@
 // @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type { FlowAccountCfImpact, CfImpactType } from "../types/accountTypes";
-import type { CalculationContext } from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+import type { CalculationContext } from "../types/calculationTypes";
+import type { CalculationResult } from "../types/calculationTypes";
 import { CF_IMPACT_TYPES } from "../types/accountTypes";
 
 // CFインパクト処理専用のストラテジークラス

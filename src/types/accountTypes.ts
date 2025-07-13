@@ -478,63 +478,8 @@ export function isNoCfImpact(
 
 // ========== その他の型定義 ==========
 
-/** 財務数値の型定義 */
-export interface FinancialValue {
-  id: string;
-  accountId: string;
-  periodId: string;
-  value: number;
-  calculatedAt: Date;
-  formula?: string;
-  dependencies?: string[];
-  isManualInput?: boolean;
-  lastUpdated?: Date;
-}
-
-/** 会計期間の型定義 */
-export interface Period {
-  id: string;
-  name: string;
-  displayName?: string;
-  year: number;
-  month?: number;
-  startDate: Date;
-  endDate: Date;
-  sequence: number;
-  isActual: boolean;
-  isHistorical?: boolean;
-  isForecast?: boolean;
-}
-
-/** 財務モデル全体の型定義 */
-export interface FinancialModel {
-  id: string;
-  name: string;
-  description?: string;
-  accounts: Account[];
-  periods: Period[];
-  values: FinancialValue[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-/** 計算結果の型 */
-export interface CalculationResult {
-  value: number;
-  formula: string;
-  references: string[];
-}
-
-/** 計算コンテキスト（計算に必要なデータ） */
-export interface CalculationContext {
-  accountId: string;
-  accountValues: Map<string, number>; // 科目ID -> 値のマップ
-  previousValues: Map<string, number>; // 前期値のマップ
-}
-
-/** 計算ストラテジーの基底インターフェース */
-export interface CalculationStrategy {
-  calculate(context: CalculationContext): CalculationResult;
-  getRequiredReferences(): string[];
-  validate(parameter: Parameter): boolean;
-}
+// 分離された型定義は以下のファイルで定義されています：
+// - periodTypes.ts: Period
+// - financialValueTypes.ts: FinancialValue
+// - financialModelTypes.ts: FinancialModel
+// - calculationTypes.ts: CalculationResult, CalculationContext, CalculationStrategy

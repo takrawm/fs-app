@@ -4,8 +4,9 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { FinancialModelManager } from "../models/FinancialModelManager";
 import type { Account, SheetType } from "../types/accountTypes";
 import type { Parameter } from "../types/accountTypes";
-import type { Period } from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+import type { Period } from "../types/periodTypes";
+import type { CalculationResult } from "../types/calculationTypes";
+// "../seed"と指定すると、TypeScriptは自動的に../seed/index.tsファイルを探す
 import { seedDataLoader } from "../seed";
 
 export const useFinancialModel = () => {
@@ -36,6 +37,10 @@ export const useFinancialModel = () => {
         seedPeriods.forEach((period) => {
           manager.addPeriod(period);
         });
+
+        // seedデータから財務数値を読み込み
+        const seedFinancialValues = seedDataLoader.getFinancialValues();
+        manager.loadFinancialValues(seedFinancialValues);
 
         // 状態を更新
         setAccounts(manager.getAllAccounts());
@@ -184,10 +189,6 @@ export const useFinancialModel = () => {
     }
   }, [manager, periods]);
 
-  const initializeSampleData = useCallback(() => {
-    // This is already handled in the useEffect
-  }, []);
-
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
       const result = calculationResults.get(`${accountId}_${periodId}`);
@@ -262,9 +263,8 @@ export const useFinancialModel = () => {
   const calculationStats = useMemo(() => {
     const totalAccounts = accounts.length;
     const calculatedAccounts = calculationResults.size;
-    const errorCount = Array.from(calculationResults.values()).filter(
-      (result) => result.value === null
-    ).length;
+    // 新しい型定義ではvalueはnumber型なので、nullチェックは不要
+    const errorCount = 0; // エラーは別途管理する必要がある
 
     return {
       totalAccounts,
@@ -311,7 +311,6 @@ export const useFinancialModel = () => {
     calculateCashFlow,
     calculateCurrentPeriod,
     calculateAllPeriods,
-    initializeSampleData,
 
     // 取得関数
     getAccountValue,

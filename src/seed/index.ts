@@ -1,15 +1,32 @@
 // @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { Account, Period, Parameter } from "../types/accountTypes";
+import type { Account, Parameter } from "../types/accountTypes";
+import type { Period } from "../types/periodTypes";
+import type { FinancialValue } from "../types/financialValueTypes";
+// ビルドツール（例：webpack）が内部的に変換する処理
+// 1. accounts.jsonファイルを読み込み
+// 2. JSON.parseでJavaScriptオブジェクトに変換
+// 3. module.exportsとして出力
+// 結果的に以下のコードと同等になる：
+// const accountsData = {
+//   "revenue-sales": {
+//     "accountName": "売上高",
+//     // ... JSONの中身がそのままオブジェクトになる
+//   }
+// };
+export default accountsData;
 import accountsData from "./accounts.json";
 import periodsData from "./periods.json";
 import parametersData from "./parameters.json";
+import financialValuesData from "./financialValues.json";
 
 // Seed データ読み込みクラス
 export class SeedDataLoader {
+  //  「クラスレベル」のstaticプロパティ（全インスタンスで共有）
   private static instance: SeedDataLoader;
   private accounts: Account[] = [];
   private periods: Period[] = [];
+  private financialValues: FinancialValue[] = [];
   private parameterMap: Map<string, Record<string, Parameter>> = new Map();
 
   private constructor() {
@@ -18,8 +35,10 @@ export class SeedDataLoader {
 
   public static getInstance(): SeedDataLoader {
     if (!SeedDataLoader.instance) {
+      // private constructor()が呼ばれ、即座にthis.loadData()が実行される
       SeedDataLoader.instance = new SeedDataLoader();
     }
+    // staticプロパティの活用
     return SeedDataLoader.instance;
   }
 
@@ -29,6 +48,9 @@ export class SeedDataLoader {
 
     // 期間データの読み込み
     this.periods = periodsData as Period[];
+
+    // 財務数値データの読み込み
+    this.financialValues = financialValuesData as FinancialValue[];
 
     // パラメータデータの読み込みと変換
     this.loadParameters();
@@ -82,12 +104,40 @@ export class SeedDataLoader {
   }
 
   public getPeriodByYearMonth(year: number, month: number): Period | undefined {
-    return this.periods.find(
-      (period) => period.year === year && period.month === month
+    return this.periods.find((p) => p.year === year && p.month === month);
+  }
+
+  // ========== 財務数値関連のメソッド ==========
+  public getFinancialValues(): FinancialValue[] {
+    return this.financialValues;
+  }
+
+  public getFinancialValue(
+    accountId: string,
+    periodId: string
+  ): FinancialValue | undefined {
+    return this.financialValues.find(
+      (fv) => fv.accountId === accountId && fv.periodId === periodId
     );
   }
 
-  // パラメータ取得メソッド
+  public getFinancialValuesByAccount(accountId: string): FinancialValue[] {
+    return this.financialValues.filter((fv) => fv.accountId === accountId);
+  }
+
+  public getFinancialValuesByPeriod(periodId: string): FinancialValue[] {
+    return this.financialValues.filter((fv) => fv.periodId === periodId);
+  }
+
+  public getCalculatedFinancialValues(): FinancialValue[] {
+    return this.financialValues.filter((fv) => fv.isCalculated);
+  }
+
+  public getManualFinancialValues(): FinancialValue[] {
+    return this.financialValues.filter((fv) => !fv.isCalculated);
+  }
+
+  // ========== パラメータ関連のメソッド ==========
   public getParametersForAccount(
     accountId: string
   ): Record<string, Parameter> | undefined {
@@ -208,3 +258,6 @@ export const getSeedAccountById = (id: string) =>
   seedDataLoader.getAccountById(id);
 export const getSeedPeriodById = (id: string) =>
   seedDataLoader.getPeriodById(id);
+export const getSeedFinancialValues = () => seedDataLoader.getFinancialValues();
+export const getSeedFinancialValue = (accountId: string, periodId: string) =>
+  seedDataLoader.getFinancialValue(accountId, periodId);

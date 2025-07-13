@@ -6,9 +6,11 @@ import type {
   DisplayOrder,
   FlowAccountCfImpact,
   Parameter,
+} from "../types/accountTypes";
+import type {
   CalculationContext,
   CalculationResult,
-} from "../types/accountTypes";
+} from "../types/calculationTypes";
 import { SHEET_TYPES, CF_IMPACT_TYPES } from "../types/accountTypes";
 import {
   PARAMETER_TYPES,

@@ -1,23 +1,32 @@
 // @ts-nocheck
 // TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { AccountValue } from "../types/accountTypes";
+import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
 
-export class FinancialValue implements AccountValue {
+export class FinancialValue implements FinancialValueType {
+  id: string;
   accountId: string;
   periodId: string;
   value: number;
-  calculatedAt: Date;
+  isCalculated: boolean;
 
-  constructor(accountId: string, periodId: string, value: number) {
+  constructor(
+    accountId: string,
+    periodId: string,
+    value: number,
+    isCalculated: boolean = false
+  ) {
+    this.id = FinancialValue.createKey(accountId, periodId);
     this.accountId = accountId;
     this.periodId = periodId;
     this.value = value;
-    this.calculatedAt = new Date();
+    this.isCalculated = isCalculated;
   }
 
-  update(value: number): void {
+  update(value: number, isCalculated?: boolean): void {
     this.value = value;
-    this.calculatedAt = new Date();
+    if (isCalculated !== undefined) {
+      this.isCalculated = isCalculated;
+    }
   }
 
   getKey(): string {
