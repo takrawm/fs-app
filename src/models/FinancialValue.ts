@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
 
 export class FinancialValue implements FinancialValueType {

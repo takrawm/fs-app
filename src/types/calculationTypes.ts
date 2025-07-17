@@ -1,18 +1,15 @@
 // 計算結果の型定義
 export interface CalculationResult {
-  accountId: string;
-  periodId: string;
   value: number;
-  calculatedAt: Date;
-  formula?: string;
+  formula: string;
+  references: string[];
 }
 
 // 計算コンテキストの型定義
 export interface CalculationContext {
   accountId: string;
-  periodId: string;
-  parameters: Map<string, any>;
-  dependencies: string[];
+  accountValues: Map<string, number>;
+  previousValues: Map<string, number>;
 }
 
 // 計算戦略のインターフェース
@@ -25,10 +22,8 @@ export interface CalculationStrategy {
 export interface CalculationError {
   accountId: string;
   periodId: string;
-  message: string;
-  code: string;
-  severity: "error" | "warning";
-  timestamp: Date;
+  error: string;
+  stack?: string;
 }
 
 // 計算統計情報の型定義

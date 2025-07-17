@@ -1,4 +1,3 @@
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { FinancialModelManager } from "../models/FinancialModelManager";
 import { AccountModel } from "../models/Account";
@@ -10,6 +9,8 @@ import type { CalculationResult } from "../types/calculationTypes";
 import { seedDataLoader } from "../seed";
 
 export const useFinancialModel = () => {
+  // このインスタンスはReactのuseStateで初期化時に一度だけ生成され、
+  // コンポーネントのライフサイクル全体で保持される
   const [manager] = useState(() => new FinancialModelManager());
   const [accounts, setAccounts] = useState<AccountModel[]>([]);
   const [periods, setPeriods] = useState<Period[]>([]);
@@ -110,8 +111,11 @@ export const useFinancialModel = () => {
     [manager]
   );
 
+  // 現在は同期的な計算処理だが、将来的にAPI呼び出しやデータベース保存、
+  // Web Workerでの並列処理などの非同期処理を実装する可能性があるため、
+  // エラーハンドリングとローディング状態管理は維持
   const calculatePeriod = useCallback(
-    async (periodId: string) => {
+    (periodId: string) => {
       setIsCalculating(true);
 
       try {
@@ -128,8 +132,10 @@ export const useFinancialModel = () => {
     [manager]
   );
 
+  // キャッシュフロー計算処理
+  // 将来的には外部CFエンジンとの連携や複雑な非同期処理を検討
   const calculateCashFlow = useCallback(
-    async (periodId: string) => {
+    (periodId: string) => {
       setIsCalculating(true);
 
       try {
@@ -145,33 +151,34 @@ export const useFinancialModel = () => {
     [manager]
   );
 
-  const calculateCurrentPeriod = useCallback(async () => {
+  // 現在選択中の期間の計算を実行
+  const calculateCurrentPeriod = useCallback(() => {
     if (!selectedPeriodId) return;
     return calculatePeriod(selectedPeriodId);
   }, [selectedPeriodId, calculatePeriod]);
 
-  const calculateAllPeriods = useCallback(async () => {
-    setIsCalculating(true);
+  // 全期間の計算を実行
+  // 将来的には並列処理やバッチ処理、進捗表示などの非同期処理を検討
+  const calculateAllPeriods = useCallback(() => {
+    const allResults = new Map<string, CalculationResult>();
 
     try {
-      const allResults = new Map<string, CalculationResult>();
-
       for (const period of periods) {
-        const results = manager.calculatePeriod(period.id);
+        // calculatePeriodを使用して一貫性を保つ（状態管理とエラーハンドリングを統一）
+        const results = calculatePeriod(period.id);
         results.forEach((result, accountId) => {
           allResults.set(`${accountId}_${period.id}`, result);
         });
       }
 
+      // 最終的な結果をまとめて設定（重複する状態更新を避ける）
       setCalculationResults(allResults);
       return allResults;
     } catch (error) {
       console.error("All periods calculation error:", error);
       throw error;
-    } finally {
-      setIsCalculating(false);
     }
-  }, [manager, periods]);
+  }, [calculatePeriod, periods]);
 
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
@@ -318,7 +325,18 @@ export const useFinancialModel = () => {
     accountStats,
 
     // 期間選択
-    setSelectedPeriodId,
+    setSelectedPeriodId: useCallback(
+      (periodId: string) => {
+        setSelectedPeriodId(periodId);
+        const selectedPeriod = periods.find((period) => period.id === periodId);
+        if (selectedPeriod) {
+          console.log(
+            `選択された期間: ${selectedPeriod.name} (ID: ${selectedPeriod.id})`
+          );
+        }
+      },
+      [periods]
+    ),
 
     // seedデータアクセス
     seedDataLoader,

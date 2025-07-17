@@ -1,12 +1,9 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import React, { useState, useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import Handsontable from "handsontable";
-import { HotTable } from "@handsontable/react";
+import { HotTable, HotTableClass } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import type { Account, SheetType } from "../../types/accountTypes";
 import type { Period } from "../../types/periodTypes";
-import { SHEET_TYPES } from "../../types/accountTypes";
 import "handsontable/dist/handsontable.full.min.css";
 import { formatNumber } from "../../utils/formatting";
 import {
@@ -37,15 +34,14 @@ interface AccountTableProps {
 
 // カスタムレンダラー: 科目名（階層表示）
 const accountNameRenderer = (
-  instance: Handsontable,
+  _instance: Handsontable,
   td: HTMLTableCellElement,
-  row: number,
-  col: number,
-  prop: string | number,
+  _row: number,
+  _col: number,
+  _prop: string | number,
   value: any,
   cellProperties: Handsontable.CellProperties
 ) => {
-  const account = cellProperties.account as Account;
   const level = (cellProperties.level as number) || 0;
 
   td.innerHTML = "";
@@ -73,12 +69,12 @@ const accountNameRenderer = (
 
 // カスタムレンダラー: シートタイプ
 const sheetTypeRenderer = (
-  instance: Handsontable,
+  _instance: Handsontable,
   td: HTMLTableCellElement,
-  row: number,
-  col: number,
-  prop: string | number,
-  value: any,
+  _row: number,
+  _col: number,
+  _prop: string | number,
+  _value: any,
   cellProperties: Handsontable.CellProperties
 ) => {
   const account = cellProperties.account as Account;
@@ -98,12 +94,12 @@ const sheetTypeRenderer = (
 
 // カスタムレンダラー: 詳細情報
 const detailsRenderer = (
-  instance: Handsontable,
+  _instance: Handsontable,
   td: HTMLTableCellElement,
-  row: number,
-  col: number,
-  prop: string | number,
-  value: any,
+  _row: number,
+  _col: number,
+  _prop: string | number,
+  _value: any,
   cellProperties: Handsontable.CellProperties
 ) => {
   const account = cellProperties.account as Account;
@@ -126,13 +122,13 @@ const detailsRenderer = (
 
   const paramDiv = document.createElement("div");
   paramDiv.textContent = `パラメータ: ${
-    NEW_PARAMETER_TYPE_LABELS[account.parameter.type]
+    account.parameter.paramType ? NEW_PARAMETER_TYPE_LABELS[account.parameter.paramType] : "なし"
   }`;
   container.appendChild(paramDiv);
 
   const cfDiv = document.createElement("div");
   cfDiv.textContent = `CFインパクト: ${
-    CF_IMPACT_TYPE_LABELS[account.flowAccountCfImpact.type]
+    account.flowAccountCfImpact.type ? CF_IMPACT_TYPE_LABELS[account.flowAccountCfImpact.type] : "なし"
   }`;
   container.appendChild(cfDiv);
 
@@ -142,11 +138,11 @@ const detailsRenderer = (
 
 // カスタムレンダラー: 数値（編集可能）
 const numberRenderer = (
-  instance: Handsontable,
+  _instance: Handsontable,
   td: HTMLTableCellElement,
-  row: number,
-  col: number,
-  prop: string | number,
+  _row: number,
+  _col: number,
+  _prop: string | number,
   value: any,
   cellProperties: Handsontable.CellProperties
 ) => {
@@ -164,12 +160,12 @@ const numberRenderer = (
 
 // カスタムレンダラー: 操作ボタン
 const actionsRenderer = (
-  instance: Handsontable,
+  _instance: Handsontable,
   td: HTMLTableCellElement,
-  row: number,
-  col: number,
-  prop: string | number,
-  value: any,
+  _row: number,
+  _col: number,
+  _prop: string | number,
+  _value: any,
   cellProperties: Handsontable.CellProperties
 ) => {
   const account = cellProperties.account as Account;
@@ -225,7 +221,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
   showHierarchy = true,
   onValueChange,
 }) => {
-  const hotTableRef = useRef<HotTable>(null);
+  const hotTableRef = useRef<HotTableClass>(null);
 
   // アカウントを階層構造に整理
   const organizeAccountsForTable = useCallback(() => {
@@ -242,7 +238,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
       // 子アカウントを検索して先に追加
       const children = accounts
         .filter((a) => a.parentId === account.id)
-        .sort((a, b) => a.displayOrder.itemOrder - b.displayOrder.itemOrder);
+        .sort((a, b) => a.displayOrder.order.localeCompare(b.displayOrder.order));
 
       children.forEach((child) => addAccountWithChildren(child, level + 1));
 
@@ -266,7 +262,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
         return groups;
       }, {} as Record<SheetType, Account[]>);
 
-      Object.entries(groupedAccounts).forEach(([sheet, sheetAccounts]) => {
+      Object.entries(groupedAccounts).forEach(([_sheet, sheetAccounts]) => {
         sheetAccounts.forEach((account) => {
           if (showHierarchy) {
             addAccountWithChildren(account, 0);
@@ -289,7 +285,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
   }, [accounts, groupBySheet, showHierarchy]);
 
   // Handsontableのデータ構造に変換
-  const { data, columns, accountMap } = useMemo(() => {
+  const { data, columns } = useMemo(() => {
     const accountsWithLevel = organizeAccountsForTable();
 
     // アカウントIDマップを作成
@@ -361,7 +357,6 @@ export const AccountTable: React.FC<AccountTableProps> = ({
     return {
       data: tableData,
       columns: tableColumns,
-      accountMap: accountIdToRowMap,
     };
   }, [
     accounts,
@@ -373,7 +368,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
 
   // セルのプロパティを設定
   const cells = useCallback(
-    (row: number, col: number) => {
+    (row: number, _col: number) => {
       const rowData = data[row];
       if (!rowData) return {};
 
@@ -460,9 +455,9 @@ export const AccountTable: React.FC<AccountTableProps> = ({
     nestedHeaders: groupBySheet
       ? [
           columns.map((col, index) => {
-            if (index < 3 || index === columns.length - 1) return col.title;
+            if (index < 3 || index === columns.length - 1) return col.title || "";
             return {
-              label: col.title,
+              label: col.title || "",
               colspan: 1,
             };
           }),
@@ -475,7 +470,7 @@ export const AccountTable: React.FC<AccountTableProps> = ({
 
   return (
     <div className="w-full">
-      <style jsx="true" global="true">{`
+      <style>{`
         .handsontable {
           font-size: 14px;
         }

@@ -1,25 +1,30 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
+import { PARAMETER_TYPES } from "../types/accountTypes";
+import type { Parameter } from "../types/accountTypes";
 import type {
-  ConstantParameter,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
 
 export class ConstantStrategy extends NewCalculationStrategy {
-  readonly type = "constant" as const;
+  readonly type = PARAMETER_TYPES.CONSTANT;
 
   calculate(
     accountId: string,
-    parameter: ConstantParameter,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
+    if (parameter.paramType !== PARAMETER_TYPES.CONSTANT) {
+      throw new Error(
+        `Expected constant parameter, got ${parameter.paramType}`
+      );
+    }
+
     return this.createResult(
       accountId,
-      context.currentPeriodId,
-      parameter.value,
-      `定数: ${parameter.value}`,
+      context.accountId, // currentPeriodIdの代わりにaccountIdを使用
+      parameter.paramValue,
+      `定数: ${parameter.paramValue}`,
       []
     );
   }

@@ -1,11 +1,12 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { Parameter, CalculationContext } from "../../types/parameter";
-import type { CalculationResult } from "../../types/financial";
+import type { Parameter } from "../../types/accountTypes";
+import type {
+  CalculationContext,
+  CalculationResult,
+} from "../../types/calculationTypes";
 
 // 新しいパラメータ構造に対応した抽象ストラテジークラス
 export abstract class NewCalculationStrategy {
-  abstract readonly type: Parameter["type"];
+  abstract readonly type: Parameter["paramType"];
 
   abstract calculate(
     accountId: string,
@@ -14,34 +15,28 @@ export abstract class NewCalculationStrategy {
   ): CalculationResult;
 
   protected createResult(
-    accountId: string,
-    periodId: string,
+    _accountId: string,
+    _periodId: string,
     value: number,
     formula?: string,
-    dependencies: string[] = []
+    references: string[] = []
   ): CalculationResult {
     return {
-      accountId,
-      periodId,
       value,
-      formula,
-      dependencies,
-      calculatedAt: new Date(),
+      formula: formula || "",
+      references,
     };
   }
 
   protected getValue(accountId: string, context: CalculationContext): number {
-    return context.accounts.get(accountId) || 0;
+    return context.accountValues.get(accountId) || 0;
   }
 
   protected getPreviousValue(
     accountId: string,
     context: CalculationContext
   ): number {
-    if (!context.previousPeriodId) return 0;
-    return (
-      context.accounts.get(`${accountId}_${context.previousPeriodId}`) || 0
-    );
+    return context.previousValues.get(accountId) || 0;
   }
 
   // 日数計算用のヘルパーメソッド

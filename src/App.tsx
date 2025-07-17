@@ -1,13 +1,9 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Header } from "./components/layout/Header";
 import { ControlPanel } from "./components/layout/ControlPanel";
 
 import { AccountTable } from "./components/accounts/AccountTable";
 import { useFinancialModel } from "./hooks/useFinancialModel";
-import type { Account } from "./types/accountTypes";
 
 function App() {
   const {
@@ -17,7 +13,6 @@ function App() {
     setSelectedPeriodId,
     isCalculating,
 
-    addAccount,
     deleteAccount,
 
     addPeriod,
@@ -29,24 +24,31 @@ function App() {
 
   const [showAccountForm, setShowAccountForm] = useState(false);
 
-  const handleAddAccount = (account: Omit<Account, "id">) => {
-    addAccount(account);
-    setShowAccountForm(false);
-  };
-
   const handleAddPeriod = () => {
-    const currentYear = new Date().getFullYear();
-    const nextOrder = periods.length + 1;
+    // 既存の期間から最新の期間を取得
+    const latestPeriod =
+      periods.length > 0
+        ? periods.reduce((latest, current) =>
+            current.sequence > latest.sequence ? current : latest
+          )
+        : null;
+
+    // 新しい期間の値を計算
+    const newYear = latestPeriod
+      ? latestPeriod.year + 1
+      : new Date().getFullYear();
+    const newMonth = latestPeriod ? latestPeriod.month : 3;
+    const newSequence = latestPeriod ? latestPeriod.sequence + 1 : 1;
 
     const newPeriod = {
-      id: `period_${Date.now()}`,
-      name: `${currentYear + nextOrder - 1}年3月期`,
-      year: currentYear + nextOrder - 1,
-      month: 3,
-      financialYear: currentYear + nextOrder - 1,
-      isAnnual: false,
+      id: `${newYear}-${newMonth.toString().padStart(2, "0")}-A`,
+      name: `${newYear}年${newMonth}月`,
+      year: newYear,
+      month: newMonth,
+      financialYear: newYear,
+      isAnnual: true,
       isForecast: true,
-      sequence: nextOrder,
+      sequence: newSequence,
     };
     addPeriod(newPeriod);
   };
@@ -65,18 +67,22 @@ function App() {
     }
   };
 
-  const handleCalculate = async () => {
+  // 現在は同期的な処理だが、将来的にAPI呼び出しやデータベース保存などの
+  // 非同期処理を実装する可能性があるため、エラーハンドリングは維持
+  const handleCalculate = () => {
     try {
-      await calculateCurrentPeriod();
+      calculateCurrentPeriod();
     } catch (error) {
       console.error("計算エラー:", error);
       alert("計算中にエラーが発生しました。");
     }
   };
 
-  const handleCalculateAll = async () => {
+  // 複数期間の計算処理
+  // 将来的には並列処理やWeb Worker、外部API連携などの非同期処理を検討
+  const handleCalculateAll = () => {
     try {
-      await calculateAllPeriods();
+      calculateAllPeriods();
     } catch (error) {
       console.error("計算エラー:", error);
       alert("計算中にエラーが発生しました。");
@@ -105,7 +111,7 @@ function App() {
           </div>
 
           <AccountTable
-            accounts={accounts}
+            accounts={accounts.map((account) => account.toJSON())}
             periods={periods}
             getAccountValue={getAccountValue}
             onEditAccount={handleEditAccount}

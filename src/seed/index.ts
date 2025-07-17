@@ -1,8 +1,7 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type { Account, Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
+import { isFormulaParameter, isReclassificationImpact } from "../types/accountTypes";
 // ビルドツール（例：webpack）が内部的に変換する処理
 // 1. accounts.jsonファイルを読み込み
 // 2. JSON.parseでJavaScriptオブジェクトに変換
@@ -202,8 +201,8 @@ export class SeedDataLoader {
       }
 
       // パラメータの依存関係確認
-      if (account.parameter.type === "formula") {
-        account.parameter.dependencies.forEach((depId) => {
+      if (isFormulaParameter(account.parameter)) {
+        account.parameter.paramReferences.forEach((depId) => {
           if (!this.getAccountById(depId)) {
             warnings.push(
               `Account ${account.id} has dependency on non-existent account: ${depId}`
@@ -213,14 +212,18 @@ export class SeedDataLoader {
       }
 
       // CF影響の対象アカウント確認
-      if (account.flowAccountCfImpact.targetAccountIds) {
-        account.flowAccountCfImpact.targetAccountIds.forEach((targetId) => {
-          if (!this.getAccountById(targetId)) {
-            warnings.push(
-              `Account ${account.id} has CF impact on non-existent account: ${targetId}`
-            );
-          }
-        });
+      if (isReclassificationImpact(account.flowAccountCfImpact)) {
+        const { from, to } = account.flowAccountCfImpact.reclassification;
+        if (!this.getAccountById(from)) {
+          warnings.push(
+            `Account ${account.id} has CF reclassification from non-existent account: ${from}`
+          );
+        }
+        if (!this.getAccountById(to)) {
+          warnings.push(
+            `Account ${account.id} has CF reclassification to non-existent account: ${to}`
+          );
+        }
       }
     });
 

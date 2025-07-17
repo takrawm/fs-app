@@ -1,7 +1,8 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type {
   Account,
+  BSAccount,
+  FlowAccount,
+  CFAccount,
   SheetType,
   DisplayOrder,
   FlowAccountCfImpact,
@@ -13,7 +14,6 @@ import type {
 } from "../types/calculationTypes";
 import { SHEET_TYPES, CF_IMPACT_TYPES } from "../types/accountTypes";
 import {
-  PARAMETER_TYPES,
   OPERATIONS,
   isGrowthRateParameter,
   isChildrenSumParameter,
@@ -23,7 +23,7 @@ import {
   isNullParameter,
 } from "../types/accountTypes";
 
-export class AccountModel implements Account {
+export class AccountModel {
   id: string;
   accountName: string;
   parentId: string | null;
@@ -53,7 +53,7 @@ export class AccountModel implements Account {
   }
 
   private generateId(): string {
-    return `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `acc_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   update(data: Partial<Account>): void {
@@ -223,15 +223,6 @@ export class AccountModel implements Account {
     return "1"; // デフォルト
   }
 
-  private generateCFFormula(): string {
-    // BS項目の増減を計算する式
-    if (this.isBSSheet()) {
-      return `[${this.id}@current] - [${this.id}@previous]`;
-    }
-
-    // その他の項目
-    return `[${this.id}]`;
-  }
 
   // 計算実行メソッド
   calculate(context: CalculationContext): CalculationResult | null {
@@ -343,7 +334,7 @@ export class AccountModel implements Account {
   // 表示用メソッド
   getFullPath(accounts: Account[]): string {
     const path: string[] = [this.accountName];
-    let current: Account | undefined = this;
+    let current: Account | undefined = this.toJSON();
 
     while (current && current.parentId) {
       const parent = accounts.find((a) => a.id === current!.parentId);
@@ -382,7 +373,7 @@ export class AccountModel implements Account {
   }
 
   // シリアライズメソッド
-  toJSON(): Account {
+  toJSON(): BSAccount | FlowAccount | CFAccount {
     return {
       id: this.id,
       accountName: this.accountName,
@@ -393,6 +384,6 @@ export class AccountModel implements Account {
       displayOrder: this.displayOrder,
       parameter: this.parameter,
       flowAccountCfImpact: this.flowAccountCfImpact,
-    };
+    } as BSAccount | FlowAccount | CFAccount;
   }
 }

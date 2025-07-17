@@ -1,24 +1,29 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type {
   Account,
   SheetType,
-  FlowAccountCfImpact,
   Parameter,
+} from "../types/accountTypes";
+import {
+  isFormulaParameter,
+  isPercentageParameter,
+  isDaysParameter,
 } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type {
   CalculationContext,
   CalculationResult,
+  CalculationError,
 } from "../types/calculationTypes";
 import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
+import type { AccountRelation } from "../types/relationTypes";
+import type { EvaluationContext } from "../types/astTypes";
 import { AccountModel } from "./Account";
 import { FinancialValue } from "./FinancialValue";
 import { NewStrategyFactory } from "../factories/NewStrategyFactory";
 import { NewFormulaStrategy } from "../strategies/NewFormulaStrategy";
 import { ASTBuilder } from "../ast/ASTBuilder";
 import { ASTEvaluator } from "../ast/ASTEvaluator";
-import { CF_IMPACT_TYPES, SHEET_TYPES } from "../types/accountTypes";
+import { CF_IMPACT_TYPES, SHEET_TYPES, PARAMETER_TYPES } from "../types/accountTypes";
 
 export class FinancialModelManager {
   private accounts: Map<string, AccountModel>;
@@ -78,7 +83,7 @@ export class FinancialModelManager {
           this.addRelation({
             fromAccountId: newAccount.id,
             toAccountId: cfAccount.id,
-            relationType: "cf-mapping",
+            relationType: "cf-mapping" as const,
           });
         }
       }
@@ -88,7 +93,7 @@ export class FinancialModelManager {
       this.addRelation({
         fromAccountId: account.parentId,
         toAccountId: newAccount.id,
-        relationType: "parent-child",
+        relationType: "parent-child" as const,
       });
     }
 
@@ -212,7 +217,7 @@ export class FinancialModelManager {
         const result = this.calculateAccount(account, periodId, context);
         if (result) {
           results.set(account.id, result);
-          context.accounts.set(account.id, result.value);
+          context.accountValues.set(account.id, result.value);
 
           const financialValue = new FinancialValue(
             account.id,
@@ -223,12 +228,13 @@ export class FinancialModelManager {
           this.values.set(financialValue.getKey(), financialValue);
         }
       } catch (error) {
-        errors.push({
+        const calculationError: CalculationError = {
           accountId: account.id,
           periodId,
           error: error instanceof Error ? error.message : String(error),
           stack: error instanceof Error ? error.stack : undefined,
-        });
+        };
+        errors.push(calculationError);
       }
     });
 
@@ -251,24 +257,23 @@ export class FinancialModelManager {
 
     // 新しいパラメータ構造での子科目合計の処理
     if (
-      parameter.type === "formula" &&
-      parameter.formula === "SUM(children)" &&
+      parameter.paramType === PARAMETER_TYPES.CHILDREN_SUM &&
       strategy instanceof NewFormulaStrategy
     ) {
-      const childIds = this.getChildAccountIds(account.id);
       // NewFormulaStrategyでは子科目IDsは計算時に動的に取得
+      // const childIds = this.getChildAccountIds(account.id);
     }
 
     // 新しいパラメータ構造での計算式の処理
-    if (parameter.type === "formula" && parameter.formula) {
+    if (isFormulaParameter(parameter) && parameter.paramValue) {
       const astContext: EvaluationContext = {
         variables: new Map(),
         functions: new Map(),
       };
 
       // 依存関係から変数を設定
-      if (parameter.dependencies) {
-        parameter.dependencies.forEach((depId) => {
+      if (parameter.paramReferences) {
+        parameter.paramReferences.forEach((depId) => {
           const value = context.accountValues.get(depId) || 0;
           astContext.variables.set(depId, value);
         });
@@ -277,12 +282,12 @@ export class FinancialModelManager {
       const evaluator = new ASTEvaluator(astContext);
 
       try {
-        const ast = this.astBuilder.parse(parameter.formula);
+        const ast = this.astBuilder.parse(parameter.paramValue);
         const value = evaluator.evaluate(ast);
 
         return {
           value,
-          formula: parameter.formula,
+          formula: parameter.paramValue,
           references: evaluator.extractDependencies(ast),
         };
       } catch (error) {
@@ -292,7 +297,7 @@ export class FinancialModelManager {
 
     // 新しいパラメータ構造に対応したストラテジー呼び出し
     context.accountId = account.id;
-    return strategy.calculate(context);
+    return strategy.calculate(account.id, parameter, context);
   }
 
   // CFインパクトに基づいたCF計算メソッド
@@ -452,18 +457,14 @@ export class FinancialModelManager {
       if (!parameter) return;
 
       // 新しいパラメータ構造での依存関係抽出
-      switch (parameter.type) {
-        case "percentage":
-        case "days":
-          if ("baseAccountId" in parameter && parameter.baseAccountId) {
-            dependencies.add(parameter.baseAccountId);
-          }
-          break;
-        case "formula":
-          if (parameter.dependencies) {
-            parameter.dependencies.forEach((depId) => dependencies.add(depId));
-          }
-          break;
+      if (isPercentageParameter(parameter) || isDaysParameter(parameter)) {
+        if (parameter.paramReferences) {
+          dependencies.add(parameter.paramReferences.accountId);
+        }
+      } else if (isFormulaParameter(parameter)) {
+        if (parameter.paramReferences) {
+          parameter.paramReferences.forEach((depId) => dependencies.add(depId));
+        }
       }
     });
 

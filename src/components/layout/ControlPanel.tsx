@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import React from "react";
 import { Button } from "../common/Button";
 import { Select } from "../common/Select";
