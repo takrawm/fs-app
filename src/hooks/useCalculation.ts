@@ -1,7 +1,5 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import { useState, useCallback } from "react";
-import type { CalculationResult, CalculationError } from "../types/financial";
+import type { CalculationResult, CalculationError } from "../types/calculationTypes";
 
 export const useCalculation = () => {
   const [results, setResults] = useState<Map<string, CalculationResult>>(

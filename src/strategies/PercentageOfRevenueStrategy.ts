@@ -1,18 +1,16 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
+import type { Parameter } from "../types/accountTypes";
 import type {
-  PercentageOfRevenueParameter,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
 
 export class PercentageOfRevenueStrategy extends NewCalculationStrategy {
-  readonly type = "percentageOfRevenue" as const;
+  readonly type = "PERCENTAGE_OF_REVENUE" as const;
 
   calculate(
     accountId: string,
-    parameter: PercentageOfRevenueParameter,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
     // 売上高アカウントを探す（通常は最初の売上項目を使用）
@@ -21,14 +19,18 @@ export class PercentageOfRevenueStrategy extends NewCalculationStrategy {
       throw new Error("売上高アカウントが見つかりません");
     }
 
+    if (parameter.paramType !== "PERCENTAGE_OF_REVENUE") {
+      throw new Error("Invalid parameter type");
+    }
+    
     const revenueValue = this.getValue(revenueAccountId, context);
-    const value = this.calculatePercentage(revenueValue, parameter.value);
+    const value = this.calculatePercentage(revenueValue, parameter.paramValue * 100);
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       value,
-      `売上高 * ${parameter.value}%`,
+      `売上高 * ${(parameter.paramValue * 100).toFixed(1)}%`,
       [revenueAccountId]
     );
   }
@@ -36,7 +38,7 @@ export class PercentageOfRevenueStrategy extends NewCalculationStrategy {
   private findRevenueAccount(context: CalculationContext): string | null {
     // 売上高アカウントを見つけるロジック
     // 実際の実装では、アカウント名やIDパターンで判定
-    for (const [accountId] of context.accounts) {
+    for (const [accountId] of context.accountValues) {
       if (accountId.includes("revenue") || accountId.includes("sales")) {
         return accountId;
       }

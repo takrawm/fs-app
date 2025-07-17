@@ -1,26 +1,31 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { DaysParameter, CalculationContext } from "../types/parameter";
-import type { CalculationResult } from "../types/financial";
+import type { Parameter } from "../types/accountTypes";
+import type {
+  CalculationContext,
+  CalculationResult,
+} from "../types/calculationTypes";
 import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
 
 export class DaysStrategy extends NewCalculationStrategy {
-  readonly type = "days" as const;
+  readonly type = "DAYS" as const;
 
   calculate(
     accountId: string,
-    parameter: DaysParameter,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
-    const baseValue = this.getValue(parameter.baseAccountId, context);
-    const value = this.calculateDaysBasedValue(baseValue, parameter.days);
+    if (parameter.paramType !== "DAYS") {
+      throw new Error("Invalid parameter type");
+    }
+    
+    const baseValue = this.getValue(parameter.paramReferences.accountId, context);
+    const value = this.calculateDaysBasedValue(baseValue, parameter.paramValue);
     
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       value,
-      `[${parameter.baseAccountId}] * ${parameter.days}日 / 30日`,
-      [parameter.baseAccountId]
+      `[${parameter.paramReferences.accountId}] * ${parameter.paramValue}日 / 30日`,
+      [parameter.paramReferences.accountId]
     );
   }
 }

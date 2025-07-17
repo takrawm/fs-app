@@ -1,20 +1,31 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import {
-  Parameter,
+import type { Parameter } from "../types/accountTypes";
+import { PARAMETER_TYPES, OPERATIONS } from "../types/accountTypes";
+import type {
   CalculationContext,
   CalculationResult,
   CalculationStrategy,
-  PARAMETER_TYPES,
-  OPERATIONS,
-  isGrowthRateParameter,
-  isChildrenSumParameter,
-  isCalculationParameter,
-  isPercentageParameter,
-  isProportionateParameter,
-} from "../types/accountTypes";
+} from "../types/calculationTypes";
+
+// 型ガード関数の定義
+function isGrowthRateParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.GROWTH_RATE }> {
+  return param.paramType === PARAMETER_TYPES.GROWTH_RATE;
+}
+
+function isChildrenSumParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.CHILDREN_SUM }> {
+  return param.paramType === PARAMETER_TYPES.CHILDREN_SUM;
+}
+
+function isCalculationParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.CALCULATION }> {
+  return param.paramType === PARAMETER_TYPES.CALCULATION;
+}
+
+function isPercentageParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.PERCENTAGE }> {
+  return param.paramType === PARAMETER_TYPES.PERCENTAGE;
+}
+
+function isProportionateParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.PROPORTIONATE }> {
+  return param.paramType === PARAMETER_TYPES.PROPORTIONATE;
+}
 
 /** 成長率計算ストラテジー */
 export class GrowthRateCalculationStrategy implements CalculationStrategy {
@@ -31,14 +42,16 @@ export class GrowthRateCalculationStrategy implements CalculationStrategy {
       throw new Error("Invalid parameter type");
     }
 
-    const previousValue = context.previousValues.get(context.accountId) || 0;
+    // accountIdは引数として別途渡す必要がある
+    const accountId = ""; // TODO: accountIdをコンテキストに追加するか、引数として渡す
+    const previousValue = context.previousValues.get(accountId) || 0;
     const growthRate = this.parameter.paramValue;
     const currentValue = previousValue * (1 + growthRate);
 
     return {
       value: currentValue,
-      formula: `${context.accountId}[t-1] × (1 + ${growthRate})`,
-      references: [context.accountId],
+      formula: `${accountId}[t-1] × (1 + ${growthRate})`,
+      references: [accountId],
     };
   }
 
@@ -208,7 +221,7 @@ export class ChildrenSumCalculationStrategy implements CalculationStrategy {
     }
   }
 
-  calculate(context: CalculationContext): CalculationResult {
+  calculate(_context: CalculationContext): CalculationResult {
     // 子科目の合計ロジックは別途実装が必要
     // ここでは仮の実装
     return {

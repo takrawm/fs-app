@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: 各StrategyクラスのtypeプロパティをPARAMETER_TYPES定数に合わせて修正が必要
 import { PARAMETER_TYPES } from "../types/accountTypes";
 import type { Parameter } from "../types/accountTypes";
 import { NewCalculationStrategy } from "../strategies/base/NewCalculationStrategy";

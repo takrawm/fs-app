@@ -111,7 +111,7 @@ function App() {
           </div>
 
           <AccountTable
-            accounts={accounts.map((account) => account.toJSON())}
+            accounts={accounts}
             periods={periods}
             getAccountValue={getAccountValue}
             onEditAccount={handleEditAccount}

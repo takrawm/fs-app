@@ -22,7 +22,7 @@ export class ConstantStrategy extends NewCalculationStrategy {
 
     return this.createResult(
       accountId,
-      context.accountId, // currentPeriodIdの代わりにaccountIdを使用
+      context.periodId,
       parameter.paramValue,
       `定数: ${parameter.paramValue}`,
       []

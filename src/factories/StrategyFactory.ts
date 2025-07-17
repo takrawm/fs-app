@@ -1,12 +1,9 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { ParameterConfig, Parameter } from "../types/accountTypes";
+import type { Parameter } from "../types/accountTypes";
 import {
   BaseCalculationStrategy,
   ProportionateStrategy,
   PercentageStrategy,
   GrowthRateStrategy,
-  CalculationStrategy,
   SubtotalStrategy,
   ReferenceStrategy,
   NewCalculationStrategy,
@@ -18,16 +15,16 @@ export class StrategyFactory {
     ["比率", new PercentageStrategy()],
     ["成長率", new GrowthRateStrategy()],
     ["他科目連動", new ProportionateStrategy()],
-    ["計算", new CalculationStrategy()],
+    // ["計算", new CalculationStrategy()], // TODO: 実装を見直す
     ["子科目合計", new SubtotalStrategy()],
     ["参照", new ReferenceStrategy()],
   ]);
 
-  static getStrategy(config: ParameterConfig): BaseCalculationStrategy {
-    const strategy = this.strategies.get(config.type);
+  static getStrategy(type: string): BaseCalculationStrategy {
+    const strategy = this.strategies.get(type);
 
     if (!strategy) {
-      throw new Error(`Unknown parameter type: ${config.type}`);
+      throw new Error(`Unknown parameter type: ${type}`);
     }
 
     return strategy;
@@ -41,7 +38,11 @@ export class StrategyFactory {
   }
 
   static getSubtotalStrategy(): SubtotalStrategy {
-    return this.strategies.get("子科目合計") as SubtotalStrategy;
+    const strategy = this.strategies.get("子科目合計");
+    if (!strategy || !(strategy instanceof SubtotalStrategy)) {
+      throw new Error("SubtotalStrategy not found");
+    }
+    return strategy;
   }
 
   // 新しいパラメータ構造に対応したストラテジー取得

@@ -1,33 +1,31 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import { CalculationStrategy } from "./base/CalculationStrategy";
+import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
+import type { Parameter } from "../types/accountTypes";
 import type {
-  ParameterConfig,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 
-export class PercentageStrategy extends CalculationStrategy {
-  readonly type = "比率" as const;
+export class PercentageStrategy extends NewCalculationStrategy {
+  readonly type = "PERCENTAGE" as const;
 
   calculate(
     accountId: string,
-    config: ParameterConfig,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
-    if (config.type !== "比率") {
-      throw new Error("Invalid parameter config type");
+    if (parameter.paramType !== "PERCENTAGE") {
+      throw new Error("Invalid parameter type");
     }
 
-    const referenceValue = this.getValue(config.referenceId, context);
-    const value = referenceValue * (config.value / 100);
+    const referenceValue = this.getValue(parameter.paramReferences.accountId, context);
+    const value = referenceValue * parameter.paramValue;
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       value,
-      `[${config.referenceId}] × ${config.value}%`,
-      [config.referenceId]
+      `[${parameter.paramReferences.accountId}] × ${(parameter.paramValue * 100).toFixed(1)}%`,
+      [parameter.paramReferences.accountId]
     );
   }
 }

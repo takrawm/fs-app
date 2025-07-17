@@ -1,14 +1,12 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import { CalculationStrategy } from "./base/CalculationStrategy";
+import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
+import type { Parameter } from "../types/accountTypes";
 import type {
-  ParameterConfig,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 
-export class SubtotalStrategy extends CalculationStrategy {
-  readonly type = "子科目合計" as const;
+export class SubtotalStrategy extends NewCalculationStrategy {
+  readonly type = "CHILDREN_SUM" as const;
 
   private childAccountIds: string[] = [];
 
@@ -18,11 +16,11 @@ export class SubtotalStrategy extends CalculationStrategy {
 
   calculate(
     accountId: string,
-    config: ParameterConfig,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
-    if (config.type !== "子科目合計") {
-      throw new Error("Invalid parameter config type");
+    if (parameter.paramType !== "CHILDREN_SUM") {
+      throw new Error("Invalid parameter type");
     }
 
     let total = 0;
@@ -36,7 +34,7 @@ export class SubtotalStrategy extends CalculationStrategy {
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       total,
       `Σ(子科目)`,
       dependencies

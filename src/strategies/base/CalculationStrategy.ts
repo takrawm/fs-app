@@ -1,48 +1,40 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
+import type { Parameter } from "../../types/accountTypes";
 import type {
-  ParameterConfig,
   CalculationContext,
-} from "../../types/parameter";
-import type { CalculationResult } from "../../types/financial";
+  CalculationResult,
+} from "../../types/calculationTypes";
 
 export abstract class CalculationStrategy {
-  abstract readonly type: ParameterConfig["type"];
+  abstract readonly type: Parameter["paramType"];
 
   abstract calculate(
     accountId: string,
-    config: ParameterConfig,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult;
 
   protected createResult(
-    accountId: string,
-    periodId: string,
+    _accountId: string,
+    _periodId: string,
     value: number,
     formula?: string,
-    dependencies: string[] = []
+    references: string[] = []
   ): CalculationResult {
     return {
-      accountId,
-      periodId,
       value,
-      formula,
-      dependencies,
-      calculatedAt: new Date(),
+      formula: formula || "",
+      references,
     };
   }
 
   protected getValue(accountId: string, context: CalculationContext): number {
-    return context.accounts.get(accountId) || 0;
+    return context.accountValues.get(accountId) || 0;
   }
 
   protected getPreviousValue(
     accountId: string,
     context: CalculationContext
   ): number {
-    if (!context.previousPeriodId) return 0;
-    return (
-      context.accounts.get(`${accountId}_${context.previousPeriodId}`) || 0
-    );
+    return context.previousValues.get(accountId) || 0;
   }
 }

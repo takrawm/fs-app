@@ -237,6 +237,12 @@ interface BaseAccount {
 
   /** 計算パラメータ */
   parameter: Parameter;
+
+  /** 作成日時 */
+  createdAt: Date;
+
+  /** 更新日時 */
+  updatedAt: Date;
 }
 
 /**

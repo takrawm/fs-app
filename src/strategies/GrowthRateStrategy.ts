@@ -1,32 +1,30 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import { CalculationStrategy } from "./base/CalculationStrategy";
+import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
+import type { Parameter } from "../types/accountTypes";
 import type {
-  ParameterConfig,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 
-export class GrowthRateStrategy extends CalculationStrategy {
-  readonly type = "成長率" as const;
+export class GrowthRateStrategy extends NewCalculationStrategy {
+  readonly type = "GROWTH_RATE" as const;
 
   calculate(
     accountId: string,
-    config: ParameterConfig,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
-    if (config.type !== "成長率") {
-      throw new Error("Invalid parameter config type");
+    if (parameter.paramType !== "GROWTH_RATE") {
+      throw new Error("Invalid parameter type");
     }
 
     const previousValue = this.getPreviousValue(accountId, context);
-    const value = previousValue * (1 + config.value / 100);
+    const value = previousValue * (1 + parameter.paramValue);
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       value,
-      `前期 × (1 + ${config.value}%)`,
+      `前期 × (1 + ${(parameter.paramValue * 100).toFixed(1)}%)`,
       []
     );
   }

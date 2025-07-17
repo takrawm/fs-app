@@ -1,29 +1,31 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
+import type { Parameter } from "../types/accountTypes";
 import type {
-  PercentageParameter,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
 
 export class NewPercentageStrategy extends NewCalculationStrategy {
-  readonly type = "percentage" as const;
+  readonly type = "PERCENTAGE" as const;
 
   calculate(
     accountId: string,
-    parameter: PercentageParameter,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
-    const baseValue = this.getValue(parameter.baseAccountId, context);
-    const value = this.calculatePercentage(baseValue, parameter.value);
+    if (parameter.paramType !== "PERCENTAGE") {
+      throw new Error("Invalid parameter type");
+    }
+    
+    const baseValue = this.getValue(parameter.paramReferences.accountId, context);
+    const value = this.calculatePercentage(baseValue, parameter.paramValue * 100);
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       value,
-      `[${parameter.baseAccountId}] * ${parameter.value}%`,
-      [parameter.baseAccountId]
+      `[${parameter.paramReferences.accountId}] * ${(parameter.paramValue * 100).toFixed(1)}%`,
+      [parameter.paramReferences.accountId]
     );
   }
 }

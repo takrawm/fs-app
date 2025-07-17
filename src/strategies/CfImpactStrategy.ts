@@ -1,8 +1,4 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
-import type { FlowAccountCfImpact, CfImpactType } from "../types/accountTypes";
+import type { FlowAccountCfImpact } from "../types/accountTypes";
 import type { CalculationContext } from "../types/calculationTypes";
 import type { CalculationResult } from "../types/calculationTypes";
 import { CF_IMPACT_TYPES } from "../types/accountTypes";
@@ -40,42 +36,35 @@ export class CfImpactStrategy {
 
   private calculateBaseProfit(
     accountId: string,
-    cfImpact: FlowAccountCfImpact,
+    _cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     // 基準利益の場合、そのまま値を使用
-    const value = context.accounts.get(accountId) || 0;
+    const value = context.accountValues.get(accountId) || 0;
 
     return {
-      accountId,
-      periodId: context.currentPeriodId,
       value,
       formula: "基準利益",
-      dependencies: [accountId],
-      calculatedAt: new Date(),
+      references: [accountId],
     };
   }
 
   private calculateAdjustment(
     accountId: string,
-    cfImpact: FlowAccountCfImpact,
+    _cfImpact: FlowAccountCfImpact,
     context: CalculationContext
   ): CalculationResult {
     // 調整項目の場合、BS項目の増減を計算
-    if (!context.previousPeriodId) {
+    if (!context.periodId) {
       return {
-        accountId,
-        periodId: context.currentPeriodId,
         value: 0,
         formula: "前期データなし",
-        dependencies: [accountId],
-        calculatedAt: new Date(),
+        references: [accountId],
       };
     }
 
-    const currentValue = context.accounts.get(accountId) || 0;
-    const previousValue =
-      context.accounts.get(`${accountId}_${context.previousPeriodId}`) || 0;
+    const currentValue = context.accountValues.get(accountId) || 0;
+    const previousValue = context.previousValues.get(accountId) || 0;
     const change = currentValue - previousValue;
 
     // 資産の増加、負債・純資産の減少はCF減少要因（マイナス）
@@ -83,12 +72,9 @@ export class CfImpactStrategy {
     const adjustmentValue = this.determineCfAdjustmentSign(accountId, change);
 
     return {
-      accountId,
-      periodId: context.currentPeriodId,
       value: adjustmentValue,
       formula: `${accountId}の変動調整`,
-      dependencies: [accountId],
-      calculatedAt: new Date(),
+      references: [accountId],
     };
   }
 
@@ -99,27 +85,24 @@ export class CfImpactStrategy {
   ): CalculationResult {
     // 振替項目の場合、対象アカウントの値を使用
     let value = 0;
-    const dependencies: string[] = [];
+    const references: string[] = [];
 
-    if (cfImpact.targetAccountIds && cfImpact.targetAccountIds.length > 0) {
-      cfImpact.targetAccountIds.forEach((targetId) => {
-        const targetValue = context.accounts.get(targetId) || 0;
-        value += targetValue;
-        dependencies.push(targetId);
-      });
+    // CFインパクトタイプごとの処理
+    if (cfImpact.type === CF_IMPACT_TYPES.RECLASSIFICATION && "reclassification" in cfImpact) {
+      // 組替元から組替先への移動
+      const fromValue = context.accountValues.get(cfImpact.reclassification.from) || 0;
+      value = fromValue;
+      references.push(cfImpact.reclassification.from);
     } else {
-      // 対象アカウントが指定されていない場合は、自身の値を使用
-      value = context.accounts.get(accountId) || 0;
-      dependencies.push(accountId);
+      // その他の場合は自身の値を使用
+      value = context.accountValues.get(accountId) || 0;
+      references.push(accountId);
     }
 
     return {
-      accountId,
-      periodId: context.currentPeriodId,
       value,
-      formula: cfImpact.formula || "振替項目",
-      dependencies,
-      calculatedAt: new Date(),
+      formula: "振替項目",
+      references,
     };
   }
 
@@ -148,21 +131,18 @@ export class CfImpactStrategy {
     context: CalculationContext
   ): CalculationResult {
     let totalValue = 0;
-    const dependencies: string[] = [];
+    const references: string[] = [];
 
     accountIds.forEach((accountId) => {
-      const value = context.accounts.get(accountId) || 0;
+      const value = context.accountValues.get(accountId) || 0;
       totalValue += value;
-      dependencies.push(accountId);
+      references.push(accountId);
     });
 
     return {
-      accountId: `cf-${sectionType}`,
-      periodId: context.currentPeriodId,
       value: totalValue,
       formula: `${sectionType}CF合計`,
-      dependencies,
-      calculatedAt: new Date(),
+      references,
     };
   }
 }

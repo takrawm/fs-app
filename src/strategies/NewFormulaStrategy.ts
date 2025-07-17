@@ -1,17 +1,19 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
+import type { Parameter } from "../types/accountTypes";
 import type {
-  FormulaParameter,
   CalculationContext,
-} from "../types/accountTypes";
-import type { CalculationResult } from "../types/financial";
+  CalculationResult,
+} from "../types/calculationTypes";
 import { NewCalculationStrategy } from "./base/NewCalculationStrategy";
 import { ASTBuilder } from "../ast/ASTBuilder";
 import { ASTEvaluator } from "../ast/ASTEvaluator";
-import type { EvaluationContext } from "../types/financialTypes";
+// ASTの評価コンテキスト型定義
+interface EvaluationContext {
+  variables: Map<string, number>;
+  functions: Map<string, Function>;
+}
 
 export class NewFormulaStrategy extends NewCalculationStrategy {
-  readonly type = "formula" as const;
+  readonly type = "FORMULA" as const;
   private astBuilder: ASTBuilder;
 
   constructor() {
@@ -21,7 +23,7 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
 
   calculate(
     accountId: string,
-    parameter: FormulaParameter,
+    parameter: Parameter,
     context: CalculationContext
   ): CalculationResult {
     try {
@@ -31,37 +33,43 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
         functions: new Map(),
       };
 
+      if (parameter.paramType !== "FORMULA") {
+        throw new Error("Invalid parameter type");
+      }
+      
       // 依存関係から変数を設定
-      parameter.dependencies.forEach((depId) => {
-        const value = this.getValue(depId, context);
-        astContext.variables.set(depId, value);
-      });
+      if (Array.isArray(parameter.paramReferences)) {
+        parameter.paramReferences.forEach((depId) => {
+          const value = this.getValue(depId, context);
+          astContext.variables.set(depId, value);
+        });
+      }
 
       // 特殊な計算式の処理
-      if (parameter.formula === "SUM(children)") {
+      if (parameter.paramValue === "SUM(children)") {
         return this.calculateChildrenSum(accountId, context);
       }
 
       // 一般的な計算式の処理
       const evaluator = new ASTEvaluator(astContext);
-      const ast = this.astBuilder.parse(parameter.formula);
+      const ast = this.astBuilder.parse(parameter.paramValue);
       const value = evaluator.evaluate(ast);
 
       return this.createResult(
         accountId,
-        context.currentPeriodId,
+        context.periodId,
         value,
-        parameter.formula,
-        parameter.dependencies
+        parameter.paramValue,
+        Array.isArray(parameter.paramReferences) ? parameter.paramReferences : []
       );
     } catch (error) {
       console.error("Formula calculation error:", error);
       return this.createResult(
         accountId,
-        context.currentPeriodId,
+        context.periodId,
         0,
-        `エラー: ${parameter.formula}`,
-        parameter.dependencies
+        `エラー: ${parameter.paramValue}`,
+        Array.isArray(parameter.paramReferences) ? parameter.paramReferences : []
       );
     }
   }
@@ -76,7 +84,7 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
     let sum = 0;
     const childAccountIds: string[] = [];
 
-    for (const [id, value] of context.accounts) {
+    for (const [id, value] of context.accountValues) {
       if (id.startsWith(`${accountId}-child-`)) {
         sum += value;
         childAccountIds.push(id);
@@ -85,7 +93,7 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
 
     return this.createResult(
       accountId,
-      context.currentPeriodId,
+      context.periodId,
       sum,
       "SUM(children)",
       childAccountIds
