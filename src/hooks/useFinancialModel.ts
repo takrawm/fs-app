@@ -237,7 +237,13 @@ export const useFinancialModel = () => {
 
         // 計算結果で状態を更新
         setCalculationResults(results);
-        setFinancialValues(new Map([...financialValues, ...calculatedValues]));
+        setFinancialValues((prev) => {
+          const newMap = new Map(prev);
+          calculatedValues.forEach((value, key) => {
+            newMap.set(key, value);
+          });
+          return newMap;
+        });
         setCalculationErrors(errors);
 
         return results;
@@ -312,8 +318,8 @@ export const useFinancialModel = () => {
       });
 
       allValues.forEach((periodValues, periodId) => {
-        periodValues.forEach((value, accountId) => {
-          flatValues.set(`${accountId}_${periodId}`, value);
+        periodValues.forEach((value, key) => {
+          flatValues.set(key, value);
         });
       });
 

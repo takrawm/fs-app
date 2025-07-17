@@ -1,7 +1,11 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
-import type { CalculationResult, CalculationContext, CalculationError } from "../types/calculationTypes";
+import type {
+  CalculationResult,
+  CalculationContext,
+  CalculationError,
+} from "../types/calculationTypes";
 import type { AccountRelation } from "../types/relationTypes";
 import { DependencyResolver } from "./DependencyResolver";
 import { AccountCalculator } from "./AccountCalculator";
@@ -39,13 +43,14 @@ export class FinancialCalculator {
 
       // 2. トポロジカルソート順に計算
       const context: CalculationContext = {
+        accountId: "", // 各アカウント計算時に設定
         periodId,
         accountValues: new Map(currentValues),
         previousValues: new Map(previousPeriodValues),
       };
 
       for (const accountId of sortedAccountIds) {
-        const account = accounts.find(a => a.id === accountId);
+        const account = accounts.find((a) => a.id === accountId);
         if (!account) continue;
 
         const parameter = parameters.get(accountId);
@@ -62,20 +67,19 @@ export class FinancialCalculator {
 
           if (result) {
             results.set(accountId, result);
-            
+
             // 計算結果をcontextに反映（次の計算で使用）
             context.accountValues.set(accountId, result.value);
-            
+
             // FinancialValueとして保存
             const financialValue: FinancialValue = {
               id: `${accountId}_${periodId}`,
               accountId,
               periodId,
               value: result.value,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              isCalculated: true,
             };
-            calculatedValues.set(accountId, financialValue);
+            calculatedValues.set(`${accountId}_${periodId}`, financialValue);
           }
         } catch (error) {
           const calculationError: CalculationError = {
@@ -85,12 +89,11 @@ export class FinancialCalculator {
             stack: error instanceof Error ? error.stack : undefined,
           };
           errors.push(calculationError);
-          
+
           // エラーが発生した場合は0として続行
           context.accountValues.set(accountId, 0);
         }
       }
-
     } catch (error) {
       // 依存関係解決エラー
       const globalError: CalculationError = {
@@ -122,6 +125,7 @@ export class FinancialCalculator {
     relations: ReadonlyArray<AccountRelation>
   ): CalculationResult | null {
     const context: CalculationContext = {
+      accountId: account.id,
       periodId,
       accountValues: new Map(currentValues),
       previousValues: new Map(previousPeriodValues),
@@ -153,11 +157,14 @@ export class FinancialCalculator {
     // 期間を順番に計算
     for (const period of periods) {
       const currentValues = new Map<string, number>();
-      
+
       // 手動入力値や定数など、期間に依存しない値を設定
       for (const account of accounts) {
         const parameter = parameters.get(account.id);
-        if (parameter?.paramType === "MANUAL_INPUT" || parameter?.paramType === "CONSTANT") {
+        if (
+          parameter?.paramType === "MANUAL_INPUT" ||
+          parameter?.paramType === "CONSTANT"
+        ) {
           const value = parameter.paramValue || 0;
           currentValues.set(account.id, value);
         }
@@ -208,14 +215,18 @@ export class FinancialCalculator {
     // すべての科目が計算されているか確認
     for (const account of accounts) {
       if (!results.has(account.id)) {
-        validationErrors.push(`Account ${account.id} (${account.accountName}) was not calculated`);
+        validationErrors.push(
+          `Account ${account.id} (${account.accountName}) was not calculated`
+        );
       }
     }
 
     // 計算結果の妥当性チェック
     for (const [accountId, result] of results) {
       if (isNaN(result.value) || !isFinite(result.value)) {
-        validationErrors.push(`Account ${accountId} has invalid value: ${result.value}`);
+        validationErrors.push(
+          `Account ${accountId} has invalid value: ${result.value}`
+        );
       }
     }
 
