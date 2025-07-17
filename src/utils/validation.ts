@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type { ValidationError } from "../types/financial";
 import type { SheetType } from "../types/accountTypes";
 import type { ParameterType, Parameter } from "../types/accountTypes";

@@ -7,6 +7,7 @@ export interface CalculationResult {
 
 // 計算コンテキストの型定義
 export interface CalculationContext {
+  accountId: string;
   periodId: string;
   accountValues: Map<string, number>;
   previousValues: Map<string, number>;

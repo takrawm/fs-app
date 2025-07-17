@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type {
   ASTNode,
   EvaluationContext,
@@ -9,7 +7,7 @@ import type {
   UnaryNode,
   FunctionNode,
   ParenthesisNode,
-} from "../types/ast";
+} from "../types/astTypes";
 
 export class ASTEvaluator {
   private context: EvaluationContext;
@@ -92,7 +90,7 @@ export class ASTEvaluator {
       throw new Error(`Unknown function: ${node.name}`);
     }
 
-    const args = node.arguments.map((arg) => this.evaluate(arg));
+    const args = node.args.map((arg: ASTNode) => this.evaluate(arg));
     return func(...args);
   }
 
@@ -158,7 +156,7 @@ export class ASTEvaluator {
         break;
       case "function":
         const funcNode = node as FunctionNode;
-        funcNode.arguments.forEach((arg) =>
+        funcNode.args.forEach((arg: ASTNode) =>
           this.collectDependencies(arg, dependencies)
         );
         break;

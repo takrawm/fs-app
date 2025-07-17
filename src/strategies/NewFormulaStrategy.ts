@@ -1,4 +1,8 @@
 import type { Parameter } from "../types/accountTypes";
+import {
+  isCalculationParameter,
+  isFormulaParameter,
+} from "../types/accountTypes";
 import type {
   CalculationContext,
   CalculationResult,
@@ -36,7 +40,7 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
       if (parameter.paramType !== "FORMULA") {
         throw new Error("Invalid parameter type");
       }
-      
+
       // 依存関係から変数を設定
       if (Array.isArray(parameter.paramReferences)) {
         parameter.paramReferences.forEach((depId) => {
@@ -55,21 +59,31 @@ export class NewFormulaStrategy extends NewCalculationStrategy {
       const ast = this.astBuilder.parse(parameter.paramValue);
       const value = evaluator.evaluate(ast);
 
+      const references =
+        isFormulaParameter(parameter) && parameter.paramReferences
+          ? parameter.paramReferences
+          : [];
+
       return this.createResult(
         accountId,
         context.periodId,
         value,
         parameter.paramValue,
-        Array.isArray(parameter.paramReferences) ? parameter.paramReferences : []
+        references
       );
     } catch (error) {
       console.error("Formula calculation error:", error);
+      const errorReferences =
+        isFormulaParameter(parameter) && parameter.paramReferences
+          ? parameter.paramReferences
+          : [];
+
       return this.createResult(
         accountId,
         context.periodId,
         0,
         `エラー: ${parameter.paramValue}`,
-        Array.isArray(parameter.paramReferences) ? parameter.paramReferences : []
+        errorReferences
       );
     }
   }

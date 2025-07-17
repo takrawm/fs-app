@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 /**
  * シードデータ検証ユーティリティ
  * 既存のAccount型定義に基づいてデータの整合性を検証
@@ -13,6 +11,8 @@ import type {
   CfImpactType,
   FlowAccountCfImpact,
   DisplayOrder,
+} from "../types/accountTypes";
+import {
   SHEET_TYPES,
   CF_IMPACT_TYPES,
   PARAMETER_TYPES,
@@ -20,18 +20,19 @@ import type {
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
 
-// 検証結果の型定義
-export interface ValidationError {
+// 検証結果の型定義（seedDataValidator専用）
+export interface SeedValidationError {
   field: string;
   message: string;
   code: string;
   severity: "error" | "warning";
+  value?: any; // 問題のある値を含める
 }
 
 export interface ValidationResult {
   isValid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationError[];
+  errors: SeedValidationError[];
+  warnings: SeedValidationError[];
 }
 
 export interface ParameterOverride {

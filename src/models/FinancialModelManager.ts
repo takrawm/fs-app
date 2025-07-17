@@ -1,8 +1,4 @@
-import type {
-  Account,
-  SheetType,
-  Parameter,
-} from "../types/accountTypes";
+import type { Account, SheetType, Parameter } from "../types/accountTypes";
 import {
   isFormulaParameter,
   isPercentageParameter,
@@ -23,7 +19,11 @@ import { NewStrategyFactory } from "../factories/NewStrategyFactory";
 import { NewFormulaStrategy } from "../strategies/NewFormulaStrategy";
 import { ASTBuilder } from "../ast/ASTBuilder";
 import { ASTEvaluator } from "../ast/ASTEvaluator";
-import { CF_IMPACT_TYPES, SHEET_TYPES, PARAMETER_TYPES } from "../types/accountTypes";
+import {
+  CF_IMPACT_TYPES,
+  SHEET_TYPES,
+  PARAMETER_TYPES,
+} from "../types/accountTypes";
 
 export class FinancialModelManager {
   private accounts: Map<string, AccountModel>;
@@ -188,6 +188,7 @@ export class FinancialModelManager {
     const previousPeriod = this.getPreviousPeriod(period);
     const context: CalculationContext = {
       accountId: "", // 計算対象のアカウントIDは後で設定
+      periodId: periodId,
       accountValues: new Map(),
       previousValues: new Map(),
     };

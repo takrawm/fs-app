@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type {
   ASTNode,
   NumberNode,
@@ -9,7 +7,7 @@ import type {
   ParenthesisNode,
   BinaryOperator,
   UnaryOperator,
-} from "../types/ast";
+} from "../types/astTypes";
 import {
   PRECEDENCE,
   isOperator,
@@ -180,7 +178,7 @@ export class ASTBuilder {
     return {
       type: "function",
       name,
-      arguments: args,
+      args: args,
     };
   }
 

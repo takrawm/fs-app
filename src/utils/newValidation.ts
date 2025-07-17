@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: accountTypes.tsの型定義に合わせて修正が必要
 import type { ValidationError } from "../types/financial";
 import type { Account, SheetType } from "../types/accountTypes";
 import type { Parameter } from "../types/accountTypes";
@@ -69,25 +67,24 @@ export const validateAccount = (
 
   // 表示順序の検証
   if (account.displayOrder) {
-    if (account.displayOrder.sheetOrder <= 0) {
+    if (
+      !account.displayOrder.order ||
+      account.displayOrder.order.trim().length === 0
+    ) {
       errors.push({
-        field: "displayOrder.sheetOrder",
-        message: "シート順序は1以上の値を入力してください",
-        code: "INVALID_VALUE",
+        field: "displayOrder.order",
+        message: "表示順序は必須です",
+        code: "REQUIRED",
       });
     }
-    if (account.displayOrder.sectionOrder <= 0) {
+    if (
+      !account.displayOrder.prefix ||
+      account.displayOrder.prefix.trim().length === 0
+    ) {
       errors.push({
-        field: "displayOrder.sectionOrder",
-        message: "セクション順序は1以上の値を入力してください",
-        code: "INVALID_VALUE",
-      });
-    }
-    if (account.displayOrder.itemOrder <= 0) {
-      errors.push({
-        field: "displayOrder.itemOrder",
-        message: "項目順序は1以上の値を入力してください",
-        code: "INVALID_VALUE",
+        field: "displayOrder.prefix",
+        message: "プレフィックスは必須です",
+        code: "REQUIRED",
       });
     }
   }
@@ -99,25 +96,28 @@ export const validateParameter = (parameter: Parameter): ValidationError[] => {
   const errors: ValidationError[] = [];
 
   // パラメータタイプの検証
-  if (!parameter.type) {
+  if (!parameter.paramType) {
     errors.push({
-      field: "parameter.type",
+      field: "parameter.paramType",
       message: "パラメータタイプは必須です",
       code: "REQUIRED",
     });
     return errors;
   }
 
-  if (!Object.values(PARAMETER_TYPES).includes(parameter.type)) {
+  if (
+    parameter.paramType &&
+    !Object.values(PARAMETER_TYPES).includes(parameter.paramType)
+  ) {
     errors.push({
-      field: "parameter.type",
+      field: "parameter.paramType",
       message: "無効なパラメータタイプです",
       code: "INVALID_VALUE",
     });
   }
 
   // パラメータタイプ別の検証
-  switch (parameter.type) {
+  switch (parameter.paramType) {
     case PARAMETER_TYPES.CONSTANT:
       if ("value" in parameter) {
         if (typeof parameter.value !== "number") {

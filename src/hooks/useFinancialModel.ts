@@ -1,18 +1,21 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { FinancialCalculator } from "../services/FinancialCalculator";
-import type { 
-  Account, 
-  SheetType, 
+import type {
+  Account,
+  SheetType,
   Parameter,
   BSSummaryAccount,
   BSDetailAccount,
   FlowSummaryAccount,
   FlowDetailAccount,
   CFSummaryAccount,
-  CFDetailAccount
+  CFDetailAccount,
 } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
-import type { CalculationResult, CalculationError } from "../types/calculationTypes";
+import type {
+  CalculationResult,
+  CalculationError,
+} from "../types/calculationTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
 import type { AccountRelation } from "../types/relationTypes";
 import { seedDataLoader } from "../seed";
@@ -21,13 +24,19 @@ export const useFinancialModel = () => {
   // FinancialModelManagerを削除し、全ての状態をReactで管理
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [periods, setPeriods] = useState<Period[]>([]);
-  const [parameters, setParameters] = useState<Map<string, Parameter>>(new Map());
-  const [financialValues, setFinancialValues] = useState<Map<string, FinancialValue>>(new Map());
+  const [parameters, setParameters] = useState<Map<string, Parameter>>(
+    new Map()
+  );
+  const [financialValues, setFinancialValues] = useState<
+    Map<string, FinancialValue>
+  >(new Map());
   const [relations] = useState<AccountRelation[]>([]);
   const [calculationResults, setCalculationResults] = useState<
     Map<string, CalculationResult>
   >(new Map());
-  const [calculationErrors, setCalculationErrors] = useState<CalculationError[]>([]);
+  const [calculationErrors, setCalculationErrors] = useState<
+    CalculationError[]
+  >([]);
   const [selectedPeriodId, setSelectedPeriodId] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,14 +58,14 @@ export const useFinancialModel = () => {
         // seedデータから財務数値を読み込み
         const seedFinancialValues = seedDataLoader.getFinancialValues();
         const valuesMap = new Map<string, FinancialValue>();
-        seedFinancialValues.forEach(value => {
+        seedFinancialValues.forEach((value) => {
           valuesMap.set(`${value.accountId}_${value.periodId}`, value);
         });
         setFinancialValues(valuesMap);
 
         // パラメータをアカウントから抽出
         const parametersMap = new Map<string, Parameter>();
-        seedAccounts.forEach(account => {
+        seedAccounts.forEach((account) => {
           if (account.parameter) {
             parametersMap.set(account.id, account.parameter);
           }
@@ -89,13 +98,17 @@ export const useFinancialModel = () => {
         isSummaryAccount: accountData.isSummaryAccount || false,
         isCredit: accountData.isCredit || null,
         displayOrder: accountData.displayOrder || { order: "", prefix: "" },
-        parameter: accountData.parameter || { paramType: null, paramValue: null, paramReferences: null },
+        parameter: accountData.parameter || {
+          paramType: null,
+          paramValue: null,
+          paramReferences: null,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
 
       let newAccount: Account;
-      
+
       if (accountData.sheet === "BS") {
         if (baseAccountData.isSummaryAccount) {
           newAccount = {
@@ -126,34 +139,42 @@ export const useFinancialModel = () => {
         newAccount = {
           ...baseAccountData,
           sheet: accountData.sheet,
-          flowAccountCfImpact: accountData.flowAccountCfImpact || { type: null },
+          flowAccountCfImpact: accountData.flowAccountCfImpact || {
+            type: null,
+          },
         } as FlowSummaryAccount | FlowDetailAccount;
       }
-      setAccounts(prev => [...prev, newAccount]);
+      setAccounts((prev) => [...prev, newAccount]);
       return newAccount;
     },
     []
   );
 
   const updateAccount = useCallback(
-    (id: string, updates: Partial<Account>) => {
-      setAccounts(prev => prev.map(account => 
-        account.id === id ? { ...account, ...updates, updatedAt: new Date() } : account
-      ));
+    <T extends Account>(
+      id: string,
+      updates: Partial<Omit<T, "id" | "createdAt">>
+    ) => {
+      setAccounts((prev) =>
+        prev.map((account) => {
+          if (account.id === id) {
+            // 型安全な更新のため、既存のアカウントの構造を保持
+            return { ...account, ...updates, updatedAt: new Date() } as Account;
+          }
+          return account;
+        })
+      );
     },
     []
   );
 
-  const deleteAccount = useCallback(
-    (id: string) => {
-      setAccounts(prev => prev.filter(account => account.id !== id));
-    },
-    []
-  );
+  const deleteAccount = useCallback((id: string) => {
+    setAccounts((prev) => prev.filter((account) => account.id !== id));
+  }, []);
 
   const addPeriod = useCallback(
     (periodData: Period) => {
-      setPeriods(prev => [...prev, periodData]);
+      setPeriods((prev) => [...prev, periodData]);
 
       if (!selectedPeriodId) {
         setSelectedPeriodId(periodData.id);
@@ -165,8 +186,8 @@ export const useFinancialModel = () => {
   );
 
   const setParameter = useCallback(
-    (accountId: string, periodId: string, parameter: Parameter) => {
-      setParameters(prev => {
+    (accountId: string, parameter: Parameter) => {
+      setParameters((prev) => {
         const newParams = new Map(prev);
         newParams.set(accountId, parameter);
         return newParams;
@@ -184,16 +205,16 @@ export const useFinancialModel = () => {
         // 現在と前期の値をイミュータブルなMapとして準備
         const currentValues = new Map<string, number>();
         const previousPeriodValues = new Map<string, number>();
-        
+
         // 手動入力値や既存値を設定
         financialValues.forEach((value) => {
           if (value.periodId === periodId) {
             currentValues.set(value.accountId, value.value);
           }
         });
-        
+
         // 前期値を設定
-        const periodIndex = periods.findIndex(p => p.id === periodId);
+        const periodIndex = periods.findIndex((p) => p.id === periodId);
         if (periodIndex > 0) {
           const previousPeriodId = periods[periodIndex - 1].id;
           financialValues.forEach((value) => {
@@ -204,14 +225,15 @@ export const useFinancialModel = () => {
         }
 
         // 純粋関数による計算実行
-        const { results, calculatedValues, errors } = FinancialCalculator.calculatePeriod(
-          accounts,
-          periodId,
-          currentValues,
-          previousPeriodValues,
-          parameters,
-          relations
-        );
+        const { results, calculatedValues, errors } =
+          FinancialCalculator.calculatePeriod(
+            accounts,
+            periodId,
+            currentValues,
+            previousPeriodValues,
+            parameters,
+            relations
+          );
 
         // 計算結果で状態を更新
         setCalculationResults(results);
@@ -230,23 +252,20 @@ export const useFinancialModel = () => {
   );
 
   // キャッシュフロー計算処理
-  const calculateCashFlow = useCallback(
-    (_periodId: string) => {
-      setIsCalculating(true);
+  const calculateCashFlow = useCallback((_periodId: string) => {
+    setIsCalculating(true);
 
-      try {
-        // TODO: CF計算の実装
-        console.log("Cash flow calculation not yet implemented");
-        return new Map<string, CalculationResult>();
-      } catch (error) {
-        console.error("Cash flow calculation error:", error);
-        throw error;
-      } finally {
-        setIsCalculating(false);
-      }
-    },
-    []
-  );
+    try {
+      // TODO: CF計算の実装
+      console.log("Cash flow calculation not yet implemented");
+      return new Map<string, CalculationResult>();
+    } catch (error) {
+      console.error("Cash flow calculation error:", error);
+      throw error;
+    } finally {
+      setIsCalculating(false);
+    }
+  }, []);
 
   // 現在選択中の期間の計算を実行
   const calculateCurrentPeriod = useCallback(() => {
@@ -262,21 +281,24 @@ export const useFinancialModel = () => {
     try {
       // 初期値を設定
       const initialValues = new Map<string, number>();
-      accounts.forEach(account => {
-        if (account.parameter.paramType === "MANUAL_INPUT" || 
-            account.parameter.paramType === "CONSTANT") {
+      accounts.forEach((account) => {
+        if (
+          account.parameter.paramType === "MANUAL_INPUT" ||
+          account.parameter.paramType === "CONSTANT"
+        ) {
           initialValues.set(account.id, account.parameter.paramValue || 0);
         }
       });
 
       // 複数期間を一括計算
-      const { allResults, allValues, allErrors } = FinancialCalculator.calculateMultiplePeriods(
-        accounts,
-        periods,
-        initialValues,
-        parameters,
-        relations
-      );
+      const { allResults, allValues, allErrors } =
+        FinancialCalculator.calculateMultiplePeriods(
+          accounts,
+          periods,
+          initialValues,
+          parameters,
+          relations
+        );
 
       // 結果をフラット化
       const flatResults = new Map<string, CalculationResult>();
@@ -375,35 +397,35 @@ export const useFinancialModel = () => {
   const validateModel = useCallback(() => {
     // 各種検証を実行
     const errors: string[] = [];
-    
+
     // 必須フィールドの検証
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       if (!account.accountName) {
         errors.push(`Account ${account.id} has no name`);
       }
     });
-    
+
     // 期間の検証
     if (periods.length === 0) {
       errors.push("No periods defined");
     }
-    
+
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }, [accounts, periods]);
 
   const getAccountParameter = useCallback(
-    (accountId: string, periodId: string): Parameter | undefined => {
+    (accountId: string): Parameter | undefined => {
       return parameters.get(accountId);
     },
     [parameters]
   );
 
   const setAccountParameter = useCallback(
-    (accountId: string, periodId: string, parameter: Parameter) => {
-      setParameters(prev => {
+    (accountId: string, parameter: Parameter) => {
+      setParameters((prev) => {
         const newParams = new Map(prev);
         newParams.set(accountId, parameter);
         return newParams;
