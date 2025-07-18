@@ -17,7 +17,7 @@ import type {
   CalculationError,
 } from "../types/calculationTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
-import type { AccountRelation } from "../types/relationTypes";
+
 import { seedDataLoader } from "../seed";
 
 export const useFinancialModel = () => {
@@ -30,7 +30,7 @@ export const useFinancialModel = () => {
   const [financialValues, setFinancialValues] = useState<
     Map<string, FinancialValue>
   >(new Map());
-  const [relations] = useState<AccountRelation[]>([]);
+
   const [calculationResults, setCalculationResults] = useState<
     Map<string, CalculationResult>
   >(new Map());
@@ -231,8 +231,7 @@ export const useFinancialModel = () => {
             periodId,
             currentValues,
             previousPeriodValues,
-            parameters,
-            relations
+            parameters
           );
 
         // 計算結果で状態を更新
@@ -254,7 +253,7 @@ export const useFinancialModel = () => {
         setIsCalculating(false);
       }
     },
-    [accounts, periods, parameters, financialValues, relations]
+    [accounts, periods, parameters, financialValues]
   );
 
   // キャッシュフロー計算処理
@@ -302,8 +301,7 @@ export const useFinancialModel = () => {
           accounts,
           periods,
           initialValues,
-          parameters,
-          relations
+          parameters
         );
 
       // 結果をフラット化
@@ -339,7 +337,7 @@ export const useFinancialModel = () => {
     } finally {
       setIsCalculating(false);
     }
-  }, [accounts, periods, parameters, financialValues, relations]);
+  }, [accounts, periods, parameters, financialValues]);
 
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
@@ -481,7 +479,7 @@ export const useFinancialModel = () => {
     periods,
     parameters,
     financialValues,
-    relations,
+
     calculationResults,
     calculationErrors,
     selectedPeriodId,

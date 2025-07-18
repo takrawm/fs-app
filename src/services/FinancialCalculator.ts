@@ -6,7 +6,7 @@ import type {
   CalculationContext,
   CalculationError,
 } from "../types/calculationTypes";
-import type { AccountRelation } from "../types/relationTypes";
+
 import { DependencyResolver } from "./DependencyResolver";
 import { AccountCalculator } from "./AccountCalculator";
 
@@ -22,8 +22,7 @@ export class FinancialCalculator {
     periodId: string,
     currentValues: ReadonlyMap<string, number>,
     previousPeriodValues: ReadonlyMap<string, number>,
-    parameters: ReadonlyMap<string, Parameter>,
-    relations: ReadonlyArray<AccountRelation>
+    parameters: ReadonlyMap<string, Parameter>
   ): {
     results: Map<string, CalculationResult>;
     calculatedValues: Map<string, FinancialValue>;
@@ -37,8 +36,7 @@ export class FinancialCalculator {
       // 1. 依存関係を解決（DependencyResolver使用）
       const sortedAccountIds = DependencyResolver.resolveDependencies(
         accounts,
-        parameters,
-        relations
+        parameters
       );
 
       // 2. トポロジカルソート順に計算
@@ -61,8 +59,7 @@ export class FinancialCalculator {
           const result = AccountCalculator.calculate(
             account,
             parameter,
-            context,
-            relations
+            context
           );
 
           if (result) {
@@ -121,8 +118,7 @@ export class FinancialCalculator {
     periodId: string,
     parameter: Readonly<Parameter>,
     currentValues: ReadonlyMap<string, number>,
-    previousPeriodValues: ReadonlyMap<string, number>,
-    relations: ReadonlyArray<AccountRelation>
+    previousPeriodValues: ReadonlyMap<string, number>
   ): CalculationResult | null {
     const context: CalculationContext = {
       accountId: account.id,
@@ -131,7 +127,7 @@ export class FinancialCalculator {
       previousValues: new Map(previousPeriodValues),
     };
 
-    return AccountCalculator.calculate(account, parameter, context, relations);
+    return AccountCalculator.calculate(account, parameter, context);
   }
 
   /**
@@ -141,8 +137,7 @@ export class FinancialCalculator {
     accounts: ReadonlyArray<Account>,
     periods: ReadonlyArray<Period>,
     initialValues: ReadonlyMap<string, number>,
-    parameters: ReadonlyMap<string, Parameter>,
-    relations: ReadonlyArray<AccountRelation>
+    parameters: ReadonlyMap<string, Parameter>
   ): {
     allResults: Map<string, Map<string, CalculationResult>>;
     allValues: Map<string, Map<string, FinancialValue>>;
@@ -176,8 +171,7 @@ export class FinancialCalculator {
         period.id,
         currentValues,
         previousValues,
-        parameters,
-        relations
+        parameters
       );
 
       allResults.set(period.id, results);

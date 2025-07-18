@@ -1,5 +1,4 @@
 import type { Account, Parameter } from "../types/accountTypes";
-import type { AccountRelation } from "../types/relationTypes";
 
 export class DependencyResolver {
   /**
@@ -7,27 +6,26 @@ export class DependencyResolver {
    */
   static resolveDependencies(
     accounts: ReadonlyArray<Account>,
-    parameters: ReadonlyMap<string, Parameter>,
-    relations: ReadonlyArray<AccountRelation>
+    parameters: ReadonlyMap<string, Parameter>
   ): string[] {
     // 依存グラフを構築
     const graph = new Map<string, Set<string>>();
     const inDegree = new Map<string, number>();
-    
+
     // 全科目を初期化
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       graph.set(account.id, new Set());
       inDegree.set(account.id, 0);
     });
 
     // パラメータから依存関係を抽出
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       const parameter = parameters.get(account.id);
       if (!parameter) return;
 
       const dependencies = this.getDependenciesFromParameter(parameter);
-      
-      dependencies.forEach(depId => {
+
+      dependencies.forEach((depId) => {
         if (graph.has(depId)) {
           graph.get(depId)!.add(account.id);
           inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
@@ -36,17 +34,15 @@ export class DependencyResolver {
     });
 
     // 親子関係から依存関係を抽出（子科目合計の場合）
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       const parameter = parameters.get(account.id);
       if (parameter?.paramType === "CHILDREN_SUM") {
-        // この科目の子科目を探す
-        const children = relations.filter(r => 
-          r.relationType === "parent-child" && r.toAccountId === account.id
-        );
-        
-        children.forEach(relation => {
-          if (graph.has(relation.fromAccountId)) {
-            graph.get(relation.fromAccountId)!.add(account.id);
+        // parentIdベースで子科目を探す
+        const children = accounts.filter((a) => a.parentId === account.id);
+
+        children.forEach((child) => {
+          if (graph.has(child.id)) {
+            graph.get(child.id)!.add(account.id);
             inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
           }
         });
@@ -70,10 +66,10 @@ export class DependencyResolver {
 
       // 隣接頂点の入次数を減らす
       const neighbors = graph.get(current) || new Set();
-      neighbors.forEach(neighbor => {
+      neighbors.forEach((neighbor) => {
         const newDegree = (inDegree.get(neighbor) || 0) - 1;
         inDegree.set(neighbor, newDegree);
-        
+
         if (newDegree === 0) {
           queue.push(neighbor);
         }
@@ -82,8 +78,12 @@ export class DependencyResolver {
 
     // 循環依存のチェック
     if (result.length !== accounts.length) {
-      const remaining = accounts.filter(a => !result.includes(a.id));
-      throw new Error(`Circular dependency detected in accounts: ${remaining.map(a => a.id).join(", ")}`);
+      const remaining = accounts.filter((a) => !result.includes(a.id));
+      throw new Error(
+        `Circular dependency detected in accounts: ${remaining
+          .map((a) => a.id)
+          .join(", ")}`
+      );
     }
 
     return result;
@@ -103,15 +103,15 @@ export class DependencyResolver {
           deps.push(parameter.paramReferences.accountId);
         }
         break;
-      
+
       case "CALCULATION":
         if (parameter.paramReferences) {
-          parameter.paramReferences.forEach(ref => {
+          parameter.paramReferences.forEach((ref) => {
             deps.push(ref.accountId);
           });
         }
         break;
-      
+
       case "FORMULA":
         if (parameter.paramReferences) {
           deps.push(...parameter.paramReferences);
@@ -122,7 +122,7 @@ export class DependencyResolver {
         // 売上高科目への依存（動的に解決される）
         // TODO: 実装時には売上高科目を特定する仕組みが必要
         break;
-      
+
       case "GROWTH_RATE":
       case "CHILDREN_SUM":
       case "CONSTANT":
@@ -150,10 +150,12 @@ export class DependencyResolver {
     const parameter = parameters.get(accountId);
     if (parameter) {
       const dependencies = this.getDependenciesFromParameter(parameter);
-      
+
       for (const depId of dependencies) {
         if (!visited.has(depId)) {
-          if (this.checkCircularDependency(depId, parameters, visited, recStack)) {
+          if (
+            this.checkCircularDependency(depId, parameters, visited, recStack)
+          ) {
             return true;
           }
         } else if (recStack.has(depId)) {
@@ -171,41 +173,40 @@ export class DependencyResolver {
    */
   static generateDependencyGraph(
     accounts: ReadonlyArray<Account>,
-    parameters: ReadonlyMap<string, Parameter>,
-    relations: ReadonlyArray<AccountRelation>
+    parameters: ReadonlyMap<string, Parameter>
   ): {
     nodes: Array<{ id: string; label: string }>;
     edges: Array<{ from: string; to: string; type: string }>;
   } {
-    const nodes = accounts.map(account => ({
+    const nodes = accounts.map((account) => ({
       id: account.id,
-      label: account.accountName
+      label: account.accountName,
     }));
 
     const edges: Array<{ from: string; to: string; type: string }> = [];
 
     // パラメータベースの依存関係
-    accounts.forEach(account => {
+    accounts.forEach((account) => {
       const parameter = parameters.get(account.id);
       if (!parameter) return;
 
       const dependencies = this.getDependenciesFromParameter(parameter);
-      dependencies.forEach(depId => {
+      dependencies.forEach((depId) => {
         edges.push({
           from: depId,
           to: account.id,
-          type: parameter.paramType || "unknown"
+          type: parameter.paramType || "unknown",
         });
       });
     });
 
-    // 親子関係
-    relations.forEach(relation => {
-      if (relation.relationType === "parent-child") {
+    // 親子関係（parentIdベース）
+    accounts.forEach((account) => {
+      if (account.parentId) {
         edges.push({
-          from: relation.fromAccountId,
-          to: relation.toAccountId,
-          type: "parent-child"
+          from: account.id,
+          to: account.parentId,
+          type: "parent-child",
         });
       }
     });
