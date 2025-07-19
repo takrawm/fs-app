@@ -118,24 +118,6 @@ export const validateParameter = (parameter: Parameter): ValidationError[] => {
 
   // パラメータタイプ別の検証
   switch (parameter.paramType) {
-    case PARAMETER_TYPES.CONSTANT:
-      if ("value" in parameter) {
-        if (typeof parameter.value !== "number") {
-          errors.push({
-            field: "parameter.value",
-            message: "定数値は数値を入力してください",
-            code: "INVALID_TYPE",
-          });
-        }
-      } else {
-        errors.push({
-          field: "parameter.value",
-          message: "定数値は必須です",
-          code: "REQUIRED",
-        });
-      }
-      break;
-
     case PARAMETER_TYPES.PERCENTAGE:
       if ("value" in parameter && "baseAccountId" in parameter) {
         if (typeof parameter.value !== "number") {
@@ -162,104 +144,6 @@ export const validateParameter = (parameter: Parameter): ValidationError[] => {
         errors.push({
           field: "parameter",
           message: "比率パラメータには値と基準科目が必要です",
-          code: "MISSING_FIELD",
-        });
-      }
-      break;
-
-    case PARAMETER_TYPES.PERCENTAGE_OF_REVENUE:
-      if ("value" in parameter) {
-        if (typeof parameter.value !== "number") {
-          errors.push({
-            field: "parameter.value",
-            message: "売上高比率は数値を入力してください",
-            code: "INVALID_TYPE",
-          });
-        } else if (parameter.value < 0 || parameter.value > 100) {
-          errors.push({
-            field: "parameter.value",
-            message: "売上高比率は0から100の間で入力してください",
-            code: "INVALID_RANGE",
-          });
-        }
-      } else {
-        errors.push({
-          field: "parameter.value",
-          message: "売上高比率は必須です",
-          code: "REQUIRED",
-        });
-      }
-      break;
-
-    case PARAMETER_TYPES.DAYS:
-      if ("days" in parameter && "baseAccountId" in parameter) {
-        if (typeof parameter.days !== "number") {
-          errors.push({
-            field: "parameter.days",
-            message: "日数は数値を入力してください",
-            code: "INVALID_TYPE",
-          });
-        } else if (parameter.days <= 0) {
-          errors.push({
-            field: "parameter.days",
-            message: "日数は1以上の値を入力してください",
-            code: "INVALID_RANGE",
-          });
-        }
-        if (!parameter.baseAccountId) {
-          errors.push({
-            field: "parameter.baseAccountId",
-            message: "基準科目は必須です",
-            code: "REQUIRED",
-          });
-        }
-      } else {
-        errors.push({
-          field: "parameter",
-          message: "日数パラメータには日数と基準科目が必要です",
-          code: "MISSING_FIELD",
-        });
-      }
-      break;
-
-    case PARAMETER_TYPES.MANUAL_INPUT:
-      if ("defaultValue" in parameter && parameter.defaultValue !== undefined) {
-        if (typeof parameter.defaultValue !== "number") {
-          errors.push({
-            field: "parameter.defaultValue",
-            message: "デフォルト値は数値を入力してください",
-            code: "INVALID_TYPE",
-          });
-        }
-      }
-      break;
-
-    case PARAMETER_TYPES.FORMULA:
-      if ("formula" in parameter && "dependencies" in parameter) {
-        if (!parameter.formula || parameter.formula.trim().length === 0) {
-          errors.push({
-            field: "parameter.formula",
-            message: "計算式は必須です",
-            code: "REQUIRED",
-          });
-        } else if (parameter.formula.length > FORMULA_MAX_LENGTH) {
-          errors.push({
-            field: "parameter.formula",
-            message: `計算式は${FORMULA_MAX_LENGTH}文字以内で入力してください`,
-            code: "MAX_LENGTH",
-          });
-        }
-        if (!Array.isArray(parameter.dependencies)) {
-          errors.push({
-            field: "parameter.dependencies",
-            message: "依存関係は配列形式で指定してください",
-            code: "INVALID_TYPE",
-          });
-        }
-      } else {
-        errors.push({
-          field: "parameter",
-          message: "計算式パラメータには計算式と依存関係が必要です",
           code: "MISSING_FIELD",
         });
       }

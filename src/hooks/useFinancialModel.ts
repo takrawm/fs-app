@@ -27,9 +27,7 @@ export const useFinancialModel = () => {
   // FinancialModelManagerを削除し、全ての状態をReactで管理
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [periods, setPeriods] = useState<Period[]>([]);
-  const [parameters, setParameters] = useState<Map<string, Parameter>>(
-    new Map()
-  );
+  // ✅ parametersステートを削除: account.parameterを直接使用
   const [financialValues, setFinancialValues] = useState<
     Map<string, FinancialValue>
   >(new Map());
@@ -70,14 +68,7 @@ export const useFinancialModel = () => {
         });
         setFinancialValues(valuesMap);
 
-        // パラメータをアカウントから抽出
-        const parametersMap = new Map<string, Parameter>();
-        seedAccounts.forEach((account) => {
-          if (account.parameter) {
-            parametersMap.set(account.id, account.parameter);
-          }
-        });
-        setParameters(parametersMap);
+        // ✅ parametersは削除: account.parameterとして既に管理されている
 
         // 最初の期間を選択
         if (seedPeriods.length > 0) {
@@ -108,6 +99,18 @@ export const useFinancialModel = () => {
       );
     }
   }, [accounts, periods, financialValues]);
+  console.log("datastore:", dataStore);
+
+  // ✅ accounts配列からparametersMapを動的に生成するヘルパー関数
+  const getParametersMap = useCallback((): Map<string, Parameter> => {
+    const parametersMap = new Map<string, Parameter>();
+    accounts.forEach((account) => {
+      if (account.parameter) {
+        parametersMap.set(account.id, account.parameter);
+      }
+    });
+    return parametersMap;
+  }, [accounts]);
 
   const addAccount = useCallback(
     (
@@ -210,11 +213,13 @@ export const useFinancialModel = () => {
 
   const setParameter = useCallback(
     (accountId: string, parameter: Parameter) => {
-      setParameters((prev) => {
-        const newParams = new Map(prev);
-        newParams.set(accountId, parameter);
-        return newParams;
-      });
+      setAccounts((prev) =>
+        prev.map((account) =>
+          account.id === accountId
+            ? ({ ...account, parameter, updatedAt: new Date() } as Account)
+            : account
+        )
+      );
     },
     []
   );
@@ -281,7 +286,7 @@ export const useFinancialModel = () => {
             accounts,
             periodId,
             context,
-            parameters
+            getParametersMap()
           );
 
         // 結果を更新
@@ -307,7 +312,7 @@ export const useFinancialModel = () => {
         setIsCalculating(false);
       }
     },
-    [accounts, parameters, periodIndexSystem, dataStore]
+    [accounts, periodIndexSystem, dataStore, getParametersMap]
   );
 
   // キャッシュフロー計算処理
@@ -390,7 +395,7 @@ export const useFinancialModel = () => {
             accounts,
             period.id,
             context,
-            parameters
+            getParametersMap()
           );
 
         // 結果を蓄積
@@ -421,7 +426,7 @@ export const useFinancialModel = () => {
     } finally {
       setIsCalculating(false);
     }
-  }, [accounts, periods, parameters, periodIndexSystem, dataStore]);
+  }, [accounts, periods, periodIndexSystem, dataStore, getParametersMap]);
 
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
@@ -499,20 +504,17 @@ export const useFinancialModel = () => {
 
   const getAccountParameter = useCallback(
     (accountId: string): Parameter | undefined => {
-      return parameters.get(accountId);
+      const account = accounts.find((acc) => acc.id === accountId);
+      return account?.parameter;
     },
-    [parameters]
+    [accounts]
   );
 
   const setAccountParameter = useCallback(
     (accountId: string, parameter: Parameter) => {
-      setParameters((prev) => {
-        const newParams = new Map(prev);
-        newParams.set(accountId, parameter);
-        return newParams;
-      });
+      setParameter(accountId, parameter);
     },
-    []
+    [setParameter]
   );
 
   // 計算結果の統計情報
@@ -541,20 +543,18 @@ export const useFinancialModel = () => {
     }, {} as Record<SheetType, number>);
 
     const byParameter = accounts.reduce((acc, account) => {
-      const parameter = parameters.get(account.id);
-      const paramType = parameter?.paramType || "NULL";
+      const paramType = account.parameter?.paramType || "NULL";
       acc[paramType] = (acc[paramType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     return { bySheet, byParameter };
-  }, [accounts, parameters]);
+  }, [accounts]);
 
   return {
     // 基本データ
     accounts,
     periods,
-    parameters,
     financialValues,
 
     calculationResults,

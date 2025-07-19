@@ -7,11 +7,6 @@ export const PARAMETER_TYPES = {
   CALCULATION: "CALCULATION",
   PERCENTAGE: "PERCENTAGE",
   PROPORTIONATE: "PROPORTIONATE",
-  CONSTANT: "CONSTANT",
-  DAYS: "DAYS",
-  MANUAL_INPUT: "MANUAL_INPUT",
-  FORMULA: "FORMULA",
-  PERCENTAGE_OF_REVENUE: "PERCENTAGE_OF_REVENUE",
 } as const;
 
 /** 操作タイプの定数定義 */
@@ -115,39 +110,6 @@ interface NullParameter {
 }
 
 /** 定数パラメータ */
-interface ConstantParameter {
-  paramType: typeof PARAMETER_TYPES.CONSTANT;
-  paramValue: number;
-  paramReferences: null;
-}
-
-/** 日数パラメータ */
-interface DaysParameter {
-  paramType: typeof PARAMETER_TYPES.DAYS;
-  paramValue: number; // 日数
-  paramReferences: SingleReference; // 基準科目
-}
-
-/** 手動入力パラメータ */
-interface ManualInputParameter {
-  paramType: typeof PARAMETER_TYPES.MANUAL_INPUT;
-  paramValue: number | null; // デフォルト値
-  paramReferences: null;
-}
-
-/** 計算式パラメータ */
-interface FormulaParameter {
-  paramType: typeof PARAMETER_TYPES.FORMULA;
-  paramValue: string; // 計算式
-  paramReferences: string[]; // 依存科目IDの配列
-}
-
-/** 売上比率パラメータ */
-interface PercentageOfRevenueParameter {
-  paramType: typeof PARAMETER_TYPES.PERCENTAGE_OF_REVENUE;
-  paramValue: number; // 売上比率
-  paramReferences: null;
-}
 
 /**
  * メインのパラメータ型（Discriminated Union）
@@ -159,12 +121,7 @@ export type Parameter =
   | CalculationParameter
   | PercentageParameter
   | ProportionateParameter
-  | NullParameter
-  | ConstantParameter
-  | DaysParameter
-  | ManualInputParameter
-  | FormulaParameter
-  | PercentageOfRevenueParameter;
+  | NullParameter;
 
 /**
  * サマリー科目で使用可能なパラメータ型
@@ -389,39 +346,6 @@ export function isProportionateParameter(
 /** パラメータなしかどうかを判定 */
 export function isNullParameter(param: Parameter): param is NullParameter {
   return param.paramType === null;
-}
-
-/** 定数パラメータかどうかを判定 */
-export function isConstantParameter(
-  param: Parameter
-): param is ConstantParameter {
-  return param.paramType === PARAMETER_TYPES.CONSTANT;
-}
-
-/** 日数パラメータかどうかを判定 */
-export function isDaysParameter(param: Parameter): param is DaysParameter {
-  return param.paramType === PARAMETER_TYPES.DAYS;
-}
-
-/** 手動入力パラメータかどうかを判定 */
-export function isManualInputParameter(
-  param: Parameter
-): param is ManualInputParameter {
-  return param.paramType === PARAMETER_TYPES.MANUAL_INPUT;
-}
-
-/** 計算式パラメータかどうかを判定 */
-export function isFormulaParameter(
-  param: Parameter
-): param is FormulaParameter {
-  return param.paramType === PARAMETER_TYPES.FORMULA;
-}
-
-/** 売上比率パラメータかどうかを判定 */
-export function isPercentageOfRevenueParameter(
-  param: Parameter
-): param is PercentageOfRevenueParameter {
-  return param.paramType === PARAMETER_TYPES.PERCENTAGE_OF_REVENUE;
 }
 
 /** サマリー科目で使用可能なパラメータかどうかを判定 */

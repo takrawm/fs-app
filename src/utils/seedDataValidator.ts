@@ -594,17 +594,6 @@ export function validateFinancialValue(
     });
   }
 
-  // idフィールドの検証
-  if (!value.id || typeof value.id !== "string") {
-    errors.push({
-      field: "id",
-      message: "idは必須の文字列フィールドです",
-      value: value.id,
-      code: "MISSING_FINANCIAL_VALUE_ID",
-      severity: "error",
-    });
-  }
-
   return {
     isValid: errors.length === 0,
     errors,
@@ -979,7 +968,6 @@ export function exampleUsage(): void {
   };
 
   const sampleFinancialValue: FinancialValue = {
-    id: "revenue-sales_2024-01",
     accountId: "revenue-sales",
     periodId: "2024-01",
     value: 1000000,

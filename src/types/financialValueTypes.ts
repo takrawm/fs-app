@@ -1,6 +1,5 @@
 // 財務数値の型定義
 export interface FinancialValue {
-  id: string;
   accountId: string;
   periodId: string;
   value: number;

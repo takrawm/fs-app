@@ -70,7 +70,6 @@ export class FinancialCalculator {
 
             // FinancialValueとして保存
             const financialValue: FinancialValue = {
-              id: `${accountId}_${periodId}`,
               accountId,
               periodId,
               value: result.value,

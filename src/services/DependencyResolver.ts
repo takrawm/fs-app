@@ -98,7 +98,6 @@ export class DependencyResolver {
     switch (parameter.paramType) {
       case "PERCENTAGE":
       case "PROPORTIONATE":
-      case "DAYS":
         if (parameter.paramReferences?.accountId) {
           deps.push(parameter.paramReferences.accountId);
         }
@@ -112,21 +111,8 @@ export class DependencyResolver {
         }
         break;
 
-      case "FORMULA":
-        if (parameter.paramReferences) {
-          deps.push(...parameter.paramReferences);
-        }
-        break;
-
-      case "PERCENTAGE_OF_REVENUE":
-        // 売上高科目への依存（動的に解決される）
-        // TODO: 実装時には売上高科目を特定する仕組みが必要
-        break;
-
       case "GROWTH_RATE":
       case "CHILDREN_SUM":
-      case "CONSTANT":
-      case "MANUAL_INPUT":
       case null:
         // これらは他の科目に依存しない
         break;

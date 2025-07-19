@@ -1,7 +1,7 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
-import { isFormulaParameter, isReclassificationImpact } from "../types/accountTypes";
+import { isReclassificationImpact } from "../types/accountTypes";
 // ビルドツール（例：webpack）が内部的に変換する処理
 // 1. accounts.jsonファイルを読み込み
 // 2. JSON.parseでJavaScriptオブジェクトに変換
@@ -198,17 +198,6 @@ export class SeedDataLoader {
         errors.push(
           `Account ${account.id} has invalid parentId: ${account.parentId}`
         );
-      }
-
-      // パラメータの依存関係確認
-      if (isFormulaParameter(account.parameter)) {
-        account.parameter.paramReferences.forEach((depId) => {
-          if (!this.getAccountById(depId)) {
-            warnings.push(
-              `Account ${account.id} has dependency on non-existent account: ${depId}`
-            );
-          }
-        });
       }
 
       // CF影響の対象アカウント確認

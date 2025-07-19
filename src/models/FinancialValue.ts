@@ -1,7 +1,6 @@
 import type { FinancialValue as FinancialValueType } from "../types/financialValueTypes";
 
 export class FinancialValue implements FinancialValueType {
-  id: string;
   accountId: string;
   periodId: string;
   value: number;
@@ -13,7 +12,6 @@ export class FinancialValue implements FinancialValueType {
     value: number,
     isCalculated: boolean = false
   ) {
-    this.id = FinancialValue.createKey(accountId, periodId);
     this.accountId = accountId;
     this.periodId = periodId;
     this.value = value;

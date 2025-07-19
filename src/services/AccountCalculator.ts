@@ -90,36 +90,6 @@ export class AccountCalculator {
           references: accountIds,
         };
 
-      case "CONSTANT":
-        return {
-          value: parameter.paramValue,
-          formula: `定数: ${parameter.paramValue}`,
-          references: [],
-        };
-
-      case "DAYS":
-        const baseAccountValue = context.getValue(
-          parameter.paramReferences.accountId
-        );
-        const daysInPeriod = 30; // 月次の場合
-        const daysValue =
-          (baseAccountValue * parameter.paramValue) / daysInPeriod;
-
-        return {
-          value: daysValue,
-          formula: `[${parameter.paramReferences.accountId}] × ${parameter.paramValue}日 / ${daysInPeriod}日`,
-          references: [parameter.paramReferences.accountId],
-        };
-
-      case "MANUAL_INPUT":
-        const manualValue = context.getValue(account.id);
-
-        return {
-          value: manualValue,
-          formula: "手動入力",
-          references: [],
-        };
-
       case "CHILDREN_SUM":
         // 子科目の合計は別途DependencyResolverで処理されるため、ここでは0を返す
         return {
@@ -127,14 +97,6 @@ export class AccountCalculator {
           formula: "Σ(子科目)",
           references: [],
         };
-
-      case "FORMULA":
-        // カスタム計算式は別途実装
-        return null;
-
-      case "PERCENTAGE_OF_REVENUE":
-        // 売上高科目を特定する処理が必要
-        return null;
 
       case null:
         return null;
@@ -204,7 +166,6 @@ export class AccountCalculator {
     switch (parameter.paramType) {
       case "PERCENTAGE":
       case "PROPORTIONATE":
-      case "DAYS":
         if (parameter.paramReferences?.accountId) {
           deps.push(parameter.paramReferences.accountId);
         }
@@ -213,12 +174,6 @@ export class AccountCalculator {
       case "CALCULATION":
         if (parameter.paramReferences) {
           deps.push(...parameter.paramReferences.map((ref) => ref.accountId));
-        }
-        break;
-
-      case "FORMULA":
-        if (parameter.paramReferences) {
-          deps.push(...parameter.paramReferences);
         }
         break;
     }
