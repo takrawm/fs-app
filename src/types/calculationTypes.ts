@@ -5,12 +5,26 @@ export interface CalculationResult {
   references: string[];
 }
 
-// 計算コンテキストの型定義
+// 最適化された計算コンテキストの型定義
 export interface CalculationContext {
-  accountId: string;
   periodId: string;
-  accountValues: Map<string, number>;
-  previousValues: Map<string, number>;
+  periodIndex: number;
+  previousPeriodId: string | null;
+
+  // 遅延評価による値取得（ループなし）
+  getValue: (accountId: string, targetPeriodId?: string) => number;
+  getRelativeValue: (accountId: string, offset: number) => number;
+  getPreviousValue: (accountId: string) => number;
+
+  // 時系列データの効率的取得
+  getTimeSeriesValues: (
+    accountId: string,
+    startOffset: number,
+    endOffset: number
+  ) => number[];
+
+  // 複数値の一括取得
+  getBulkValues: (accountIds: string[]) => Map<string, number>;
 }
 
 // 計算戦略のインターフェース

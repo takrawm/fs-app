@@ -15,10 +15,13 @@ import type { Period } from "../types/periodTypes";
 import type {
   CalculationResult,
   CalculationError,
+  CalculationContext,
 } from "../types/calculationTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
 
 import { seedDataLoader } from "../seed";
+import { PeriodIndexSystem } from "../utils/PeriodIndexSystem";
+import { OptimizedFinancialDataStore } from "../utils/OptimizedFinancialDataStore";
 
 export const useFinancialModel = () => {
   // FinancialModelManagerを削除し、全ての状態をReactで管理
@@ -40,6 +43,10 @@ export const useFinancialModel = () => {
   const [selectedPeriodId, setSelectedPeriodId] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [periodIndexSystem, setPeriodIndexSystem] =
+    useState<PeriodIndexSystem | null>(null);
+  const [dataStore, setDataStore] =
+    useState<OptimizedFinancialDataStore | null>(null);
 
   // seedデータの初期化
   useEffect(() => {
@@ -85,6 +92,22 @@ export const useFinancialModel = () => {
 
     initializeSeedData();
   }, []);
+
+  // periodsが更新されたらインデックスシステムを再構築
+  useEffect(() => {
+    if (periods.length > 0) {
+      setPeriodIndexSystem(new PeriodIndexSystem(periods));
+    }
+  }, [periods]);
+
+  // データストアの初期化
+  useEffect(() => {
+    if (accounts.length > 0 && periods.length > 0 && financialValues.size > 0) {
+      setDataStore(
+        new OptimizedFinancialDataStore(accounts, periods, financialValues)
+      );
+    }
+  }, [accounts, periods, financialValues]);
 
   const addAccount = useCallback(
     (
@@ -198,51 +221,77 @@ export const useFinancialModel = () => {
 
   const calculatePeriod = useCallback(
     (periodId: string) => {
+      if (!periodIndexSystem || !dataStore) {
+        throw new Error("System not initialized");
+      }
+
       setIsCalculating(true);
       setCalculationErrors([]);
 
       try {
-        // 現在と前期の値をイミュータブルなMapとして準備
-        const currentValues = new Map<string, number>();
-        const previousPeriodValues = new Map<string, number>();
+        // 前期IDを高速取得（O(1)）
+        const previousPeriodId =
+          periodIndexSystem.getPreviousPeriodId(periodId);
+        const periodIndex = periodIndexSystem.getPeriodIndex(periodId) || 0;
 
-        // 手動入力値や既存値を設定
-        financialValues.forEach((value) => {
-          if (value.periodId === periodId) {
-            currentValues.set(value.accountId, value.value);
-          }
-        });
+        // 最適化されたコンテキスト
+        const context: CalculationContext = {
+          periodId,
+          periodIndex,
+          previousPeriodId,
 
-        // 前期値を設定
-        const periodIndex = periods.findIndex((p) => p.id === periodId);
-        if (periodIndex > 0) {
-          const previousPeriodId = periods[periodIndex - 1].id;
-          financialValues.forEach((value) => {
-            if (value.periodId === previousPeriodId) {
-              previousPeriodValues.set(value.accountId, value.value);
-            }
-          });
-        }
+          getValue: (accountId: string, targetPeriodId?: string) => {
+            return dataStore.getValue(accountId, targetPeriodId || periodId);
+          },
 
-        // 純粋関数による計算実行
+          getRelativeValue: (accountId: string, offset: number) => {
+            return dataStore.getRelativeValue(accountId, periodId, offset);
+          },
+
+          getPreviousValue: (accountId: string) => {
+            return dataStore.getPreviousValue(accountId, periodId);
+          },
+
+          getTimeSeriesValues: (
+            accountId: string,
+            startOffset: number,
+            endOffset: number
+          ) => {
+            return dataStore.getTimeSeriesValues(
+              accountId,
+              periodId,
+              startOffset,
+              endOffset
+            );
+          },
+
+          getBulkValues: (accountIds: string[]) => {
+            return dataStore.getBulkValues(accountIds, periodId);
+          },
+        };
+
+        // 計算実行
         const { results, calculatedValues, errors } =
           FinancialCalculator.calculatePeriod(
             accounts,
             periodId,
-            currentValues,
-            previousPeriodValues,
+            context,
             parameters
           );
 
-        // 計算結果で状態を更新
+        // 結果を更新
         setCalculationResults(results);
-        setFinancialValues((prev) => {
-          const newMap = new Map(prev);
-          calculatedValues.forEach((value, key) => {
-            newMap.set(key, value);
-          });
-          return newMap;
-        });
+
+        // データストアを更新
+        const updates = Array.from(calculatedValues.values()).map((v) => ({
+          accountId: v.accountId,
+          periodId: v.periodId,
+          value: v.value,
+        }));
+        dataStore.setValues(updates);
+
+        // React stateも更新
+        setFinancialValues(dataStore.toFinancialValueMap());
         setCalculationErrors(errors);
 
         return results;
@@ -253,7 +302,7 @@ export const useFinancialModel = () => {
         setIsCalculating(false);
       }
     },
-    [accounts, periods, parameters, financialValues]
+    [accounts, parameters, periodIndexSystem, dataStore]
   );
 
   // キャッシュフロー計算処理
@@ -280,78 +329,98 @@ export const useFinancialModel = () => {
 
   // 全期間の計算を実行
   const calculateAllPeriods = useCallback(() => {
+    if (!periodIndexSystem || !dataStore) {
+      throw new Error("System not initialized");
+    }
+
     setIsCalculating(true);
     setCalculationErrors([]);
 
     try {
-      // 初期値を設定
-      const initialValues = new Map<string, number>();
-      accounts.forEach((account) => {
-        if (
-          account.parameter.paramType === "MANUAL_INPUT" ||
-          account.parameter.paramType === "CONSTANT"
-        ) {
-          initialValues.set(account.id, account.parameter.paramValue || 0);
-        }
-      });
+      const allResults = new Map<string, CalculationResult>();
+      const allErrors: CalculationError[] = [];
 
-      // 複数期間を一括計算
-      const { allResults, allValues, allErrors } =
-        FinancialCalculator.calculateMultiplePeriods(
-          accounts,
-          periods,
-          initialValues,
-          parameters
+      // 各期間を順番に計算
+      periods.forEach((period) => {
+        const periodIndex = periodIndexSystem.getPeriodIndex(period.id) || 0;
+        const previousPeriodId = periodIndexSystem.getPreviousPeriodId(
+          period.id
         );
 
-      // 結果をフラット化
-      const flatResults = new Map<string, CalculationResult>();
-      const flatValues = new Map<string, FinancialValue>();
-      const flatErrors: CalculationError[] = [];
+        const context: CalculationContext = {
+          periodId: period.id,
+          periodIndex,
+          previousPeriodId,
+          getValue: (accountId: string, targetPeriodId?: string) => {
+            return dataStore.getValue(accountId, targetPeriodId || period.id);
+          },
+          getRelativeValue: (accountId: string, offset: number) => {
+            return dataStore.getRelativeValue(accountId, period.id, offset);
+          },
+          getPreviousValue: (accountId: string) => {
+            return dataStore.getPreviousValue(accountId, period.id);
+          },
+          getTimeSeriesValues: (
+            accountId: string,
+            startOffset: number,
+            endOffset: number
+          ) => {
+            return dataStore.getTimeSeriesValues(
+              accountId,
+              period.id,
+              startOffset,
+              endOffset
+            );
+          },
+          getBulkValues: (accountIds: string[]) => {
+            return dataStore.getBulkValues(accountIds, period.id);
+          },
+        };
 
-      allResults.forEach((periodResults, periodId) => {
-        periodResults.forEach((result, accountId) => {
-          flatResults.set(`${accountId}_${periodId}`, result);
+        const { results, calculatedValues, errors } =
+          FinancialCalculator.calculatePeriod(
+            accounts,
+            period.id,
+            context,
+            parameters
+          );
+
+        // 結果を蓄積
+        results.forEach((result, accountId) => {
+          allResults.set(`${accountId}_${period.id}`, result);
         });
-      });
 
-      allValues.forEach((periodValues, periodId) => {
-        periodValues.forEach((value, key) => {
-          flatValues.set(key, value);
-        });
-      });
+        // データストアを更新
+        const updates = Array.from(calculatedValues.values()).map((v) => ({
+          accountId: v.accountId,
+          periodId: v.periodId,
+          value: v.value,
+        }));
+        dataStore.setValues(updates);
 
-      allErrors.forEach((errors) => {
-        flatErrors.push(...errors);
+        allErrors.push(...errors);
       });
 
       // 状態を更新
-      setCalculationResults(flatResults);
-      setFinancialValues(new Map([...financialValues, ...flatValues]));
-      setCalculationErrors(flatErrors);
+      setCalculationResults(allResults);
+      setFinancialValues(dataStore.toFinancialValueMap());
+      setCalculationErrors(allErrors);
 
-      return flatResults;
+      return allResults;
     } catch (error) {
       console.error("All periods calculation error:", error);
       throw error;
     } finally {
       setIsCalculating(false);
     }
-  }, [accounts, periods, parameters, financialValues]);
+  }, [accounts, periods, parameters, periodIndexSystem, dataStore]);
 
   const getAccountValue = useCallback(
     (accountId: string, periodId: string): number => {
-      // 1. 計算結果を優先して取得
-      const result = calculationResults.get(`${accountId}_${periodId}`);
-      if (result !== undefined) {
-        return result.value;
-      }
-
-      // 2. 計算結果がない場合、財務数値から取得
-      const financialValue = financialValues.get(`${accountId}_${periodId}`);
-      return financialValue?.value || 0;
+      if (!dataStore) return 0;
+      return dataStore.getValue(accountId, periodId);
     },
-    [calculationResults, financialValues]
+    [dataStore]
   );
 
   const getAccountsBySheet = useCallback(

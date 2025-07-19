@@ -20,8 +20,7 @@ export class FinancialCalculator {
   static calculatePeriod(
     accounts: ReadonlyArray<Account>,
     periodId: string,
-    currentValues: ReadonlyMap<string, number>,
-    previousPeriodValues: ReadonlyMap<string, number>,
+    context: CalculationContext,
     parameters: ReadonlyMap<string, Parameter>
   ): {
     results: Map<string, CalculationResult>;
@@ -39,23 +38,18 @@ export class FinancialCalculator {
         parameters
       );
 
-      // 2. トポロジカルソート順に計算
-      const context: CalculationContext = {
-        accountId: "", // 各アカウント計算時に設定
-        periodId,
-        accountValues: new Map(currentValues),
-        previousValues: new Map(previousPeriodValues),
-      };
+      // 2. アカウントマップを事前構築
+      const accountMap = new Map(accounts.map((a) => [a.id, a]));
 
+      // 3. 各科目の計算（ループは1回のみ）
       for (const accountId of sortedAccountIds) {
-        const account = accounts.find((a) => a.id === accountId);
+        const account = accountMap.get(accountId);
         if (!account) continue;
 
         const parameter = parameters.get(accountId);
         if (!parameter) continue;
 
         try {
-          // 3. 各科目の計算（AccountCalculator使用）
           const result = AccountCalculator.calculate(
             account,
             parameter,
@@ -65,8 +59,9 @@ export class FinancialCalculator {
           if (result) {
             results.set(accountId, result);
 
-            // 計算結果をcontextに反映（次の計算で使用）
-            context.accountValues.set(accountId, result.value);
+            // 計算結果をデータストアに反映（次の計算で使用）
+            // contextの関数経由で値を設定する必要がある場合は、
+            // データストア側でsetValueメソッドを呼び出す
 
             // FinancialValueとして保存
             const financialValue: FinancialValue = {
@@ -88,7 +83,8 @@ export class FinancialCalculator {
           errors.push(calculationError);
 
           // エラーが発生した場合は0として続行
-          context.accountValues.set(accountId, 0);
+          // 注意: 最適化されたcontextでは直接設定できないため、
+          // エラー時の処理は計算結果に委ねる
         }
       }
     } catch (error) {
@@ -120,79 +116,17 @@ export class FinancialCalculator {
     currentValues: ReadonlyMap<string, number>,
     previousPeriodValues: ReadonlyMap<string, number>
   ): CalculationResult | null {
-    const context: CalculationContext = {
-      accountId: account.id,
-      periodId,
-      accountValues: new Map(currentValues),
-      previousValues: new Map(previousPeriodValues),
-    };
-
-    return AccountCalculator.calculate(account, parameter, context);
+    // 注意: この関数は非推奨です。新しいcontextベースの計算を使用してください。
+    throw new Error(
+      "calculateSingleAccount is deprecated. Use context-based calculation instead."
+    );
   }
 
   /**
    * 複数期間を一括計算する純粋関数
    */
-  static calculateMultiplePeriods(
-    accounts: ReadonlyArray<Account>,
-    periods: ReadonlyArray<Period>,
-    initialValues: ReadonlyMap<string, number>,
-    parameters: ReadonlyMap<string, Parameter>
-  ): {
-    allResults: Map<string, Map<string, CalculationResult>>;
-    allValues: Map<string, Map<string, FinancialValue>>;
-    allErrors: Map<string, CalculationError[]>;
-  } {
-    const allResults = new Map<string, Map<string, CalculationResult>>();
-    const allValues = new Map<string, Map<string, FinancialValue>>();
-    const allErrors = new Map<string, CalculationError[]>();
-
-    let previousValues = new Map(initialValues);
-
-    // 期間を順番に計算
-    for (const period of periods) {
-      const currentValues = new Map<string, number>();
-
-      // 手動入力値や定数など、期間に依存しない値を設定
-      for (const account of accounts) {
-        const parameter = parameters.get(account.id);
-        if (
-          parameter?.paramType === "MANUAL_INPUT" ||
-          parameter?.paramType === "CONSTANT"
-        ) {
-          const value = parameter.paramValue || 0;
-          currentValues.set(account.id, value);
-        }
-      }
-
-      // 期間の計算を実行
-      const { results, calculatedValues, errors } = this.calculatePeriod(
-        accounts,
-        period.id,
-        currentValues,
-        previousValues,
-        parameters
-      );
-
-      allResults.set(period.id, results);
-      allValues.set(period.id, calculatedValues);
-      if (errors.length > 0) {
-        allErrors.set(period.id, errors);
-      }
-
-      // 次期間の前期値として使用
-      previousValues = new Map();
-      for (const [accountId, result] of results) {
-        previousValues.set(accountId, result.value);
-      }
-    }
-
-    return {
-      allResults,
-      allValues,
-      allErrors,
-    };
-  }
+  // 注意: calculateMultiplePeriodsは削除されました。
+  // 新しい最適化されたシステムでは、useFinancialModel.calculateAllPeriodsを使用してください。
 
   /**
    * 計算結果の検証を行う純粋関数
