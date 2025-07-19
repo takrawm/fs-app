@@ -11,8 +11,8 @@
       "prefix": "A"
     },
     "parameter": {
-      "paramType": null,
-      "paramValue": null,
+      "paramType": "GROWTH_RATE",
+      "paramValue": 0.1,
       "paramReferences": null
     },
     "flowAccountCfImpact": {

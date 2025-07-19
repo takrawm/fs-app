@@ -21,6 +21,27 @@ export class OptimizedFinancialDataStore {
     financialValues.forEach((value, key) => {
       this.data.set(key, value.value);
     });
+
+    // 🔧 改善: MANUAL_INPUT、CONSTANTパラメータのデフォルト値を設定
+    accounts.forEach((account) => {
+      periods.forEach((period) => {
+        const key = `${account.id}_${period.id}`;
+
+        // 既に値が設定されている場合はスキップ
+        if (this.data.has(key)) return;
+
+        // パラメータに基づくデフォルト値の設定
+        if (account.parameter) {
+          if (
+            account.parameter.paramType === "MANUAL_INPUT" ||
+            account.parameter.paramType === "CONSTANT"
+          ) {
+            const defaultValue = account.parameter.paramValue || 0;
+            this.data.set(key, defaultValue);
+          }
+        }
+      });
+    });
   }
 
   // O(1)で現在期間の値を取得

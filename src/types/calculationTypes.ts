@@ -25,6 +25,9 @@ export interface CalculationContext {
 
   // 複数値の一括取得
   getBulkValues: (accountIds: string[]) => Map<string, number>;
+
+  // 🔧 改善: 計算中の値の即座反映
+  setValue: (accountId: string, periodId: string, value: number) => void;
 }
 
 // 計算戦略のインターフェース

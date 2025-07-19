@@ -59,9 +59,14 @@ export class FinancialCalculator {
           if (result) {
             results.set(accountId, result);
 
-            // 計算結果をデータストアに反映（次の計算で使用）
-            // contextの関数経由で値を設定する必要がある場合は、
-            // データストア側でsetValueメソッドを呼び出す
+            // 🔧 改善: 計算結果を即座にcontextに反映
+            // contextがsetValueメソッドを持っている場合、次の計算で使用可能にする
+            if (
+              "setValue" in context &&
+              typeof context.setValue === "function"
+            ) {
+              context.setValue(accountId, periodId, result.value);
+            }
 
             // FinancialValueとして保存
             const financialValue: FinancialValue = {

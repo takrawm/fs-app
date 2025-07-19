@@ -268,6 +268,11 @@ export const useFinancialModel = () => {
           getBulkValues: (accountIds: string[]) => {
             return dataStore.getBulkValues(accountIds, periodId);
           },
+
+          // 🔧 改善: 計算中の値の即座反映
+          setValue: (accountId: string, periodId: string, value: number) => {
+            dataStore.setValue(accountId, periodId, value);
+          },
         };
 
         // 計算実行
@@ -374,6 +379,9 @@ export const useFinancialModel = () => {
           },
           getBulkValues: (accountIds: string[]) => {
             return dataStore.getBulkValues(accountIds, period.id);
+          },
+          setValue: (accountId: string, periodId: string, value: number) => {
+            dataStore.setValue(accountId, periodId, value);
           },
         };
 
