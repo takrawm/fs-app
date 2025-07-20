@@ -29,14 +29,14 @@ export abstract class NewCalculationStrategy {
   }
 
   protected getValue(accountId: string, context: CalculationContext): number {
-    return context.accountValues.get(accountId) || 0;
+    return context.getValue(accountId) || 0;
   }
 
   protected getPreviousValue(
     accountId: string,
     context: CalculationContext
   ): number {
-    return context.previousValues.get(accountId) || 0;
+    return context.getPreviousValue(accountId) || 0;
   }
 
   // 日数計算用のヘルパーメソッド

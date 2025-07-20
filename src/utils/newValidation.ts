@@ -283,40 +283,14 @@ export const validateAccountConsistency = (
       });
     }
 
+    // TODO: パラメータの依存関係チェック - 新しい型システムに合わせて実装が必要
+    // 現在はparameter.paramTypeを使用する設計だが、バリデーションロジックの更新が必要
+    /*
     // パラメータの依存関係チェック
-    if (
-      account.parameter.type === PARAMETER_TYPES.PERCENTAGE ||
-      account.parameter.type === PARAMETER_TYPES.DAYS
-    ) {
-      if (
-        "baseAccountId" in account.parameter &&
-        account.parameter.baseAccountId &&
-        !accountIds.has(account.parameter.baseAccountId)
-      ) {
-        errors.push({
-          field: `account.${account.id}.parameter.baseAccountId`,
-          message: `基準アカウント ${account.parameter.baseAccountId} が存在しません`,
-          code: "REFERENCE_NOT_FOUND",
-        });
-      }
+    if (account.parameter.paramType === PARAMETER_TYPES.PERCENTAGE) {
+      // バリデーションロジック
     }
-
-    if (account.parameter.type === PARAMETER_TYPES.FORMULA) {
-      if (
-        "dependencies" in account.parameter &&
-        account.parameter.dependencies
-      ) {
-        account.parameter.dependencies.forEach((depId) => {
-          if (!accountIds.has(depId)) {
-            errors.push({
-              field: `account.${account.id}.parameter.dependencies`,
-              message: `依存アカウント ${depId} が存在しません`,
-              code: "REFERENCE_NOT_FOUND",
-            });
-          }
-        });
-      }
-    }
+    */
   });
 
   return errors;

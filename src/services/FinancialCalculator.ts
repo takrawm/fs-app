@@ -1,5 +1,5 @@
 import type { Account, Parameter } from "../types/accountTypes";
-import type { Period } from "../types/periodTypes";
+
 import type { FinancialValue } from "../types/financialValueTypes";
 import type {
   CalculationResult,
@@ -114,11 +114,11 @@ export class FinancialCalculator {
    * 単一科目を計算する純粋関数
    */
   static calculateSingleAccount(
-    account: Readonly<Account>,
-    periodId: string,
-    parameter: Readonly<Parameter>,
-    currentValues: ReadonlyMap<string, number>,
-    previousPeriodValues: ReadonlyMap<string, number>
+    _account: Readonly<Account>,
+    _periodId: string,
+    _parameter: Readonly<Parameter>,
+    _currentValues: ReadonlyMap<string, number>,
+    _previousPeriodValues: ReadonlyMap<string, number>
   ): CalculationResult | null {
     // 注意: この関数は非推奨です。新しいcontextベースの計算を使用してください。
     throw new Error(

@@ -1,6 +1,5 @@
 import type { Parameter } from "../types/accountTypes";
 import {
-  BaseCalculationStrategy,
   ProportionateStrategy,
   PercentageStrategy,
   GrowthRateStrategy,
@@ -11,7 +10,7 @@ import {
 import { NewStrategyFactory } from "./NewStrategyFactory";
 
 export class StrategyFactory {
-  private static strategies = new Map<string, BaseCalculationStrategy>([
+  private static strategies = new Map<string, any>([
     ["比率", new PercentageStrategy()],
     ["成長率", new GrowthRateStrategy()],
     ["他科目連動", new ProportionateStrategy()],
@@ -20,7 +19,7 @@ export class StrategyFactory {
     ["参照", new ReferenceStrategy()],
   ]);
 
-  static getStrategy(type: string): BaseCalculationStrategy {
+  static getStrategy(type: string): any {
     const strategy = this.strategies.get(type);
 
     if (!strategy) {
@@ -30,10 +29,7 @@ export class StrategyFactory {
     return strategy;
   }
 
-  static registerStrategy(
-    type: string,
-    strategy: BaseCalculationStrategy
-  ): void {
+  static registerStrategy(type: string, strategy: any): void {
     this.strategies.set(type, strategy);
   }
 

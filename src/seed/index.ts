@@ -1,22 +1,9 @@
-import type { Account, Parameter } from "../types/accountTypes";
+import type { Account } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
 import { isReclassificationImpact } from "../types/accountTypes";
-// ビルドツール（例：webpack）が内部的に変換する処理
-// 1. accounts.jsonファイルを読み込み
-// 2. JSON.parseでJavaScriptオブジェクトに変換
-// 3. module.exportsとして出力
-// 結果的に以下のコードと同等になる：
-// const accountsData = {
-//   "revenue-sales": {
-//     "accountName": "売上高",
-//     // ... JSONの中身がそのままオブジェクトになる
-//   }
-// };
-export default accountsData;
 import accountsData from "./accounts.json";
 import periodsData from "./periods.json";
-import parametersData from "./parameters.json";
 import financialValuesData from "./financialValues.json";
 
 // Seed データ読み込みクラス
@@ -26,7 +13,6 @@ export class SeedDataLoader {
   private accounts: Account[] = [];
   private periods: Period[] = [];
   private financialValues: FinancialValue[] = [];
-  private parameterMap: Map<string, Record<string, Parameter>> = new Map();
 
   private constructor() {
     this.loadData();
@@ -50,22 +36,6 @@ export class SeedDataLoader {
 
     // 財務数値データの読み込み
     this.financialValues = financialValuesData as FinancialValue[];
-
-    // パラメータデータの読み込みと変換
-    this.loadParameters();
-  }
-
-  private loadParameters(): void {
-    parametersData.forEach((item: any) => {
-      const accountId = item.accountId;
-      const parameters: Record<string, Parameter> = {};
-
-      Object.entries(item.parameters).forEach(([key, param]) => {
-        parameters[key] = param as Parameter;
-      });
-
-      this.parameterMap.set(accountId, parameters);
-    });
   }
 
   // アカウント取得メソッド
@@ -136,25 +106,6 @@ export class SeedDataLoader {
     return this.financialValues.filter((fv) => !fv.isCalculated);
   }
 
-  // ========== パラメータ関連のメソッド ==========
-  public getParametersForAccount(
-    accountId: string
-  ): Record<string, Parameter> | undefined {
-    return this.parameterMap.get(accountId);
-  }
-
-  public getParameter(
-    accountId: string,
-    parameterKey: string
-  ): Parameter | undefined {
-    const params = this.parameterMap.get(accountId);
-    return params ? params[parameterKey] : undefined;
-  }
-
-  public getDefaultParameter(accountId: string): Parameter | undefined {
-    return this.getParameter(accountId, "default");
-  }
-
   // ヘルパーメソッド
   public getRootAccounts(): Account[] {
     return this.accounts.filter((account) => account.parentId === null);
@@ -223,7 +174,6 @@ export class SeedDataLoader {
   public reset(): void {
     this.accounts = [];
     this.periods = [];
-    this.parameterMap.clear();
     this.loadData();
   }
 }

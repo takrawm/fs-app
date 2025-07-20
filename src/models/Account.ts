@@ -223,7 +223,6 @@ export class AccountModel {
     return "1"; // デフォルト
   }
 
-
   // 計算実行メソッド
   calculate(context: CalculationContext): CalculationResult | null {
     if (this.hasNullParameter()) {
@@ -235,7 +234,7 @@ export class AccountModel {
       this.hasGrowthRateParameter() &&
       isGrowthRateParameter(this.parameter)
     ) {
-      const previousValue = context.previousValues.get(this.id) || 0;
+      const previousValue = context.getPreviousValue(this.id) || 0;
       const growthRate = this.parameter.paramValue;
       const currentValue = previousValue * (1 + growthRate);
 
@@ -252,7 +251,7 @@ export class AccountModel {
       isPercentageParameter(this.parameter)
     ) {
       const baseAccountId = this.parameter.paramReferences.accountId;
-      const baseValue = context.accountValues.get(baseAccountId) || 0;
+      const baseValue = context.getValue(baseAccountId) || 0;
       const percentage = this.parameter.paramValue;
       const currentValue = baseValue * percentage;
 
@@ -269,7 +268,7 @@ export class AccountModel {
       isProportionateParameter(this.parameter)
     ) {
       const baseAccountId = this.parameter.paramReferences.accountId;
-      const baseValue = context.accountValues.get(baseAccountId) || 0;
+      const baseValue = context.getValue(baseAccountId) || 0;
 
       return {
         value: baseValue,
@@ -288,7 +287,7 @@ export class AccountModel {
       const references: string[] = [];
 
       this.parameter.paramReferences.forEach((ref, index) => {
-        const accountValue = context.accountValues.get(ref.accountId) || 0;
+        const accountValue = context.getValue(ref.accountId) || 0;
         references.push(ref.accountId);
 
         switch (ref.operation) {

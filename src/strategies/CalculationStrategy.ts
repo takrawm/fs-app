@@ -7,23 +7,48 @@ import type {
 } from "../types/calculationTypes";
 
 // 型ガード関数の定義
-function isGrowthRateParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.GROWTH_RATE }> {
+function isGrowthRateParameter(
+  param: Parameter
+): param is Extract<
+  Parameter,
+  { paramType: typeof PARAMETER_TYPES.GROWTH_RATE }
+> {
   return param.paramType === PARAMETER_TYPES.GROWTH_RATE;
 }
 
-function isChildrenSumParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.CHILDREN_SUM }> {
+function isChildrenSumParameter(
+  param: Parameter
+): param is Extract<
+  Parameter,
+  { paramType: typeof PARAMETER_TYPES.CHILDREN_SUM }
+> {
   return param.paramType === PARAMETER_TYPES.CHILDREN_SUM;
 }
 
-function isCalculationParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.CALCULATION }> {
+function isCalculationParameter(
+  param: Parameter
+): param is Extract<
+  Parameter,
+  { paramType: typeof PARAMETER_TYPES.CALCULATION }
+> {
   return param.paramType === PARAMETER_TYPES.CALCULATION;
 }
 
-function isPercentageParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.PERCENTAGE }> {
+function isPercentageParameter(
+  param: Parameter
+): param is Extract<
+  Parameter,
+  { paramType: typeof PARAMETER_TYPES.PERCENTAGE }
+> {
   return param.paramType === PARAMETER_TYPES.PERCENTAGE;
 }
 
-function isProportionateParameter(param: Parameter): param is Extract<Parameter, { paramType: typeof PARAMETER_TYPES.PROPORTIONATE }> {
+function isProportionateParameter(
+  param: Parameter
+): param is Extract<
+  Parameter,
+  { paramType: typeof PARAMETER_TYPES.PROPORTIONATE }
+> {
   return param.paramType === PARAMETER_TYPES.PROPORTIONATE;
 }
 
@@ -44,7 +69,7 @@ export class GrowthRateCalculationStrategy implements CalculationStrategy {
 
     // accountIdは引数として別途渡す必要がある
     const accountId = ""; // TODO: accountIdをコンテキストに追加するか、引数として渡す
-    const previousValue = context.previousValues.get(accountId) || 0;
+    const previousValue = context.getPreviousValue(accountId) || 0;
     const growthRate = this.parameter.paramValue;
     const currentValue = previousValue * (1 + growthRate);
 
@@ -80,7 +105,7 @@ export class PercentageCalculationStrategy implements CalculationStrategy {
     }
 
     const baseAccountId = this.parameter.paramReferences.accountId;
-    const baseValue = context.accountValues.get(baseAccountId) || 0;
+    const baseValue = context.getValue(baseAccountId) || 0;
     const percentage = this.parameter.paramValue;
     const currentValue = baseValue * percentage;
 
@@ -123,7 +148,7 @@ export class ProportionateCalculationStrategy implements CalculationStrategy {
     }
 
     const baseAccountId = this.parameter.paramReferences.accountId;
-    const baseValue = context.accountValues.get(baseAccountId) || 0;
+    const baseValue = context.getValue(baseAccountId) || 0;
 
     return {
       value: baseValue,
@@ -165,7 +190,7 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
     const references: string[] = [];
 
     this.parameter.paramReferences.forEach((ref, index) => {
-      const accountValue = context.accountValues.get(ref.accountId) || 0;
+      const accountValue = context.getValue(ref.accountId) || 0;
       references.push(ref.accountId);
 
       switch (ref.operation) {
@@ -213,8 +238,8 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
 
 /** 子科目合計計算ストラテジー */
 export class ChildrenSumCalculationStrategy implements CalculationStrategy {
-  constructor(private parameter: Parameter) {
-    if (!isChildrenSumParameter(parameter)) {
+  constructor(private _parameter: Parameter) {
+    if (!isChildrenSumParameter(_parameter)) {
       throw new Error(
         "Invalid parameter type for ChildrenSumCalculationStrategy"
       );

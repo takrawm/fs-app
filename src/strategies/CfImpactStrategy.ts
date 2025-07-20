@@ -40,7 +40,7 @@ export class CfImpactStrategy {
     context: CalculationContext
   ): CalculationResult {
     // 基準利益の場合、そのまま値を使用
-    const value = context.accountValues.get(accountId) || 0;
+    const value = context.getValue(accountId) || 0;
 
     return {
       value,
@@ -63,8 +63,8 @@ export class CfImpactStrategy {
       };
     }
 
-    const currentValue = context.accountValues.get(accountId) || 0;
-    const previousValue = context.previousValues.get(accountId) || 0;
+    const currentValue = context.getValue(accountId) || 0;
+    const previousValue = context.getPreviousValue(accountId) || 0;
     const change = currentValue - previousValue;
 
     // 資産の増加、負債・純資産の減少はCF減少要因（マイナス）
@@ -88,14 +88,17 @@ export class CfImpactStrategy {
     const references: string[] = [];
 
     // CFインパクトタイプごとの処理
-    if (cfImpact.type === CF_IMPACT_TYPES.RECLASSIFICATION && "reclassification" in cfImpact) {
+    if (
+      cfImpact.type === CF_IMPACT_TYPES.RECLASSIFICATION &&
+      "reclassification" in cfImpact
+    ) {
       // 組替元から組替先への移動
-      const fromValue = context.accountValues.get(cfImpact.reclassification.from) || 0;
+      const fromValue = context.getValue(cfImpact.reclassification.from) || 0;
       value = fromValue;
       references.push(cfImpact.reclassification.from);
     } else {
       // その他の場合は自身の値を使用
-      value = context.accountValues.get(accountId) || 0;
+      value = context.getValue(accountId) || 0;
       references.push(accountId);
     }
 
@@ -134,7 +137,7 @@ export class CfImpactStrategy {
     const references: string[] = [];
 
     accountIds.forEach((accountId) => {
-      const value = context.accountValues.get(accountId) || 0;
+      const value = context.getValue(accountId) || 0;
       totalValue += value;
       references.push(accountId);
     });
