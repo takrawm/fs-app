@@ -38,6 +38,8 @@ export class FinancialCalculator {
         parameters
       );
 
+      console.log("sortedAccountIds:", sortedAccountIds);
+
       // 2. アカウントマップを事前構築
       const accountMap = new Map(accounts.map((a) => [a.id, a]));
 

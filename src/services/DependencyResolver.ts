@@ -8,7 +8,25 @@ export class DependencyResolver {
     accounts: ReadonlyArray<Account>,
     parameters: ReadonlyMap<string, Parameter>
   ): string[] {
-    // 依存グラフを構築
+    const { graph, inDegree } = this._buildDependencyGraph(
+      accounts,
+      parameters
+    );
+    const sortedAccountIds = this._topologicalSort(
+      graph,
+      inDegree,
+      accounts.length
+    );
+    return sortedAccountIds;
+  }
+
+  /**
+   * 依存グラフと入次数を構築するプライベートメソッド
+   */
+  private static _buildDependencyGraph(
+    accounts: ReadonlyArray<Account>,
+    parameters: ReadonlyMap<string, Parameter>
+  ): { graph: Map<string, Set<string>>; inDegree: Map<string, number> } {
     const graph = new Map<string, Set<string>>();
     const inDegree = new Map<string, number>();
 
@@ -33,7 +51,8 @@ export class DependencyResolver {
       });
     });
 
-    // 親子関係から依存関係を抽出（子科目合計の場合）
+    // 親子関係から依存関係を抽出（CHILDREN_SUMの場合）
+    // 修正：親科目は子科目の合計で計算されるため、子 → 親 の依存関係
     accounts.forEach((account) => {
       const parameter = parameters.get(account.id);
       if (parameter?.paramType === "CHILDREN_SUM") {
@@ -42,6 +61,7 @@ export class DependencyResolver {
 
         children.forEach((child) => {
           if (graph.has(child.id)) {
+            // 修正：子科目から親科目への依存関係（子 → 親）
             graph.get(child.id)!.add(account.id);
             inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
           }
@@ -49,7 +69,50 @@ export class DependencyResolver {
       }
     });
 
-    // トポロジカルソート（カーンのアルゴリズム）
+    // flowAccountCfImpactに基づく依存関係を追加
+    accounts.forEach((account) => {
+      const cfImpact = account.flowAccountCfImpact;
+      if (!cfImpact || cfImpact.type === null) return;
+
+      switch (cfImpact.type) {
+        case "ADJUSTMENT":
+          // 調整項目の場合：現在科目 → targetIdの依存関係
+          const targetId = cfImpact.adjustment.targetId;
+          if (graph.has(targetId)) {
+            graph.get(account.id)!.add(targetId);
+            inDegree.set(targetId, (inDegree.get(targetId) || 0) + 1);
+          }
+          break;
+
+        case "IS_BASE_PROFIT":
+          // 基礎利益の場合：現在科目 → "equity-retained-earnings"の依存関係（固定）
+          const retainedEarningsId = "equity-retained-earnings";
+          if (graph.has(retainedEarningsId)) {
+            graph.get(account.id)!.add(retainedEarningsId);
+            inDegree.set(
+              retainedEarningsId,
+              (inDegree.get(retainedEarningsId) || 0) + 1
+            );
+          }
+          break;
+
+        case "RECLASSIFICATION":
+          // 組替項目の場合：依存関係を作らない
+          break;
+      }
+    });
+
+    return { graph, inDegree };
+  }
+
+  /**
+   * トポロジカルソート（カーンのアルゴリズム）を実行するプライベートメソッド
+   */
+  private static _topologicalSort(
+    graph: Map<string, Set<string>>,
+    inDegree: Map<string, number>,
+    totalAccounts: number
+  ): string[] {
     const queue: string[] = [];
     const result: string[] = [];
 
@@ -77,12 +140,12 @@ export class DependencyResolver {
     }
 
     // 循環依存のチェック
-    if (result.length !== accounts.length) {
-      const remaining = accounts.filter((a) => !result.includes(a.id));
+    if (result.length !== totalAccounts) {
+      const remaining = Array.from(inDegree.keys()).filter(
+        (accountId) => !result.includes(accountId)
+      );
       throw new Error(
-        `Circular dependency detected in accounts: ${remaining
-          .map((a) => a.id)
-          .join(", ")}`
+        `Circular dependency detected in accounts: ${remaining.join(", ")}`
       );
     }
 
@@ -186,14 +249,46 @@ export class DependencyResolver {
       });
     });
 
-    // 親子関係（parentIdベース）
+    // CHILDREN_SUM の親子関係（修正：子 → 親）
     accounts.forEach((account) => {
-      if (account.parentId) {
-        edges.push({
-          from: account.id,
-          to: account.parentId,
-          type: "parent-child",
+      const parameter = parameters.get(account.id);
+      if (parameter?.paramType === "CHILDREN_SUM") {
+        const children = accounts.filter((a) => a.parentId === account.id);
+        children.forEach((child) => {
+          edges.push({
+            from: child.id,
+            to: account.id,
+            type: "children-sum",
+          });
         });
+      }
+    });
+
+    // flowAccountCfImpactに基づく依存関係
+    accounts.forEach((account) => {
+      const cfImpact = account.flowAccountCfImpact;
+      if (!cfImpact || cfImpact.type === null) return;
+
+      switch (cfImpact.type) {
+        case "ADJUSTMENT":
+          edges.push({
+            from: account.id,
+            to: cfImpact.adjustment.targetId,
+            type: "cf-adjustment",
+          });
+          break;
+
+        case "IS_BASE_PROFIT":
+          edges.push({
+            from: account.id,
+            to: "equity-retained-earnings",
+            type: "cf-base-profit",
+          });
+          break;
+
+        case "RECLASSIFICATION":
+          // 組替項目の場合：依存関係を作らない
+          break;
       }
     });
 
