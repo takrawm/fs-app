@@ -3,7 +3,6 @@
 /** パラメータタイプの定数定義 */
 export const PARAMETER_TYPES = {
   GROWTH_RATE: "GROWTH_RATE",
-  CHILDREN_SUM: "CHILDREN_SUM",
   CALCULATION: "CALCULATION",
   PERCENTAGE: "PERCENTAGE",
   PROPORTIONATE: "PROPORTIONATE",
@@ -34,7 +33,7 @@ export const CF_IMPACT_TYPES = {
 } as const;
 
 // 型エイリアスの作成（キーではなく値を使う）
-// 結果: "GROWTH_RATE" | "CHILDREN_SUM" | "CALCULATION" | "PERCENTAGE" | "PROPORTIONATE"
+// 結果: "GROWTH_RATE" | "CALCULATION" | "PERCENTAGE" | "PROPORTIONATE"
 export type ParameterType =
   (typeof PARAMETER_TYPES)[keyof typeof PARAMETER_TYPES];
 export type Operation = (typeof OPERATIONS)[keyof typeof OPERATIONS];
@@ -74,13 +73,6 @@ interface GrowthRateParameter {
   paramReferences: null;
 }
 
-/** 子科目合計パラメータ */
-interface ChildrenSumParameter {
-  paramType: typeof PARAMETER_TYPES.CHILDREN_SUM;
-  paramValue: null;
-  paramReferences: null;
-}
-
 /** 計算パラメータ（複数科目の計算） */
 interface CalculationParameter {
   paramType: typeof PARAMETER_TYPES.CALCULATION;
@@ -117,7 +109,6 @@ interface NullParameter {
  */
 export type Parameter =
   | GrowthRateParameter
-  | ChildrenSumParameter
   | CalculationParameter
   | PercentageParameter
   | ProportionateParameter
@@ -126,9 +117,7 @@ export type Parameter =
 /**
  * サマリー科目で使用可能なパラメータ型
  */
-export type SummaryAccountParameter =
-  | ChildrenSumParameter
-  | CalculationParameter;
+export type SummaryAccountParameter = CalculationParameter | NullParameter;
 
 // ========== CFインパクトの種類ごとの型定義 ==========
 
@@ -315,13 +304,6 @@ export function isGrowthRateParameter(
   return param.paramType === PARAMETER_TYPES.GROWTH_RATE;
 }
 
-/** 子科目合計パラメータかどうかを判定 */
-export function isChildrenSumParameter(
-  param: Parameter
-): param is ChildrenSumParameter {
-  return param.paramType === PARAMETER_TYPES.CHILDREN_SUM;
-}
-
 /** 計算パラメータかどうかを判定 */
 export function isCalculationParameter(
   param: Parameter
@@ -353,8 +335,7 @@ export function isSummaryAccountParameter(
   param: Parameter
 ): param is SummaryAccountParameter {
   return (
-    param.paramType === PARAMETER_TYPES.CHILDREN_SUM ||
-    param.paramType === PARAMETER_TYPES.CALCULATION
+    param.paramType === PARAMETER_TYPES.CALCULATION || param.paramType === null
   );
 }
 

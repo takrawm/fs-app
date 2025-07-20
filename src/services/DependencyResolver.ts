@@ -51,24 +51,6 @@ export class DependencyResolver {
       });
     });
 
-    // 親子関係から依存関係を抽出（CHILDREN_SUMの場合）
-    // 修正：親科目は子科目の合計で計算されるため、子 → 親 の依存関係
-    accounts.forEach((account) => {
-      const parameter = parameters.get(account.id);
-      if (parameter?.paramType === "CHILDREN_SUM") {
-        // parentIdベースで子科目を探す
-        const children = accounts.filter((a) => a.parentId === account.id);
-
-        children.forEach((child) => {
-          if (graph.has(child.id)) {
-            // 修正：子科目から親科目への依存関係（子 → 親）
-            graph.get(child.id)!.add(account.id);
-            inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
-          }
-        });
-      }
-    });
-
     // flowAccountCfImpactに基づく依存関係を追加
     accounts.forEach((account) => {
       const cfImpact = account.flowAccountCfImpact;
@@ -175,7 +157,6 @@ export class DependencyResolver {
         break;
 
       case "GROWTH_RATE":
-      case "CHILDREN_SUM":
       case null:
         // これらは他の科目に依存しない
         break;
@@ -247,21 +228,6 @@ export class DependencyResolver {
           type: parameter.paramType || "unknown",
         });
       });
-    });
-
-    // CHILDREN_SUM の親子関係（修正：子 → 親）
-    accounts.forEach((account) => {
-      const parameter = parameters.get(account.id);
-      if (parameter?.paramType === "CHILDREN_SUM") {
-        const children = accounts.filter((a) => a.parentId === account.id);
-        children.forEach((child) => {
-          edges.push({
-            from: child.id,
-            to: account.id,
-            type: "children-sum",
-          });
-        });
-      }
     });
 
     // flowAccountCfImpactに基づく依存関係

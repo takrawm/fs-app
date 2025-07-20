@@ -16,15 +16,6 @@ function isGrowthRateParameter(
   return param.paramType === PARAMETER_TYPES.GROWTH_RATE;
 }
 
-function isChildrenSumParameter(
-  param: Parameter
-): param is Extract<
-  Parameter,
-  { paramType: typeof PARAMETER_TYPES.CHILDREN_SUM }
-> {
-  return param.paramType === PARAMETER_TYPES.CHILDREN_SUM;
-}
-
 function isCalculationParameter(
   param: Parameter
 ): param is Extract<
@@ -236,35 +227,6 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
   }
 }
 
-/** 子科目合計計算ストラテジー */
-export class ChildrenSumCalculationStrategy implements CalculationStrategy {
-  constructor(private _parameter: Parameter) {
-    if (!isChildrenSumParameter(_parameter)) {
-      throw new Error(
-        "Invalid parameter type for ChildrenSumCalculationStrategy"
-      );
-    }
-  }
-
-  calculate(_context: CalculationContext): CalculationResult {
-    // 子科目の合計ロジックは別途実装が必要
-    // ここでは仮の実装
-    return {
-      value: 0,
-      formula: "SUM(children)",
-      references: [],
-    };
-  }
-
-  getRequiredReferences(): string[] {
-    return []; // 子科目は動的に決まる
-  }
-
-  validate(parameter: Parameter): boolean {
-    return isChildrenSumParameter(parameter);
-  }
-}
-
 /** ストラテジーファクトリー（パラメータに応じて適切なストラテジーを生成） */
 export class CalculationStrategyFactory {
   static createStrategy(parameter: Parameter): CalculationStrategy | null {
@@ -280,9 +242,6 @@ export class CalculationStrategyFactory {
 
       case PARAMETER_TYPES.PROPORTIONATE:
         return new ProportionateCalculationStrategy(parameter);
-
-      case PARAMETER_TYPES.CHILDREN_SUM:
-        return new ChildrenSumCalculationStrategy(parameter);
 
       default:
         return null;

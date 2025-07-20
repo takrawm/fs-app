@@ -90,14 +90,6 @@ export class AccountCalculator {
           references: accountIds,
         };
 
-      case "CHILDREN_SUM":
-        // 子科目の合計は別途DependencyResolverで処理されるため、ここでは0を返す
-        return {
-          value: 0,
-          formula: "Σ(子科目)",
-          references: [],
-        };
-
       case null:
         return null;
 

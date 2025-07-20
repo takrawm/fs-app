@@ -16,7 +16,6 @@ import { SHEET_TYPES, CF_IMPACT_TYPES } from "../types/accountTypes";
 import {
   OPERATIONS,
   isGrowthRateParameter,
-  isChildrenSumParameter,
   isCalculationParameter,
   isPercentageParameter,
   isProportionateParameter,
@@ -106,10 +105,6 @@ export class AccountModel {
   // パラメータタイプ判定メソッド
   hasGrowthRateParameter(): boolean {
     return isGrowthRateParameter(this.parameter);
-  }
-
-  hasChildrenSumParameter(): boolean {
-    return isChildrenSumParameter(this.parameter);
   }
 
   hasCalculationParameter(): boolean {
@@ -319,12 +314,6 @@ export class AccountModel {
         formula: formulaParts.join(" "),
         references,
       };
-    }
-
-    // 子科目合計
-    if (this.hasChildrenSumParameter()) {
-      // 子科目の合計ロジックは別途実装が必要
-      return null;
     }
 
     return null;

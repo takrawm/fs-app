@@ -31,7 +31,6 @@ export const CF_IMPACT_TYPE_LABELS: Record<CfImpactType, string> = {
 // パラメータタイプのラベル
 export const NEW_PARAMETER_TYPE_LABELS: Record<ParameterType, string> = {
   [PARAMETER_TYPES.GROWTH_RATE]: "成長率",
-  [PARAMETER_TYPES.CHILDREN_SUM]: "子科目合計",
   [PARAMETER_TYPES.CALCULATION]: "計算式",
   [PARAMETER_TYPES.PERCENTAGE]: "比率",
   [PARAMETER_TYPES.PROPORTIONATE]: "連動",

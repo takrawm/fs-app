@@ -202,7 +202,7 @@
       "prefix": "D"
     },
     "parameter": {
-      "paramType": "CHILDREN_SUM",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
@@ -473,7 +473,7 @@
       "prefix": "H"
     },
     "parameter": {
-      "paramType": "CHILDREN_SUM",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
@@ -567,7 +567,7 @@
       "prefix": "J"
     },
     "parameter": {
-      "paramType": "CHILDREN_SUM",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
@@ -586,7 +586,7 @@
       "prefix": "K"
     },
     "parameter": {
-      "paramType": "CHILDREN_SUM",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
@@ -605,7 +605,7 @@
       "prefix": "L"
     },
     "parameter": {
-      "paramType": "CHILDREN_SUM",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },
