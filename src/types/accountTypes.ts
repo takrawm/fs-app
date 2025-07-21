@@ -435,21 +435,33 @@ export function isCFDetailAccount(
 export function isBaseProfitImpact(
   impact: FlowAccountCfImpact
 ): impact is BaseProfitImpact {
-  return impact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT;
+  return (
+    impact.type === CF_IMPACT_TYPES.IS_BASE_PROFIT &&
+    "isBaseProfit" in impact &&
+    impact.isBaseProfit !== undefined
+  );
 }
 
 /** 調整項目かどうかを判定 */
 export function isAdjustmentImpact(
   impact: FlowAccountCfImpact
 ): impact is AdjustmentImpact {
-  return impact.type === CF_IMPACT_TYPES.ADJUSTMENT;
+  return (
+    impact.type === CF_IMPACT_TYPES.ADJUSTMENT &&
+    "adjustment" in impact &&
+    impact.adjustment !== undefined
+  );
 }
 
 /** 組替項目かどうかを判定 */
 export function isReclassificationImpact(
   impact: FlowAccountCfImpact
 ): impact is ReclassificationImpact {
-  return impact.type === CF_IMPACT_TYPES.RECLASSIFICATION;
+  return (
+    impact.type === CF_IMPACT_TYPES.RECLASSIFICATION &&
+    "reclassification" in impact &&
+    impact.reclassification !== undefined
+  );
 }
 
 /** CFに影響しない場合かどうかを判定 */

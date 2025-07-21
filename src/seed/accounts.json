@@ -207,7 +207,7 @@
       "paramReferences": null
     },
     "flowAccountCfImpact": {
-      "type": "ADJUSTMENT"
+      "type": null
     }
   },
   {
@@ -230,7 +230,8 @@
       ]
     },
     "flowAccountCfImpact": {
-      "type": "IS_BASE_PROFIT"
+      "type": "IS_BASE_PROFIT",
+      "isBaseProfit": true
     }
   },
   {
@@ -493,12 +494,9 @@
       "prefix": "I"
     },
     "parameter": {
-      "paramType": "CALCULATION",
+      "paramType": null,
       "paramValue": null,
-      "paramReferences": [
-        { "accountId": "liability-total", "operation": "ADD", "lag": 0 },
-        { "accountId": "equity-total", "operation": "ADD", "lag": 0 }
-      ]
+      "paramReferences": null
     },
     "flowAccountCfImpact": {
       "type": null
