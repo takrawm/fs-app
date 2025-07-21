@@ -71,11 +71,6 @@ export const useFinancialModel = () => {
     onStructureChange: () => calculations.markStructureDirty(),
   });
 
-  // 現在選択中の期間の計算を実行
-  const calculateCurrentPeriod = useCallback(() => {
-    return calculations.calculateCurrentPeriod(periodManagement.selectedPeriodId);
-  }, [calculations, periodManagement.selectedPeriodId]);
-
   // モデルの検証
   const validateModel = useCallback(() => {
     const errors: string[] = [];
@@ -127,14 +122,14 @@ export const useFinancialModel = () => {
     isLoading,
 
     // 操作関数
+    // accountManagement.addAccountという関数をaddAccountという名前でエクスポート
     addAccount: accountManagement.addAccount,
     updateAccount: accountManagement.updateAccount,
     deleteAccount: accountManagement.deleteAccount,
     addPeriod: periodManagement.addPeriod,
     setParameter: accountManagement.setParameter,
-    calculatePeriod: calculations.calculatePeriod,
+    calculateSinglePeriod: calculations.calculateSinglePeriod,
     calculateCashFlow: calculations.calculateCashFlow,
-    calculateCurrentPeriod,
     calculateAllPeriods: calculations.calculateAllPeriods,
 
     // 取得関数

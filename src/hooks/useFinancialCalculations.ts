@@ -14,7 +14,9 @@ interface UseFinancialCalculationsProps {
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   periods: Period[];
   financialValues: Map<string, FinancialValue>;
-  setFinancialValues: React.Dispatch<React.SetStateAction<Map<string, FinancialValue>>>;
+  setFinancialValues: React.Dispatch<
+    React.SetStateAction<Map<string, FinancialValue>>
+  >;
   periodIndexSystem: PeriodIndexSystem | null;
   dataStore: OptimizedFinancialDataStore | null;
 }
@@ -32,10 +34,16 @@ export const useFinancialCalculations = ({
   periodIndexSystem,
   dataStore,
 }: UseFinancialCalculationsProps) => {
-  const [calculationResults, setCalculationResults] = useState<Map<string, number>>(new Map());
-  const [calculationErrors, setCalculationErrors] = useState<CalculationError[]>([]);
+  const [calculationResults, setCalculationResults] = useState<
+    Map<string, number>
+  >(new Map());
+  const [calculationErrors, setCalculationErrors] = useState<
+    CalculationError[]
+  >([]);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [sortedAccountIds, setSortedAccountIds] = useState<string[] | null>(null);
+  const [sortedAccountIds, setSortedAccountIds] = useState<string[] | null>(
+    null
+  );
   const [isStructureDirty, setIsStructureDirty] = useState(true);
 
   // accounts配列からparametersMapを動的に生成
@@ -74,8 +82,8 @@ export const useFinancialCalculations = ({
     sortedAccountIds,
   ]);
 
-  // 特定期間の計算を実行
-  const calculatePeriod = useCallback(
+  // 単一期間の計算を実行
+  const calculateSinglePeriod = useCallback(
     (periodId: string) => {
       const pipelineContext = createPipelineContext();
       if (!pipelineContext) {
@@ -108,6 +116,7 @@ export const useFinancialCalculations = ({
 
         // パイプラインを実行
         const result = pipeline.run(pipelineContext);
+        console.log("result: ", result);
 
         // 結果を反映
         if (result.sortedAccountIds && isStructureDirty) {
@@ -167,7 +176,9 @@ export const useFinancialCalculations = ({
         pipeline = CalculationPipeline.createFullPipeline();
       } else {
         // 数値変更のみの場合は短縮パイプライン
-        console.log("[useFinancialCalculations] Running calculation-only pipeline");
+        console.log(
+          "[useFinancialCalculations] Running calculation-only pipeline"
+        );
         pipeline = CalculationPipeline.createCalculationOnlyPipeline();
       }
 
@@ -204,16 +215,12 @@ export const useFinancialCalculations = ({
     } finally {
       setIsCalculating(false);
     }
-  }, [createPipelineContext, isStructureDirty, setAccounts, setFinancialValues]);
-
-  // 現在選択中の期間の計算を実行
-  const calculateCurrentPeriod = useCallback(
-    (selectedPeriodId: string | null) => {
-      if (!selectedPeriodId) return;
-      return calculatePeriod(selectedPeriodId);
-    },
-    [calculatePeriod]
-  );
+  }, [
+    createPipelineContext,
+    isStructureDirty,
+    setAccounts,
+    setFinancialValues,
+  ]);
 
   // キャッシュフロー計算処理
   const calculateCashFlow = useCallback((_periodId: string) => {
@@ -258,21 +265,20 @@ export const useFinancialCalculations = ({
     calculationResults,
     calculationErrors,
     isCalculating,
-    
+
     // 内部状態
     sortedAccountIds,
     isStructureDirty,
-    
+
     // 計算実行
-    calculatePeriod,
+    calculateSinglePeriod,
     calculateAllPeriods,
-    calculateCurrentPeriod,
     calculateCashFlow,
-    
+
     // 状態管理
     markStructureDirty,
     createPipelineContext,
-    
+
     // 統計情報
     calculationStats,
   };

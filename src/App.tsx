@@ -12,12 +12,9 @@ function App() {
     selectedPeriodId,
     setSelectedPeriodId,
     isCalculating,
-
     deleteAccount,
-
     addPeriod,
-
-    calculateCurrentPeriod,
+    calculateSinglePeriod,
     calculateAllPeriods,
     getAccountValue,
   } = useFinancialModel();
@@ -71,7 +68,11 @@ function App() {
   // 非同期処理を実装する可能性があるため、エラーハンドリングは維持
   const handleCalculate = () => {
     try {
-      calculateCurrentPeriod();
+      if (!selectedPeriodId) {
+        alert("期間を選択してください");
+        return;
+      }
+      calculateSinglePeriod(selectedPeriodId);
     } catch (error) {
       console.error("計算エラー:", error);
       alert("計算中にエラーが発生しました。");
