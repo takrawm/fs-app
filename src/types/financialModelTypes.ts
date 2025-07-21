@@ -9,8 +9,6 @@ export interface FinancialModel {
   description?: string;
   periods: Period[];
   values: FinancialValue[];
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 // 財務モデル作成データの型定義
@@ -30,8 +28,6 @@ export interface UpdateFinancialModelData {
 // 財務モデルフィルターの型定義
 export interface FinancialModelFilter {
   name?: string;
-  createdAfter?: Date;
-  createdBefore?: Date;
 }
 
 // 財務モデル統計情報の型定義
@@ -40,7 +36,6 @@ export interface FinancialModelStats {
   totalPeriods: number;
   totalValues: number;
   averageValuesPerModel: number;
-  lastUpdated: Date;
 }
 
 // 財務モデルバックアップの型定義

@@ -2,7 +2,6 @@ import type { Account, Parameter } from "../types/accountTypes";
 
 import type { FinancialValue } from "../types/financialValueTypes";
 import type {
-  CalculationResult,
   CalculationContext,
   CalculationError,
 } from "../types/calculationTypes";
@@ -23,11 +22,11 @@ export class FinancialCalculator {
     context: CalculationContext,
     parameters: ReadonlyMap<string, Parameter>
   ): {
-    results: Map<string, CalculationResult>;
+    results: Map<string, number>;
     calculatedValues: Map<string, FinancialValue>;
     errors: CalculationError[];
   } {
-    const results = new Map<string, CalculationResult>();
+    const results = new Map<string, number>();
     const calculatedValues = new Map<string, FinancialValue>();
     const errors: CalculationError[] = [];
 
@@ -58,7 +57,7 @@ export class FinancialCalculator {
             context
           );
 
-          if (result) {
+          if (result !== null) {
             results.set(accountId, result);
 
             // 🔧 改善: 計算結果を即座にcontextに反映
@@ -67,14 +66,14 @@ export class FinancialCalculator {
               "setValue" in context &&
               typeof context.setValue === "function"
             ) {
-              context.setValue(accountId, periodId, result.value);
+              context.setValue(accountId, periodId, result);
             }
 
             // FinancialValueとして保存
             const financialValue: FinancialValue = {
               accountId,
               periodId,
-              value: result.value,
+              value: result,
               isCalculated: true,
             };
             calculatedValues.set(`${accountId}_${periodId}`, financialValue);
@@ -121,7 +120,7 @@ export class FinancialCalculator {
     _parameter: Readonly<Parameter>,
     _currentValues: ReadonlyMap<string, number>,
     _previousPeriodValues: ReadonlyMap<string, number>
-  ): CalculationResult | null {
+  ): number | null {
     // 注意: この関数は非推奨です。新しいcontextベースの計算を使用してください。
     throw new Error(
       "calculateSingleAccount is deprecated. Use context-based calculation instead."
@@ -138,7 +137,7 @@ export class FinancialCalculator {
    * 計算結果の検証を行う純粋関数
    */
   static validateResults(
-    results: ReadonlyMap<string, CalculationResult>,
+    results: ReadonlyMap<string, number>,
     accounts: ReadonlyArray<Account>
   ): {
     isValid: boolean;
@@ -157,9 +156,9 @@ export class FinancialCalculator {
 
     // 計算結果の妥当性チェック
     for (const [accountId, result] of results) {
-      if (isNaN(result.value) || !isFinite(result.value)) {
+      if (isNaN(result) || !isFinite(result)) {
         validationErrors.push(
-          `Account ${accountId} has invalid value: ${result.value}`
+          `Account ${accountId} has invalid value: ${result}`
         );
       }
     }

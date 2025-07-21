@@ -1,10 +1,7 @@
 // 財務関連の型定義の再エクスポート
-export type {
-  CalculationResult,
-  CalculationContext,
-  CalculationStrategy,
-  CalculationError,
-} from "./calculationTypes";
+export type { CalculationContext, CalculationError } from "./calculationTypes";
+
+// CalculationResult、CalculationStrategyは削除済み
 
 export type { FinancialModel } from "./financialModelTypes";
 

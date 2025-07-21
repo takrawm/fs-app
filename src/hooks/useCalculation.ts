@@ -1,10 +1,8 @@
 import { useState, useCallback } from "react";
-import type { CalculationResult, CalculationError } from "../types/calculationTypes";
+import type { CalculationError } from "../types/calculationTypes";
 
 export const useCalculation = () => {
-  const [results, setResults] = useState<Map<string, CalculationResult>>(
-    new Map()
-  );
+  const [results, setResults] = useState<Map<string, number>>(new Map());
   const [errors, setErrors] = useState<CalculationError[]>([]);
   const [isCalculating, setIsCalculating] = useState(false);
 
@@ -17,16 +15,13 @@ export const useCalculation = () => {
     setIsCalculating(false);
   }, []);
 
-  const addResult = useCallback(
-    (accountId: string, result: CalculationResult) => {
-      setResults((prev) => {
-        const newResults = new Map(prev);
-        newResults.set(accountId, result);
-        return newResults;
-      });
-    },
-    []
-  );
+  const addResult = useCallback((accountId: string, result: number) => {
+    setResults((prev) => {
+      const newResults = new Map(prev);
+      newResults.set(accountId, result);
+      return newResults;
+    });
+  }, []);
 
   const addError = useCallback((error: CalculationError) => {
     setErrors((prev) => [...prev, error]);
@@ -38,7 +33,7 @@ export const useCalculation = () => {
   }, []);
 
   const getResult = useCallback(
-    (accountId: string): CalculationResult | undefined => {
+    (accountId: string): number | undefined => {
       return results.get(accountId);
     },
     [results]
@@ -46,7 +41,7 @@ export const useCalculation = () => {
 
   const getValue = useCallback(
     (accountId: string): number => {
-      return results.get(accountId)?.value || 0;
+      return results.get(accountId) || 0;
     },
     [results]
   );

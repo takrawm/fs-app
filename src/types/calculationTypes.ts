@@ -1,9 +1,5 @@
-// 計算結果の型定義
-export interface CalculationResult {
-  value: number;
-  formula: string;
-  references: string[];
-}
+// 計算結果は単純にnumber型として扱う
+// 以前のCalculationResultインターフェースは削除済み
 
 // 最適化された計算コンテキストの型定義
 export interface CalculationContext {
@@ -30,9 +26,10 @@ export interface CalculationContext {
   setValue: (accountId: string, periodId: string, value: number) => void;
 }
 
-// 計算戦略のインターフェース
+// 計算戦略のインターフェース（非推奨）
+// 現在の実装ではAccountCalculator.calculateメソッドを使用
 export interface CalculationStrategy {
-  calculate(context: CalculationContext): CalculationResult;
+  calculate(context: CalculationContext): number;
   validate(parameters: any): boolean;
 }
 
@@ -64,7 +61,7 @@ export interface CalculationOptions {
 // 計算キャッシュの型定義
 export interface CalculationCache {
   key: string;
-  result: CalculationResult;
+  result: number;
   timestamp: Date;
   ttl: number;
 }

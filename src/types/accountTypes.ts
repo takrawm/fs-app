@@ -183,12 +183,6 @@ interface BaseAccount {
 
   /** 計算パラメータ */
   parameter: Parameter;
-
-  /** 作成日時 */
-  createdAt: Date;
-
-  /** 更新日時 */
-  updatedAt: Date;
 }
 
 /**
@@ -471,4 +465,4 @@ export function isNoCfImpact(
 // - periodTypes.ts: Period
 // - financialValueTypes.ts: FinancialValue
 // - financialModelTypes.ts: FinancialModel
-// - calculationTypes.ts: CalculationResult, CalculationContext, CalculationStrategy
+// - calculationTypes.ts: CalculationContext

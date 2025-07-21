@@ -13,7 +13,6 @@ import type {
 } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type {
-  CalculationResult,
   CalculationError,
   CalculationContext,
 } from "../types/calculationTypes";
@@ -33,7 +32,7 @@ export const useFinancialModel = () => {
   >(new Map());
 
   const [calculationResults, setCalculationResults] = useState<
-    Map<string, CalculationResult>
+    Map<string, number>
   >(new Map());
   const [calculationErrors, setCalculationErrors] = useState<
     CalculationError[]
@@ -129,8 +128,6 @@ export const useFinancialModel = () => {
           paramValue: null,
           paramReferences: null,
         },
-        createdAt: new Date(),
-        updatedAt: new Date(),
       };
 
       let newAccount: Account;
@@ -177,15 +174,12 @@ export const useFinancialModel = () => {
   );
 
   const updateAccount = useCallback(
-    <T extends Account>(
-      id: string,
-      updates: Partial<Omit<T, "id" | "createdAt">>
-    ) => {
+    <T extends Account>(id: string, updates: Partial<Omit<T, "id">>) => {
       setAccounts((prev) =>
         prev.map((account) => {
           if (account.id === id) {
             // 型安全な更新のため、既存のアカウントの構造を保持
-            return { ...account, ...updates, updatedAt: new Date() } as Account;
+            return { ...account, ...updates } as Account;
           }
           return account;
         })
@@ -216,7 +210,7 @@ export const useFinancialModel = () => {
       setAccounts((prev) =>
         prev.map((account) =>
           account.id === accountId
-            ? ({ ...account, parameter, updatedAt: new Date() } as Account)
+            ? ({ ...account, parameter } as Account)
             : account
         )
       );
@@ -322,7 +316,7 @@ export const useFinancialModel = () => {
     try {
       // TODO: CF計算の実装
       console.log("Cash flow calculation not yet implemented");
-      return new Map<string, CalculationResult>();
+      return new Map<string, number>();
     } catch (error) {
       console.error("Cash flow calculation error:", error);
       throw error;
@@ -347,7 +341,7 @@ export const useFinancialModel = () => {
     setCalculationErrors([]);
 
     try {
-      const allResults = new Map<string, CalculationResult>();
+      const allResults = new Map<string, number>();
       const allErrors: CalculationError[] = [];
 
       // 各期間を順番に計算

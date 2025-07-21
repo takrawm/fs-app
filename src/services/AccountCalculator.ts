@@ -1,8 +1,5 @@
 import type { Account, Parameter } from "../types/accountTypes";
-import type {
-  CalculationContext,
-  CalculationResult,
-} from "../types/calculationTypes";
+import type { CalculationContext } from "../types/calculationTypes";
 
 export class AccountCalculator {
   /**
@@ -13,40 +10,21 @@ export class AccountCalculator {
     account: Readonly<Account>,
     parameter: Parameter,
     context: CalculationContext
-  ): CalculationResult | null {
+  ): number | null {
     switch (parameter.paramType) {
       case "GROWTH_RATE":
         const previousValue = context.getPreviousValue(account.id);
         const currentValue = previousValue * (1 + parameter.paramValue);
-
-        return {
-          value: currentValue,
-          formula: `${account.accountName}[前期] × (1 + ${(
-            parameter.paramValue * 100
-          ).toFixed(1)}%)`,
-          references: [account.id],
-        };
+        return currentValue;
 
       case "PERCENTAGE":
         const baseValue = context.getValue(parameter.paramReferences.accountId);
         const value = baseValue * parameter.paramValue;
-
-        return {
-          value,
-          formula: `[${parameter.paramReferences.accountId}] × ${(
-            parameter.paramValue * 100
-          ).toFixed(1)}%`,
-          references: [parameter.paramReferences.accountId],
-        };
+        return value;
 
       case "PROPORTIONATE":
         const propValue = context.getValue(parameter.paramReferences.accountId);
-
-        return {
-          value: propValue,
-          formula: `[${parameter.paramReferences.accountId}]`,
-          references: [parameter.paramReferences.accountId],
-        };
+        return propValue;
 
       case "CALCULATION":
         const accountIds = parameter.paramReferences.map(
@@ -55,7 +33,6 @@ export class AccountCalculator {
         const values = context.getBulkValues(accountIds);
 
         let result = 0;
-        const formulaParts: string[] = [];
 
         parameter.paramReferences.forEach((ref, index) => {
           const accountValue = values.get(ref.accountId) || 0;
@@ -63,32 +40,22 @@ export class AccountCalculator {
           switch (ref.operation) {
             case "ADD":
               result += accountValue;
-              formulaParts.push(
-                index === 0 ? ref.accountId : `+ ${ref.accountId}`
-              );
               break;
             case "SUB":
               result -= accountValue;
-              formulaParts.push(`- ${ref.accountId}`);
               break;
             case "MUL":
               result *= accountValue;
-              formulaParts.push(`× ${ref.accountId}`);
               break;
             case "DIV":
               if (accountValue !== 0) {
                 result /= accountValue;
-                formulaParts.push(`÷ ${ref.accountId}`);
               }
               break;
           }
         });
 
-        return {
-          value: result,
-          formula: formulaParts.join(" "),
-          references: accountIds,
-        };
+        return result;
 
       case null:
         return null;
@@ -104,8 +71,8 @@ export class AccountCalculator {
   /**
    * 計算結果の妥当性をチェックする純粋関数
    */
-  static validateResult(result: CalculationResult): boolean {
-    return !isNaN(result.value) && isFinite(result.value);
+  static validateResult(result: number): boolean {
+    return !isNaN(result) && isFinite(result);
   }
 
   /**

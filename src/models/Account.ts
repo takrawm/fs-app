@@ -8,10 +8,7 @@ import type {
   FlowAccountCfImpact,
   Parameter,
 } from "../types/accountTypes";
-import type {
-  CalculationContext,
-  CalculationResult,
-} from "../types/calculationTypes";
+import type { CalculationContext } from "../types/calculationTypes";
 import { SHEET_TYPES, CF_IMPACT_TYPES } from "../types/accountTypes";
 import {
   OPERATIONS,
@@ -219,7 +216,7 @@ export class AccountModel {
   }
 
   // 計算実行メソッド
-  calculate(context: CalculationContext): CalculationResult | null {
+  calculate(context: CalculationContext): number | null {
     if (this.hasNullParameter()) {
       return null;
     }
@@ -233,11 +230,7 @@ export class AccountModel {
       const growthRate = this.parameter.paramValue;
       const currentValue = previousValue * (1 + growthRate);
 
-      return {
-        value: currentValue,
-        formula: `${this.id}[t-1] × (1 + ${growthRate})`,
-        references: [this.id],
-      };
+      return currentValue;
     }
 
     // 比率計算
@@ -250,11 +243,7 @@ export class AccountModel {
       const percentage = this.parameter.paramValue;
       const currentValue = baseValue * percentage;
 
-      return {
-        value: currentValue,
-        formula: `${baseAccountId} × ${percentage}`,
-        references: [baseAccountId],
-      };
+      return currentValue;
     }
 
     // 連動計算（比率100%）
@@ -265,11 +254,7 @@ export class AccountModel {
       const baseAccountId = this.parameter.paramReferences.accountId;
       const baseValue = context.getValue(baseAccountId) || 0;
 
-      return {
-        value: baseValue,
-        formula: baseAccountId,
-        references: [baseAccountId],
-      };
+      return baseValue;
     }
 
     // 複数科目計算
@@ -278,42 +263,29 @@ export class AccountModel {
       isCalculationParameter(this.parameter)
     ) {
       let result = 0;
-      const formulaParts: string[] = [];
-      const references: string[] = [];
 
       this.parameter.paramReferences.forEach((ref, index) => {
         const accountValue = context.getValue(ref.accountId) || 0;
-        references.push(ref.accountId);
 
         switch (ref.operation) {
           case OPERATIONS.ADD:
             result += accountValue;
-            formulaParts.push(
-              index === 0 ? ref.accountId : `+ ${ref.accountId}`
-            );
             break;
           case OPERATIONS.SUB:
             result -= accountValue;
-            formulaParts.push(`- ${ref.accountId}`);
             break;
           case OPERATIONS.MUL:
             result *= accountValue;
-            formulaParts.push(`× ${ref.accountId}`);
             break;
           case OPERATIONS.DIV:
             if (accountValue !== 0) {
               result /= accountValue;
-              formulaParts.push(`÷ ${ref.accountId}`);
             }
             break;
         }
       });
 
-      return {
-        value: result,
-        formula: formulaParts.join(" "),
-        references,
-      };
+      return result;
     }
 
     return null;
