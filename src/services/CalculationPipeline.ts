@@ -1,10 +1,7 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
-import type {
-  CalculationContext,
-  CalculationError,
-} from "../types/calculationTypes";
+import type { CalculationError } from "../types/calculationTypes";
 import { PeriodIndexSystem } from "../utils/PeriodIndexSystem";
 import { OptimizedFinancialDataStore } from "../utils/OptimizedFinancialDataStore";
 import { ValidateAccountDefinitionsStage } from "./stages/ValidateAccountDefinitionsStage";
