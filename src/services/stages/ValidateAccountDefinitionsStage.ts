@@ -1,6 +1,6 @@
 import type { PipelineContext, PipelineStage } from "../CalculationPipeline";
-import { 
-  isFlowAccount, 
+import {
+  isFlowAccount,
   isBSAccount,
   isFlowDetailAccount,
   isSummaryAccount,
@@ -8,7 +8,7 @@ import {
   isNullParameter,
   type Account,
   type FlowAccount,
-  type BSAccount
+  type BSAccount,
 } from "../../types/accountTypes";
 
 /**
@@ -18,7 +18,7 @@ import {
 export class ValidateAccountDefinitionsStage implements PipelineStage {
   name = "ValidateAccountDefinitions";
 
-  async execute(context: PipelineContext): Promise<PipelineContext> {
+  execute(context: PipelineContext): PipelineContext {
     console.log(`[${this.name}] Starting validation of account definitions`);
 
     const validationErrors: string[] = [];
@@ -28,12 +28,16 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
       // 基本的な検証
       if (!account.id) {
         validationErrors.push(`Account without ID found`);
+        return; // IDがない場合は以降の検証をスキップ
       }
+
+      const accountId = account.id; // 型推論を助けるため
+
       if (!account.accountName) {
-        validationErrors.push(`Account ${account.id} has no name`);
+        validationErrors.push(`Account ${accountId} has no name`);
       }
       if (!account.sheet) {
-        validationErrors.push(`Account ${account.id} has no sheet type`);
+        validationErrors.push(`Account ${accountId} has no sheet type`);
       }
 
       // フロー科目の検証
@@ -53,11 +57,18 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
     });
 
     if (validationErrors.length > 0) {
-      console.error(`[${this.name}] Validation errors found:`, validationErrors);
-      throw new Error(`Account validation failed: ${validationErrors.join(", ")}`);
+      console.error(
+        `[${this.name}] Validation errors found:`,
+        validationErrors
+      );
+      throw new Error(
+        `Account validation failed: ${validationErrors.join(", ")}`
+      );
     }
 
-    console.log(`[${this.name}] Validation completed. CF target accounts: ${cfTargetAccounts.length}`);
+    console.log(
+      `[${this.name}] Validation completed. CF target accounts: ${cfTargetAccounts.length}`
+    );
 
     return {
       ...context,
@@ -66,8 +77,8 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
   }
 
   private validateFlowAccount(
-    account: FlowAccount, 
-    errors: string[], 
+    account: FlowAccount,
+    errors: string[],
     cfTargets: string[]
   ): void {
     // フロー科目のflowAccountCfImpactの検証
@@ -77,32 +88,45 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
     }
 
     // 明細科目でCFインパクトがある場合、CF生成対象
-    if (isFlowDetailAccount(account) && account.flowAccountCfImpact.type !== null) {
+    if (
+      isFlowDetailAccount(account) &&
+      account.flowAccountCfImpact.type !== null
+    ) {
       cfTargets.push(account.id);
 
       // 各CF影響タイプに応じた検証
       switch (account.flowAccountCfImpact.type) {
         case "ADJUSTMENT":
           if (!account.flowAccountCfImpact.adjustment?.targetId) {
-            errors.push(`Flow account ${account.id} with ADJUSTMENT type has no targetId`);
+            errors.push(
+              `Flow account ${account.id} with ADJUSTMENT type has no targetId`
+            );
           }
           if (!account.flowAccountCfImpact.adjustment?.operation) {
-            errors.push(`Flow account ${account.id} with ADJUSTMENT type has no operation`);
+            errors.push(
+              `Flow account ${account.id} with ADJUSTMENT type has no operation`
+            );
           }
           break;
 
         case "RECLASSIFICATION":
           if (!account.flowAccountCfImpact.reclassification?.from) {
-            errors.push(`Flow account ${account.id} with RECLASSIFICATION type has no 'from' field`);
+            errors.push(
+              `Flow account ${account.id} with RECLASSIFICATION type has no 'from' field`
+            );
           }
           if (!account.flowAccountCfImpact.reclassification?.to) {
-            errors.push(`Flow account ${account.id} with RECLASSIFICATION type has no 'to' field`);
+            errors.push(
+              `Flow account ${account.id} with RECLASSIFICATION type has no 'to' field`
+            );
           }
           break;
 
         case "IS_BASE_PROFIT":
           if (!account.flowAccountCfImpact.isBaseProfit) {
-            errors.push(`Flow account ${account.id} with IS_BASE_PROFIT type has isBaseProfit=false`);
+            errors.push(
+              `Flow account ${account.id} with IS_BASE_PROFIT type has isBaseProfit=false`
+            );
           }
           break;
       }
@@ -110,8 +134,8 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
   }
 
   private validateBSAccount(
-    account: BSAccount, 
-    errors: string[], 
+    account: BSAccount,
+    errors: string[],
     cfTargets: string[]
   ): void {
     // BS科目のパラメータ検証
@@ -127,13 +151,18 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
 
     // BS科目はflowAccountCfImpactを持たないことを確認
     if (account.flowAccountCfImpact.type !== null) {
-      errors.push(`BS account ${account.id} should not have flowAccountCfImpact type`);
+      errors.push(
+        `BS account ${account.id} should not have flowAccountCfImpact type`
+      );
     }
   }
 
   private validateSummaryAccount(account: Account, errors: string[]): void {
     // サマリー科目は計算パラメータかNullパラメータのみ許可
-    if (!isCalculationParameter(account.parameter) && !isNullParameter(account.parameter)) {
+    if (
+      !isCalculationParameter(account.parameter) &&
+      !isNullParameter(account.parameter)
+    ) {
       errors.push(
         `Summary account ${account.id} has invalid parameter type: ${account.parameter.paramType}`
       );
@@ -141,8 +170,13 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
 
     // サマリー科目の計算パラメータに参照が設定されているか確認
     if (isCalculationParameter(account.parameter)) {
-      if (!account.parameter.paramReferences || account.parameter.paramReferences.length === 0) {
-        errors.push(`Summary account ${account.id} with CALCULATION parameter has no references`);
+      if (
+        !account.parameter.paramReferences ||
+        account.parameter.paramReferences.length === 0
+      ) {
+        errors.push(
+          `Summary account ${account.id} with CALCULATION parameter has no references`
+        );
       }
     }
   }
@@ -150,7 +184,7 @@ export class ValidateAccountDefinitionsStage implements PipelineStage {
   validate(context: PipelineContext): boolean {
     // 必須のコンテキストプロパティの存在確認
     return !!(
-      context.accounts && 
+      context.accounts &&
       Array.isArray(context.accounts) &&
       context.accounts.length > 0
     );

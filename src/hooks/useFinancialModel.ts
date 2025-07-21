@@ -45,9 +45,11 @@ export const useFinancialModel = () => {
     useState<PeriodIndexSystem | null>(null);
   const [dataStore, setDataStore] =
     useState<OptimizedFinancialDataStore | null>(null);
-  
+
   // 追加の状態管理
-  const [sortedAccountIds, setSortedAccountIds] = useState<string[] | null>(null);
+  const [sortedAccountIds, setSortedAccountIds] = useState<string[] | null>(
+    null
+  );
   const [isStructureDirty, setIsStructureDirty] = useState(true); // 初回はtrue
 
   // seedデータの初期化
@@ -186,8 +188,12 @@ export const useFinancialModel = () => {
         prev.map((account) => {
           if (account.id === id) {
             // パラメータや構造に影響する変更があるか確認
-            if ('parameter' in updates || 'parentId' in updates || 
-                'flowAccountCfImpact' in updates || 'sheet' in updates) {
+            if (
+              "parameter" in updates ||
+              "parentId" in updates ||
+              "flowAccountCfImpact" in updates ||
+              "sheet" in updates
+            ) {
               setIsStructureDirty(true);
             }
             // 型安全な更新のため、既存のアカウントの構造を保持
@@ -251,10 +257,18 @@ export const useFinancialModel = () => {
       parameters: getParametersMap(),
       sortedAccountIds: sortedAccountIds || undefined,
     };
-  }, [accounts, periods, financialValues, periodIndexSystem, dataStore, getParametersMap, sortedAccountIds]);
+  }, [
+    accounts,
+    periods,
+    financialValues,
+    periodIndexSystem,
+    dataStore,
+    getParametersMap,
+    sortedAccountIds,
+  ]);
 
   const calculatePeriod = useCallback(
-    async (periodId: string) => {
+    (periodId: string) => {
       const pipelineContext = createPipelineContext();
       if (!pipelineContext) {
         throw new Error("System not initialized");
@@ -265,23 +279,27 @@ export const useFinancialModel = () => {
 
       try {
         let pipeline: CalculationPipeline;
-        
+
         // 構造が変更されている場合はフルパイプラインを実行
         if (isStructureDirty) {
-          console.log("[useFinancialModel] Running full pipeline for single period (structure changed)");
-          pipeline = await CalculationPipeline.createFullPipeline({
+          console.log(
+            "[useFinancialModel] Running full pipeline for single period (structure changed)"
+          );
+          pipeline = CalculationPipeline.createFullPipeline({
             targetPeriodId: periodId,
           });
         } else {
           // 数値変更のみの場合は短縮パイプライン
-          console.log("[useFinancialModel] Running calculation-only pipeline for single period");
-          pipeline = await CalculationPipeline.createCalculationOnlyPipeline({
+          console.log(
+            "[useFinancialModel] Running calculation-only pipeline for single period"
+          );
+          pipeline = CalculationPipeline.createCalculationOnlyPipeline({
             targetPeriodId: periodId,
           });
         }
 
         // パイプラインを実行
-        const result = await pipeline.run(pipelineContext);
+        const result = pipeline.run(pipelineContext);
 
         // 結果を反映
         if (result.sortedAccountIds && isStructureDirty) {
@@ -302,7 +320,10 @@ export const useFinancialModel = () => {
         }
 
         // CF科目が生成された場合はアカウントを更新
-        if (result.cfGeneratedAccounts && result.cfGeneratedAccounts.length > 0) {
+        if (
+          result.cfGeneratedAccounts &&
+          result.cfGeneratedAccounts.length > 0
+        ) {
           setAccounts(result.accounts);
         }
 
@@ -334,13 +355,13 @@ export const useFinancialModel = () => {
   }, []);
 
   // 現在選択中の期間の計算を実行
-  const calculateCurrentPeriod = useCallback(async () => {
+  const calculateCurrentPeriod = useCallback(() => {
     if (!selectedPeriodId) return;
     return calculatePeriod(selectedPeriodId);
   }, [selectedPeriodId, calculatePeriod]);
 
   // 全期間の計算を実行
-  const calculateAllPeriods = useCallback(async () => {
+  const calculateAllPeriods = useCallback(() => {
     const pipelineContext = createPipelineContext();
     if (!pipelineContext) {
       throw new Error("System not initialized");
@@ -351,19 +372,21 @@ export const useFinancialModel = () => {
 
     try {
       let pipeline: CalculationPipeline;
-      
+
       // 構造が変更されている場合はフルパイプラインを実行
       if (isStructureDirty) {
-        console.log("[useFinancialModel] Running full pipeline (structure changed)");
-        pipeline = await CalculationPipeline.createFullPipeline();
+        console.log(
+          "[useFinancialModel] Running full pipeline (structure changed)"
+        );
+        pipeline = CalculationPipeline.createFullPipeline();
       } else {
         // 数値変更のみの場合は短縮パイプライン
         console.log("[useFinancialModel] Running calculation-only pipeline");
-        pipeline = await CalculationPipeline.createCalculationOnlyPipeline();
+        pipeline = CalculationPipeline.createCalculationOnlyPipeline();
       }
 
       // パイプラインを実行
-      const result = await pipeline.run(pipelineContext);
+      const result = pipeline.run(pipelineContext);
 
       // 結果を反映
       if (result.sortedAccountIds && isStructureDirty) {

@@ -8,7 +8,7 @@ import { DependencyResolverEnhanced } from "../DependencyResolverEnhanced";
 export class DependencyResolutionStage implements PipelineStage {
   name = "DependencyResolution";
 
-  async execute(context: PipelineContext): Promise<PipelineContext> {
+  execute(context: PipelineContext): PipelineContext {
     console.log(`[${this.name}] Starting dependency resolution`);
 
     const { accounts, parameters } = context;
@@ -20,7 +20,9 @@ export class DependencyResolutionStage implements PipelineStage {
         parameters
       );
 
-      console.log(`[${this.name}] Resolved dependencies for ${sortedAccountIds.length} accounts`);
+      console.log(
+        `[${this.name}] Resolved dependencies for ${sortedAccountIds.length} accounts`
+      );
 
       // 循環依存のチェック（追加の安全性確保）
       this.validateNoCycles(sortedAccountIds, accounts);
@@ -39,15 +41,18 @@ export class DependencyResolutionStage implements PipelineStage {
     }
   }
 
-  private validateNoCycles(sortedIds: string[], accounts: import("../../types/accountTypes").Account[]): void {
+  private validateNoCycles(
+    sortedIds: string[],
+    accounts: import("../../types/accountTypes").Account[]
+  ): void {
     // ソート結果に含まれるIDの数が元の科目数と一致することを確認
     if (sortedIds.length !== accounts.length) {
-      const accountIds = new Set(accounts.map(a => a.id));
+      const accountIds = new Set(accounts.map((a) => a.id));
       const sortedIdSet = new Set(sortedIds);
-      
+
       // ソートに含まれていない科目を特定
       const missingIds: string[] = [];
-      accountIds.forEach(id => {
+      accountIds.forEach((id) => {
         if (!sortedIdSet.has(id)) {
           missingIds.push(id);
         }
@@ -60,9 +65,9 @@ export class DependencyResolutionStage implements PipelineStage {
 
       throw new Error(
         `Dependency resolution mismatch: ` +
-        `Expected ${accounts.length} accounts, got ${sortedIds.length}. ` +
-        `Missing: [${missingIds.join(", ")}], ` +
-        `Duplicates: [${duplicateIds.join(", ")}]`
+          `Expected ${accounts.length} accounts, got ${sortedIds.length}. ` +
+          `Missing: [${missingIds.join(", ")}], ` +
+          `Duplicates: [${duplicateIds.join(", ")}]`
       );
     }
   }

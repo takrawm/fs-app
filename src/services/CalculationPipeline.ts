@@ -1,9 +1,17 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { Period } from "../types/periodTypes";
 import type { FinancialValue } from "../types/financialValueTypes";
-import type { CalculationContext, CalculationError } from "../types/calculationTypes";
+import type {
+  CalculationContext,
+  CalculationError,
+} from "../types/calculationTypes";
 import { PeriodIndexSystem } from "../utils/PeriodIndexSystem";
 import { OptimizedFinancialDataStore } from "../utils/OptimizedFinancialDataStore";
+import { ValidateAccountDefinitionsStage } from "./stages/ValidateAccountDefinitionsStage";
+import { InitializeFinancialValuesStage } from "./stages/InitializeFinancialValuesStage";
+import { CfAccountGenerationStage } from "./stages/CfAccountGenerationStage";
+import { DependencyResolutionStage } from "./stages/DependencyResolutionStage";
+import { CalculationStage } from "./stages/CalculationStage";
 
 /**
  * パイプライン実行時のコンテキスト
@@ -16,9 +24,10 @@ export interface PipelineContext {
   periodIndexSystem: PeriodIndexSystem;
   dataStore: OptimizedFinancialDataStore;
   parameters: Map<string, Parameter>;
-  
+
   // ステージごとに追加される情報
   sortedAccountIds?: string[];
+  cfTargetAccounts?: string[];
   cfGeneratedAccounts?: Account[];
   calculationErrors?: CalculationError[];
   calculationResults?: Map<string, number>;
@@ -29,7 +38,7 @@ export interface PipelineContext {
  */
 export interface PipelineStage {
   name: string;
-  execute(context: PipelineContext): Promise<PipelineContext>;
+  execute(context: PipelineContext): PipelineContext;
   validate?(context: PipelineContext): boolean;
 }
 
@@ -80,10 +89,12 @@ export class CalculationPipeline {
   /**
    * パイプラインを実行
    */
-  async run(initialContext: PipelineContext): Promise<PipelineContext> {
+  run(initialContext: PipelineContext): PipelineContext {
     let context = { ...initialContext };
 
-    console.log(`[Pipeline] Starting execution with ${this.stages.length} stages`);
+    console.log(
+      `[Pipeline] Starting execution with ${this.stages.length} stages`
+    );
 
     for (const stage of this.stages) {
       console.log(`[Pipeline] Executing stage: ${stage.name}`);
@@ -95,11 +106,15 @@ export class CalculationPipeline {
 
       try {
         // ステージを実行
-        context = await stage.execute(context);
+        context = stage.execute(context);
         console.log(`[Pipeline] Stage completed: ${stage.name}`);
       } catch (error) {
         console.error(`[Pipeline] Stage failed: ${stage.name}`, error);
-        throw new Error(`Pipeline execution failed at stage: ${stage.name}. ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+          `Pipeline execution failed at stage: ${stage.name}. ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        );
       }
     }
 
@@ -110,15 +125,10 @@ export class CalculationPipeline {
   /**
    * 標準的なフルパイプラインを構築
    */
-  static async createFullPipeline(config: PipelineConfig = {}): Promise<CalculationPipeline> {
+  static createFullPipeline(config: PipelineConfig = {}): CalculationPipeline {
     const pipeline = new CalculationPipeline(config);
 
-    // 各ステージを動的にインポート
-    const { ValidateAccountDefinitionsStage } = await import("./stages/ValidateAccountDefinitionsStage");
-    const { InitializeFinancialValuesStage } = await import("./stages/InitializeFinancialValuesStage");
-    const { CfAccountGenerationStage } = await import("./stages/CfAccountGenerationStage");
-    const { DependencyResolutionStage } = await import("./stages/DependencyResolutionStage");
-    const { CalculationStage } = await import("./stages/CalculationStage");
+    // 各ステージを使用
 
     // 設定に基づいてステージを追加
     if (config.enableValidation !== false) {
@@ -137,7 +147,9 @@ export class CalculationPipeline {
     }
 
     // 計算ステージは必須
-    const targetPeriods = config.targetPeriods || (config.targetPeriodId ? [config.targetPeriodId] : []);
+    const targetPeriods =
+      config.targetPeriods ||
+      (config.targetPeriodId ? [config.targetPeriodId] : []);
     pipeline.addStage(new CalculationStage(targetPeriods));
 
     return pipeline;
@@ -146,7 +158,9 @@ export class CalculationPipeline {
   /**
    * 計算のみの短縮パイプラインを構築
    */
-  static async createCalculationOnlyPipeline(config: PipelineConfig = {}): Promise<CalculationPipeline> {
+  static createCalculationOnlyPipeline(
+    config: PipelineConfig = {}
+  ): CalculationPipeline {
     const pipeline = new CalculationPipeline({
       ...config,
       enableValidation: false,
@@ -154,15 +168,15 @@ export class CalculationPipeline {
       enableDependencyResolution: false,
     });
 
-    // 必要なステージのみインポート
-    const { InitializeFinancialValuesStage } = await import("./stages/InitializeFinancialValuesStage");
-    const { CalculationStage } = await import("./stages/CalculationStage");
+    // 必要なステージのみ使用
 
     // 財務数値初期化
     pipeline.addStage(new InitializeFinancialValuesStage());
 
     // 計算ステージ
-    const targetPeriods = config.targetPeriods || (config.targetPeriodId ? [config.targetPeriodId] : []);
+    const targetPeriods =
+      config.targetPeriods ||
+      (config.targetPeriodId ? [config.targetPeriodId] : []);
     pipeline.addStage(new CalculationStage(targetPeriods));
 
     return pipeline;

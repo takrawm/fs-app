@@ -1,18 +1,18 @@
 import type { PipelineContext, PipelineStage } from "../CalculationPipeline";
-import type { 
-  Account, 
+import type {
+  Account,
   CFDetailAccount,
   NullParameter,
   FlowAccountCfImpact,
-  DisplayOrder 
+  DisplayOrder,
 } from "../../types/accountTypes";
-import { 
+import {
   SHEET_TYPES,
   CF_IMPACT_TYPES,
   isBSAccount,
   isFlowAccount,
   isFlowDetailAccount,
-  isSummaryAccount
+  isSummaryAccount,
 } from "../../types/accountTypes";
 
 /**
@@ -21,7 +21,7 @@ import {
 export class CfAccountGenerationStage implements PipelineStage {
   name = "CfAccountGeneration";
 
-  async execute(context: PipelineContext): Promise<PipelineContext> {
+  execute(context: PipelineContext): PipelineContext {
     console.log(`[${this.name}] Starting CF account generation`);
 
     const { accounts } = context;
@@ -29,7 +29,9 @@ export class CfAccountGenerationStage implements PipelineStage {
     const processedAccountIds = new Set<string>();
 
     // 既存のCF科目を除外した科目リストを処理
-    const nonCfAccounts = accounts.filter(account => account.sheet !== SHEET_TYPES.CF);
+    const nonCfAccounts = accounts.filter(
+      (account) => account.sheet !== SHEET_TYPES.CF
+    );
 
     for (const account of nonCfAccounts) {
       // 重複処理を防ぐ
@@ -44,7 +46,9 @@ export class CfAccountGenerationStage implements PipelineStage {
       }
     }
 
-    console.log(`[${this.name}] Generated ${generatedCfAccounts.length} CF accounts`);
+    console.log(
+      `[${this.name}] Generated ${generatedCfAccounts.length} CF accounts`
+    );
 
     // 生成されたCF科目を既存の科目リストに追加
     const updatedAccounts = [...accounts, ...generatedCfAccounts];
@@ -73,7 +77,7 @@ export class CfAccountGenerationStage implements PipelineStage {
       if (account.parameter.paramType === null) {
         return null;
       }
-      
+
       // BS科目のCF科目を生成
       return this.createBsCfAccount(account);
     }
@@ -169,28 +173,31 @@ export class CfAccountGenerationStage implements PipelineStage {
     switch (account.flowAccountCfImpact.type) {
       case CF_IMPACT_TYPES.IS_BASE_PROFIT:
         return account.accountName;
-      
+
       case CF_IMPACT_TYPES.ADJUSTMENT:
         return `${account.accountName}（調整）`;
-      
+
       case CF_IMPACT_TYPES.RECLASSIFICATION:
         return `${account.accountName}（組替）`;
-      
+
       default:
         return account.accountName;
     }
   }
 
-  private generateCfDisplayOrder(account: Account, type: "BS" | "FLOW"): string {
+  private generateCfDisplayOrder(
+    account: Account,
+    type: "BS" | "FLOW"
+  ): string {
     // CFセクションの判定
     const section = this.determineCfSection(account);
-    
+
     // タイプに応じた順序プレフィックス
     const typePrefix = type === "BS" ? "1" : "2";
-    
+
     // 元の表示順序を利用して一意性を保つ
     const originalOrder = account.displayOrder?.order || "00";
-    
+
     return `${section}${typePrefix}${originalOrder}`;
   }
 
@@ -201,15 +208,19 @@ export class CfAccountGenerationStage implements PipelineStage {
     // BS科目の場合
     if (isBSAccount(account)) {
       // 固定資産系は投資活動（J2）
-      if (account.accountName.includes("固定資産") || 
-          account.accountName.includes("投資") ||
-          account.accountName.includes("有価証券")) {
+      if (
+        account.accountName.includes("固定資産") ||
+        account.accountName.includes("投資") ||
+        account.accountName.includes("有価証券")
+      ) {
         section = "J2";
       }
       // 負債・資本系は財務活動（J3）
-      else if (account.accountName.includes("借入") || 
-               account.accountName.includes("社債") ||
-               account.accountName.includes("資本")) {
+      else if (
+        account.accountName.includes("借入") ||
+        account.accountName.includes("社債") ||
+        account.accountName.includes("資本")
+      ) {
         section = "J3";
       }
     }
@@ -229,7 +240,7 @@ export class CfAccountGenerationStage implements PipelineStage {
 
   private determineCfParentId(account: Account): string {
     const section = this.determineCfSection(account);
-    
+
     switch (section) {
       case "J1":
         return "cf-operating"; // 営業活動によるCF

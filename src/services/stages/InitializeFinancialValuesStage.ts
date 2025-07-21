@@ -8,7 +8,7 @@ import type { FinancialValue } from "../../types/financialValueTypes";
 export class InitializeFinancialValuesStage implements PipelineStage {
   name = "InitializeFinancialValues";
 
-  async execute(context: PipelineContext): Promise<PipelineContext> {
+  execute(context: PipelineContext): PipelineContext {
     console.log(`[${this.name}] Starting financial values initialization`);
 
     const { accounts, periods, financialValues, dataStore } = context;
@@ -19,7 +19,7 @@ export class InitializeFinancialValuesStage implements PipelineStage {
     for (const account of accounts) {
       for (const period of periods) {
         const key = `${account.id}_${period.id}`;
-        
+
         // financialValuesに存在しない場合は初期化
         if (!updatedFinancialValues.has(key)) {
           const defaultValue: FinancialValue = {
@@ -28,21 +28,25 @@ export class InitializeFinancialValuesStage implements PipelineStage {
             value: 0,
             isCalculated: false,
           };
-          
+
           updatedFinancialValues.set(key, defaultValue);
-          
+
           // データストアにも反映
           if (dataStore) {
             dataStore.setValue(account.id, period.id, 0);
           }
-          
+
           addedCount++;
         }
       }
     }
 
-    console.log(`[${this.name}] Initialized ${addedCount} missing financial values`);
-    console.log(`[${this.name}] Total financial values: ${updatedFinancialValues.size}`);
+    console.log(
+      `[${this.name}] Initialized ${addedCount} missing financial values`
+    );
+    console.log(
+      `[${this.name}] Total financial values: ${updatedFinancialValues.size}`
+    );
 
     // データストアの再構築が必要な場合
     if (addedCount > 0 && dataStore) {

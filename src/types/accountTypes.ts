@@ -95,7 +95,7 @@ interface ProportionateParameter {
 }
 
 /** パラメータなし */
-interface NullParameter {
+export interface NullParameter {
   paramType: null;
   paramValue: null;
   paramReferences: null;

@@ -1,5 +1,8 @@
 import type { PipelineContext, PipelineStage } from "../CalculationPipeline";
-import type { CalculationContext, CalculationError } from "../../types/calculationTypes";
+import type {
+  CalculationContext,
+  CalculationError,
+} from "../../types/calculationTypes";
 import type { FinancialValue } from "../../types/financialValueTypes";
 import { FinancialCalculatorEnhanced } from "../FinancialCalculatorEnhanced";
 import { DependencyResolverEnhanced } from "../DependencyResolverEnhanced";
@@ -16,16 +19,16 @@ export class CalculationStage implements PipelineStage {
     this.targetPeriods = targetPeriods || [];
   }
 
-  async execute(context: PipelineContext): Promise<PipelineContext> {
+  execute(context: PipelineContext): PipelineContext {
     console.log(`[${this.name}] Starting calculation stage`);
 
-    const { 
-      accounts, 
-      periods, 
-      parameters, 
-      dataStore, 
+    const {
+      accounts,
+      periods,
+      parameters,
+      dataStore,
       periodIndexSystem,
-      sortedAccountIds 
+      sortedAccountIds,
     } = context;
 
     // sortedAccountIdsが存在しない場合はDependencyResolverで解決
@@ -36,15 +39,20 @@ export class CalculationStage implements PipelineStage {
     const allErrors: CalculationError[] = [];
 
     // 計算対象の期間を決定
-    const targetPeriodList = this.targetPeriods.length > 0
-      ? periods.filter(p => this.targetPeriods.includes(p.id))
-      : periods;
+    const targetPeriodList =
+      this.targetPeriods.length > 0
+        ? periods.filter((p) => this.targetPeriods.includes(p.id))
+        : periods;
 
-    console.log(`[${this.name}] Calculating ${targetPeriodList.length} periods`);
+    console.log(
+      `[${this.name}] Calculating ${targetPeriodList.length} periods`
+    );
 
     // 各期間に対して計算を実行
     for (const period of targetPeriodList) {
-      console.log(`[${this.name}] Calculating period: ${period.name} (${period.id})`);
+      console.log(
+        `[${this.name}] Calculating period: ${period.name} (${period.id})`
+      );
 
       const calculationContext = this.createCalculationContext(
         period.id,
@@ -53,12 +61,13 @@ export class CalculationStage implements PipelineStage {
       );
 
       // FinancialCalculatorEnhancedを使用して計算
-      const { results, calculatedValues, errors } = FinancialCalculatorEnhanced.calculatePeriod(
-        accounts,
-        period.id,
-        calculationContext,
-        parameters
-      );
+      const { results, calculatedValues, errors } =
+        FinancialCalculatorEnhanced.calculatePeriod(
+          accounts,
+          period.id,
+          calculationContext,
+          parameters
+        );
 
       // 結果を集約
       results.forEach((value, accountId) => {
@@ -72,7 +81,7 @@ export class CalculationStage implements PipelineStage {
       allErrors.push(...errors);
 
       // データストアを更新（次の期間の計算で使用）
-      const updates = Array.from(calculatedValues.values()).map(v => ({
+      const updates = Array.from(calculatedValues.values()).map((v) => ({
         accountId: v.accountId,
         periodId: v.periodId,
         value: v.value,
@@ -80,7 +89,9 @@ export class CalculationStage implements PipelineStage {
       dataStore.setValues(updates);
     }
 
-    console.log(`[${this.name}] Calculation completed. Results: ${allResults.size}, Errors: ${allErrors.length}`);
+    console.log(
+      `[${this.name}] Calculation completed. Results: ${allResults.size}, Errors: ${allErrors.length}`
+    );
 
     // 更新されたfinancialValuesを生成
     const updatedFinancialValues = dataStore.toFinancialValueMap();
@@ -142,8 +153,10 @@ export class CalculationStage implements PipelineStage {
   }
 
   private resolveDependencies(context: PipelineContext): string[] {
-    console.log(`[${this.name}] sortedAccountIds not found, resolving dependencies`);
-    
+    console.log(
+      `[${this.name}] sortedAccountIds not found, resolving dependencies`
+    );
+
     return DependencyResolverEnhanced.resolveDependencies(
       context.accounts,
       context.parameters
