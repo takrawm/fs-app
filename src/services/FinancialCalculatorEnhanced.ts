@@ -4,30 +4,15 @@ import type {
   CalculationContext,
   CalculationError,
 } from "../types/calculationTypes";
-import type { CalculationStrategy } from "./calculation/CalculationStrategy";
-
 import { DependencyResolverEnhanced } from "./DependencyResolverEnhanced";
-import { GrowthRateStrategy } from "./calculation/GrowthRateStrategy";
-import { PercentageStrategy } from "./calculation/PercentageStrategy";
-import { ProportionateStrategy } from "./calculation/ProportionateStrategy";
-import { MultipleCalculationStrategy } from "./calculation/MultipleCalculationStrategy";
+import { AccountCalculator } from "./AccountCalculator";
 import { isNullParameter } from "../types/accountTypes";
 
 /**
  * 拡張版の財務計算クラス
- * ストラテジーパターンを使用して各種計算を実行
+ * AccountCalculatorを使用して各種計算を実行
  */
 export class FinancialCalculatorEnhanced {
-  /**
-   * 計算ストラテジー
-   */
-  private static strategies: CalculationStrategy[] = [
-    new GrowthRateStrategy(),
-    new PercentageStrategy(),
-    new ProportionateStrategy(),
-    new MultipleCalculationStrategy(),
-  ];
-
   /**
    * 期間の全科目を計算する純粋関数
    */
@@ -52,7 +37,9 @@ export class FinancialCalculatorEnhanced {
         parameters
       );
 
-      console.log(`[FinancialCalculatorEnhanced] Calculating ${sortedAccountIds.length} accounts for period ${periodId}`);
+      console.log(
+        `[FinancialCalculatorEnhanced] Calculating ${sortedAccountIds.length} accounts for period ${periodId}`
+      );
 
       // 2. アカウントマップを事前構築
       const accountMap = new Map(accounts.map((a) => [a.id, a]));
@@ -66,11 +53,10 @@ export class FinancialCalculatorEnhanced {
         if (!parameter) continue;
 
         try {
-          const result = this.calculateAccount(
+          const result = AccountCalculator.calculate(
             account,
             parameter,
-            context,
-            accountId
+            context
           );
 
           if (result !== null) {
@@ -104,10 +90,7 @@ export class FinancialCalculatorEnhanced {
 
           // エラーが発生した場合は0として続行
           results.set(accountId, 0);
-          if (
-            "setValue" in context &&
-            typeof context.setValue === "function"
-          ) {
+          if ("setValue" in context && typeof context.setValue === "function") {
             context.setValue(accountId, periodId, 0);
           }
         }
@@ -123,74 +106,15 @@ export class FinancialCalculatorEnhanced {
       errors.push(globalError);
     }
 
-    console.log(`[FinancialCalculatorEnhanced] Calculation completed. Results: ${results.size}, Errors: ${errors.length}`);
+    console.log(
+      `[FinancialCalculatorEnhanced] Calculation completed. Results: ${results.size}, Errors: ${errors.length}`
+    );
 
     return {
       results,
       calculatedValues,
       errors,
     };
-  }
-
-  /**
-   * 単一科目を計算
-   */
-  private static calculateAccount(
-    account: Account,
-    parameter: Parameter,
-    context: CalculationContext,
-    accountId: string
-  ): number | null {
-    // NullParameterの場合は0を返す
-    if (isNullParameter(parameter)) {
-      return 0;
-    }
-
-    // 適用可能なストラテジーを探す
-    for (const strategy of this.strategies) {
-      if (strategy.isApplicable(parameter)) {
-        // パラメータの妥当性を検証
-        if (!strategy.validate(parameter)) {
-          throw new Error(
-            `Invalid parameter for ${strategy.name} strategy on account ${account.accountName}`
-          );
-        }
-
-        // 計算を実行
-        return strategy.calculate(parameter, context, accountId);
-      }
-    }
-
-    // 適用可能なストラテジーがない場合
-    throw new Error(
-      `No applicable calculation strategy for parameter type: ${parameter.paramType}`
-    );
-  }
-
-  /**
-   * ストラテジーを追加（拡張用）
-   */
-  static addStrategy(strategy: CalculationStrategy): void {
-    this.strategies.push(strategy);
-  }
-
-  /**
-   * ストラテジーをクリア（テスト用）
-   */
-  static clearStrategies(): void {
-    this.strategies = [];
-  }
-
-  /**
-   * デフォルトストラテジーをリセット
-   */
-  static resetToDefaultStrategies(): void {
-    this.strategies = [
-      new GrowthRateStrategy(),
-      new PercentageStrategy(),
-      new ProportionateStrategy(),
-      new MultipleCalculationStrategy(),
-    ];
   }
 
   /**

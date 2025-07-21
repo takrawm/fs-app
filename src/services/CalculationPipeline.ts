@@ -58,13 +58,12 @@ export class CalculationPipeline {
   private stages: PipelineStage[] = [];
   private config: PipelineConfig;
 
+  /**
+   * パイプラインインスタンスを作成
+   * @param config パイプライン設定（デフォルト値は設定しない）
+   */
   constructor(config: PipelineConfig = {}) {
-    this.config = {
-      enableValidation: true,
-      enableCfGeneration: true,
-      enableDependencyResolution: true,
-      ...config,
-    };
+    this.config = config;
   }
 
   /**
@@ -103,6 +102,8 @@ export class CalculationPipeline {
 
       try {
         // ステージを実行
+        // execute(context: PipelineContext): PipelineContext;で
+        // PipelineContextを受け取り、PipelineContextを返す
         context = stage.execute(context);
         console.log(`[Pipeline] Stage completed: ${stage.name}`);
       } catch (error) {
@@ -121,32 +122,50 @@ export class CalculationPipeline {
 
   /**
    * 標準的なフルパイプラインを構築
+   * @param inputConfig パイプライン設定（部分的な設定も可能）
+   * @returns 設定済みのCalculationPipelineインスタンス
    */
-  static createFullPipeline(config: PipelineConfig = {}): CalculationPipeline {
-    const pipeline = new CalculationPipeline(config);
+  static createFullPipeline(
+    inputConfig: PipelineConfig = {}
+  ): CalculationPipeline {
+    // デフォルト値を明示的に設定
+    const resolvedConfig: Required<
+      Pick<
+        PipelineConfig,
+        "enableValidation" | "enableCfGeneration" | "enableDependencyResolution"
+      >
+    > &
+      Pick<PipelineConfig, "targetPeriodId" | "targetPeriods"> = {
+      enableValidation: inputConfig.enableValidation ?? true,
+      enableCfGeneration: inputConfig.enableCfGeneration ?? true,
+      enableDependencyResolution:
+        inputConfig.enableDependencyResolution ?? true,
+      targetPeriodId: inputConfig.targetPeriodId,
+      targetPeriods: inputConfig.targetPeriods,
+    };
 
-    // 各ステージを使用
+    const pipeline = new CalculationPipeline(resolvedConfig);
 
-    // 設定に基づいてステージを追加
-    if (config.enableValidation !== false) {
+    // 解決済みの設定を使用してステージを追加
+    if (resolvedConfig.enableValidation) {
       pipeline.addStage(new ValidateAccountDefinitionsStage());
     }
 
     // 財務数値初期化は常に実行
     pipeline.addStage(new InitializeFinancialValuesStage());
 
-    if (config.enableCfGeneration !== false) {
+    if (resolvedConfig.enableCfGeneration) {
       pipeline.addStage(new CfAccountGenerationStage());
     }
 
-    if (config.enableDependencyResolution !== false) {
+    if (resolvedConfig.enableDependencyResolution) {
       pipeline.addStage(new DependencyResolutionStage());
     }
 
     // 計算ステージは必須
     const targetPeriods =
-      config.targetPeriods ||
-      (config.targetPeriodId ? [config.targetPeriodId] : []);
+      resolvedConfig.targetPeriods ||
+      (resolvedConfig.targetPeriodId ? [resolvedConfig.targetPeriodId] : []);
     pipeline.addStage(new CalculationStage(targetPeriods));
 
     return pipeline;
@@ -154,26 +173,36 @@ export class CalculationPipeline {
 
   /**
    * 計算のみの短縮パイプラインを構築
+   * @param inputConfig パイプライン設定（部分的な設定も可能）
+   * @returns 設定済みのCalculationPipelineインスタンス
    */
   static createCalculationOnlyPipeline(
-    config: PipelineConfig = {}
+    inputConfig: PipelineConfig = {}
   ): CalculationPipeline {
-    const pipeline = new CalculationPipeline({
-      ...config,
+    // 計算のみパイプライン用の設定を明示的に設定
+    const resolvedConfig: Required<
+      Pick<
+        PipelineConfig,
+        "enableValidation" | "enableCfGeneration" | "enableDependencyResolution"
+      >
+    > &
+      Pick<PipelineConfig, "targetPeriodId" | "targetPeriods"> = {
       enableValidation: false,
       enableCfGeneration: false,
       enableDependencyResolution: false,
-    });
+      targetPeriodId: inputConfig.targetPeriodId,
+      targetPeriods: inputConfig.targetPeriods,
+    };
 
-    // 必要なステージのみ使用
+    const pipeline = new CalculationPipeline(resolvedConfig);
 
     // 財務数値初期化
     pipeline.addStage(new InitializeFinancialValuesStage());
 
     // 計算ステージ
     const targetPeriods =
-      config.targetPeriods ||
-      (config.targetPeriodId ? [config.targetPeriodId] : []);
+      resolvedConfig.targetPeriods ||
+      (resolvedConfig.targetPeriodId ? [resolvedConfig.targetPeriodId] : []);
     pipeline.addStage(new CalculationStage(targetPeriods));
 
     return pipeline;
