@@ -1,7 +1,10 @@
-import type { CalculationStrategy } from "./CalculationStrategy";
+import type { CalculationStrategy } from "../../types/calculationTypes";
 import type { CalculationContext } from "../../types/calculationTypes";
 import type { Parameter } from "../../types/accountTypes";
-import { isGrowthRateParameter, PARAMETER_TYPES } from "../../types/accountTypes";
+import {
+  isGrowthRateParameter,
+  PARAMETER_TYPES,
+} from "../../types/accountTypes";
 
 /**
  * 成長率計算ストラテジー
@@ -26,7 +29,7 @@ export class GrowthRateStrategy implements CalculationStrategy {
 
     // 前期値を取得
     const previousValue = context.getPreviousValue(accountId);
-    
+
     // 成長率を適用（1 + 成長率）
     const growthRate = parameter.paramValue || 0;
     const result = previousValue * (1 + growthRate);

@@ -19,10 +19,11 @@ export const useFinancialDataStore = ({
   periods,
   initialFinancialValues = new Map(),
 }: UseFinancialDataStoreProps) => {
-  const [financialValues, setFinancialValues] = useState<Map<string, FinancialValue>>(
-    initialFinancialValues
-  );
-  const [dataStore, setDataStore] = useState<OptimizedFinancialDataStore | null>(null);
+  const [financialValues, setFinancialValues] = useState<
+    Map<string, FinancialValue>
+  >(initialFinancialValues);
+  const [dataStore, setDataStore] =
+    useState<OptimizedFinancialDataStore | null>(null);
 
   // 初期値の設定
   useEffect(() => {
@@ -58,8 +59,9 @@ export const useFinancialDataStore = ({
         accountId,
         periodId,
         value,
+        isCalculated: false,
       };
-      
+
       setFinancialValues((prev) => {
         const newMap = new Map(prev);
         newMap.set(key, newValue);
@@ -122,17 +124,17 @@ export const useFinancialDataStore = ({
     // 財務数値データ
     financialValues,
     dataStore,
-    
+
     // 値の取得
     getAccountValue,
     getAccountValuesForAllPeriods,
     getPeriodValuesForAllAccounts,
-    
+
     // 値の更新
     updateFinancialValue,
     updateFinancialValues,
     setFinancialValues,
-    
+
     // 統計情報
     dataStoreStats,
   };

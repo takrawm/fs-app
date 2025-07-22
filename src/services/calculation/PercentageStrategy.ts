@@ -1,7 +1,10 @@
-import type { CalculationStrategy } from "./CalculationStrategy";
+import type { CalculationStrategy } from "../../types/calculationTypes";
 import type { CalculationContext } from "../../types/calculationTypes";
 import type { Parameter } from "../../types/accountTypes";
-import { isPercentageParameter, PARAMETER_TYPES } from "../../types/accountTypes";
+import {
+  isPercentageParameter,
+  PARAMETER_TYPES,
+} from "../../types/accountTypes";
 
 /**
  * 比率計算ストラテジー
@@ -23,7 +26,11 @@ export class PercentageStrategy implements CalculationStrategy {
     const referenceAccountId = parameter.paramReferences?.accountId;
     const percentage = parameter.paramValue;
 
-    if (!referenceAccountId || percentage === null || percentage === undefined) {
+    if (
+      !referenceAccountId ||
+      percentage === null ||
+      percentage === undefined
+    ) {
       return null;
     }
 

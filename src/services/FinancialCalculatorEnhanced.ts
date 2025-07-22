@@ -6,7 +6,6 @@ import type {
 } from "../types/calculationTypes";
 import { DependencyResolverEnhanced } from "./DependencyResolverEnhanced";
 import { AccountCalculator } from "./AccountCalculator";
-import { isNullParameter } from "../types/accountTypes";
 
 /**
  * 拡張版の財務計算クラス
@@ -18,7 +17,6 @@ export class FinancialCalculatorEnhanced {
    */
   static calculatePeriod(
     accounts: ReadonlyArray<Account>,
-    periodId: string,
     context: CalculationContext,
     parameters: ReadonlyMap<string, Parameter>
   ): {
@@ -29,6 +27,9 @@ export class FinancialCalculatorEnhanced {
     const results = new Map<string, number>();
     const calculatedValues = new Map<string, FinancialValue>();
     const errors: CalculationError[] = [];
+
+    // コンテキストからperiodIdを取得
+    const { periodId } = context;
 
     try {
       // 1. 依存関係を解決（DependencyResolverEnhanced使用）

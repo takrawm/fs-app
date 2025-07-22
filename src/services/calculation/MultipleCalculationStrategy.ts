@@ -1,7 +1,10 @@
-import type { CalculationStrategy } from "./CalculationStrategy";
+import type { CalculationStrategy } from "../../types/calculationTypes";
 import type { CalculationContext } from "../../types/calculationTypes";
 import type { Parameter } from "../../types/accountTypes";
-import { isCalculationParameter, PARAMETER_TYPES } from "../../types/accountTypes";
+import {
+  isCalculationParameter,
+  PARAMETER_TYPES,
+} from "../../types/accountTypes";
 
 /**
  * 複数科目計算ストラテジー
@@ -48,11 +51,11 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
         case "ADD":
           result += value;
           break;
-        
+
         case "SUB":
           result -= value;
           break;
-        
+
         case "MUL":
           if (isFirstMultiplication) {
             result = value;
@@ -61,7 +64,7 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
             result *= value;
           }
           break;
-        
+
         case "DIV":
           if (value !== 0) {
             if (isFirstMultiplication) {
@@ -75,7 +78,7 @@ export class MultipleCalculationStrategy implements CalculationStrategy {
             return 0;
           }
           break;
-        
+
         default:
           console.warn(`Unknown operation: ${operation}`);
       }

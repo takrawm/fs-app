@@ -4,7 +4,7 @@ import {
   isFlowAccount,
   isAdjustmentImpact,
   isBaseProfitImpact,
-  CF_IMPACT_TYPES,
+  isReclassificationImpact,
 } from "../../types/accountTypes";
 
 /**

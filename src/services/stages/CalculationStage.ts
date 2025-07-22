@@ -28,7 +28,7 @@ export class CalculationStage implements PipelineStage {
       parameters,
       dataStore,
       periodIndexSystem,
-      sortedAccountIds,
+      // sortedAccountIds, // 現在は未使用
     } = context;
 
     // sortedAccountIdsが存在しない場合はDependencyResolverで解決
@@ -64,7 +64,6 @@ export class CalculationStage implements PipelineStage {
       const { results, calculatedValues, errors } =
         FinancialCalculatorEnhanced.calculatePeriod(
           accounts,
-          period.id,
           calculationContext,
           parameters
         );

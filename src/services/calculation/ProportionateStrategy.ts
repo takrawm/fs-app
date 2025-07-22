@@ -1,7 +1,10 @@
-import type { CalculationStrategy } from "./CalculationStrategy";
+import type { CalculationStrategy } from "../../types/calculationTypes";
 import type { CalculationContext } from "../../types/calculationTypes";
 import type { Parameter } from "../../types/accountTypes";
-import { isProportionateParameter, PARAMETER_TYPES } from "../../types/accountTypes";
+import {
+  isProportionateParameter,
+  PARAMETER_TYPES,
+} from "../../types/accountTypes";
 
 /**
  * 連動計算ストラテジー
