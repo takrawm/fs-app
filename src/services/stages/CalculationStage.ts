@@ -14,6 +14,7 @@ import { DependencyResolverEnhanced } from "../DependencyResolverEnhanced";
 export class CalculationStage implements PipelineStage {
   name = "Calculation";
   private targetPeriods: string[];
+  private currentContext: PipelineContext | null = null;
 
   constructor(targetPeriods?: string[]) {
     this.targetPeriods = targetPeriods || [];
@@ -31,76 +32,84 @@ export class CalculationStage implements PipelineStage {
       // sortedAccountIds, // 現在は未使用
     } = context;
 
-    // sortedAccountIdsが存在しない場合はDependencyResolverで解決
-    // const accountOrder = sortedAccountIds || this.resolveDependencies(context);
+    // コンテキストを設定
+    this.currentContext = context;
 
-    const allResults = new Map<string, number>();
-    const allCalculatedValues = new Map<string, FinancialValue>();
-    const allErrors: CalculationError[] = [];
+    try {
+      // sortedAccountIdsが存在しない場合はDependencyResolverで解決
+      // const accountOrder = sortedAccountIds || this.resolveDependencies(context);
 
-    // 計算対象の期間を決定
-    const targetPeriodList =
-      this.targetPeriods.length > 0
-        ? periods.filter((p) => this.targetPeriods.includes(p.id))
-        : periods;
+      const allResults = new Map<string, number>();
+      const allCalculatedValues = new Map<string, FinancialValue>();
+      const allErrors: CalculationError[] = [];
 
-    console.log(
-      `[${this.name}] Calculating ${targetPeriodList.length} periods`
-    );
+      // 計算対象の期間を決定
+      const targetPeriodList =
+        this.targetPeriods.length > 0
+          ? periods.filter((p) => this.targetPeriods.includes(p.id))
+          : periods;
 
-    // 各期間に対して計算を実行
-    for (const period of targetPeriodList) {
       console.log(
-        `[${this.name}] Calculating period: ${period.name} (${period.id})`
+        `[${this.name}] Calculating ${targetPeriodList.length} periods`
       );
 
-      const calculationContext = this.createCalculationContext(
-        period.id,
-        periodIndexSystem,
-        dataStore
-      );
-
-      // FinancialCalculatorEnhancedを使用して計算
-      const { results, calculatedValues, errors } =
-        FinancialCalculatorEnhanced.calculatePeriod(
-          accounts,
-          calculationContext,
-          parameters
+      // 各期間に対して計算を実行
+      for (const period of targetPeriodList) {
+        console.log(
+          `[${this.name}] Calculating period: ${period.name} (${period.id})`
         );
 
-      // 結果を集約
-      results.forEach((value, accountId) => {
-        allResults.set(`${accountId}_${period.id}`, value);
-      });
+        const calculationContext = this.createCalculationContext(
+          period.id,
+          periodIndexSystem,
+          dataStore
+        );
 
-      calculatedValues.forEach((value, key) => {
-        allCalculatedValues.set(key, value);
-      });
+        // FinancialCalculatorEnhancedを使用して計算
+        const { results, calculatedValues, errors } =
+          FinancialCalculatorEnhanced.calculatePeriod(
+            accounts,
+            calculationContext,
+            parameters
+          );
 
-      allErrors.push(...errors);
+        // 結果を集約
+        results.forEach((value, accountId) => {
+          allResults.set(`${accountId}_${period.id}`, value);
+        });
 
-      // データストアを更新（次の期間の計算で使用）
-      const updates = Array.from(calculatedValues.values()).map((v) => ({
-        accountId: v.accountId,
-        periodId: v.periodId,
-        value: v.value,
-      }));
-      dataStore.setValues(updates);
+        calculatedValues.forEach((value, key) => {
+          allCalculatedValues.set(key, value);
+        });
+
+        allErrors.push(...errors);
+
+        // データストアを更新（次の期間の計算で使用）
+        const updates = Array.from(calculatedValues.values()).map((v) => ({
+          accountId: v.accountId,
+          periodId: v.periodId,
+          value: v.value,
+        }));
+        dataStore.setValues(updates);
+      }
+
+      console.log(
+        `[${this.name}] Calculation completed. Results: ${allResults.size}, Errors: ${allErrors.length}`
+      );
+
+      // 更新されたfinancialValuesを生成
+      const updatedFinancialValues = dataStore.toFinancialValueMap();
+
+      return {
+        ...context,
+        calculationResults: allResults,
+        calculationErrors: allErrors,
+        financialValues: updatedFinancialValues,
+      };
+    } finally {
+      // コンテキストをクリア
+      this.currentContext = null;
     }
-
-    console.log(
-      `[${this.name}] Calculation completed. Results: ${allResults.size}, Errors: ${allErrors.length}`
-    );
-
-    // 更新されたfinancialValuesを生成
-    const updatedFinancialValues = dataStore.toFinancialValueMap();
-
-    return {
-      ...context,
-      calculationResults: allResults,
-      calculationErrors: allErrors,
-      financialValues: updatedFinancialValues,
-    };
   }
 
   private createCalculationContext(
@@ -147,6 +156,86 @@ export class CalculationStage implements PipelineStage {
 
       setValue: (accountId: string, periodId: string, value: number) => {
         dataStore.setValue(accountId, periodId, value);
+      },
+
+      // === 新しい計算ロジック用のメソッド ===
+
+      getChildrenSum: (parentAccountId: string) => {
+        if (!this.currentContext) return 0;
+
+        const childAccounts = this.currentContext.accounts.filter(
+          (acc) => acc.parentId === parentAccountId
+        );
+
+        let sum = 0;
+        childAccounts.forEach((child) => {
+          sum += dataStore.getValue(child.id, periodId);
+        });
+
+        return sum;
+      },
+
+      getFlowAdjustmentSum: (targetAccountId: string) => {
+        if (!this.currentContext) return 0;
+
+        let sum = 0;
+        this.currentContext.accounts.forEach((account) => {
+          // フロー科目かつflowAccountCfImpactがADJUSTMENTで、targetIdが一致する場合
+          if (
+            (account.sheet === "PL" ||
+              account.sheet === "PPE" ||
+              account.sheet === "FINANCING") &&
+            account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.type === "ADJUSTMENT" &&
+            "adjustment" in account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.adjustment.targetId === targetAccountId
+          ) {
+            const flowValue = dataStore.getValue(account.id, periodId);
+            const operation = account.flowAccountCfImpact.adjustment.operation;
+
+            if (operation === "ADD") {
+              sum += flowValue;
+            } else if (operation === "SUB") {
+              sum -= flowValue;
+            }
+          }
+        });
+
+        return sum;
+      },
+
+      hasFlowAdjustments: (targetAccountId: string) => {
+        if (!this.currentContext) return false;
+
+        return this.currentContext.accounts.some((account) => {
+          return (
+            (account.sheet === "PL" ||
+              account.sheet === "PPE" ||
+              account.sheet === "FINANCING") &&
+            account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.type === "ADJUSTMENT" &&
+            "adjustment" in account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.adjustment.targetId === targetAccountId
+          );
+        });
+      },
+
+      getBaseProfitSum: () => {
+        if (!this.currentContext) return 0;
+
+        let sum = 0;
+        this.currentContext.accounts.forEach((account) => {
+          if (
+            account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.type === "IS_BASE_PROFIT" &&
+            "isBaseProfit" in account.flowAccountCfImpact &&
+            account.flowAccountCfImpact.isBaseProfit === true
+          ) {
+            sum += dataStore.getValue(account.id, periodId);
+          }
+        });
+
+        return sum;
       },
     };
   }

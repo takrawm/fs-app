@@ -11,6 +11,27 @@ export class AccountCalculator {
     parameter: Parameter,
     context: CalculationContext
   ): number | null {
+    // === 特別な計算ロジック（パラメータベースの計算より優先） ===
+
+    // 1. 利益剰余金の特別計算
+    if (account.id === "equity-retained-earnings") {
+      return this.calculateRetainedEarnings(account, context);
+    }
+
+    // 2. BS科目でADJUSTMENTターゲットになっている場合の残高計算
+    if (
+      account.sheet === "BS" &&
+      this.isAdjustmentTarget(account.id, context)
+    ) {
+      return this.calculateBSBalance(account, context);
+    }
+
+    // 3. 親子計算（サマリー科目でparamTypeがnullの場合）
+    if (account.isSummaryAccount && parameter.paramType === null) {
+      return this.calculateChildrenSum(account, context);
+    }
+
+    // === 通常のパラメータベースの計算 ===
     switch (parameter.paramType) {
       case "GROWTH_RATE":
         const previousValue = context.getPreviousValue(account.id);
@@ -34,7 +55,7 @@ export class AccountCalculator {
 
         let result = 0;
 
-        parameter.paramReferences.forEach((ref, index) => {
+        parameter.paramReferences.forEach((ref) => {
           const accountValue = values.get(ref.accountId) || 0;
 
           switch (ref.operation) {
@@ -133,5 +154,127 @@ export class AccountCalculator {
     }
 
     return deps;
+  }
+
+  /**
+   * 利益剰余金の計算（前期末残高 + 基礎利益の合計）
+   */
+  private static calculateRetainedEarnings(
+    account: Readonly<Account>,
+    context: CalculationContext
+  ): number {
+    const previousBalance = context.getPreviousValue(account.id);
+    const baseProfitSum = this.getBaseProfitSum(context);
+    return previousBalance + baseProfitSum;
+  }
+
+  /**
+   * BS科目の残高計算（前期末残高 + 関連フロー科目の当期発生額）
+   */
+  private static calculateBSBalance(
+    account: Readonly<Account>,
+    context: CalculationContext
+  ): number {
+    const previousBalance = context.getPreviousValue(account.id);
+    const flowAdjustmentSum = this.getFlowAdjustmentSum(account.id, context);
+    return previousBalance + flowAdjustmentSum;
+  }
+
+  /**
+   * 親科目の子科目合計計算
+   */
+  private static calculateChildrenSum(
+    parentAccount: Readonly<Account>,
+    context: CalculationContext
+  ): number {
+    return this.getChildrenSum(parentAccount.id, context);
+  }
+
+  /**
+   * 指定されたBS科目がADJUSTMENTのターゲットかどうかを判定
+   */
+  private static isAdjustmentTarget(
+    accountId: string,
+    context: CalculationContext
+  ): boolean {
+    // この判定は現在のcontextでは直接実装が困難なため、
+    // 暫定的にfalseを返し、後でCalculationContextを拡張する
+    return this.hasFlowAdjustments(accountId, context);
+  }
+
+  /**
+   * isBaseProfitがtrueの科目の合計を取得
+   */
+  private static getBaseProfitSum(context: CalculationContext): number {
+    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
+    // 暫定的に0を返す
+    if (
+      "getBaseProfitSum" in context &&
+      typeof context.getBaseProfitSum === "function"
+    ) {
+      return (context as any).getBaseProfitSum();
+    }
+    console.warn("[AccountCalculator] getBaseProfitSum not available");
+    return 0;
+  }
+
+  /**
+   * 指定されたターゲット科目に対するフロー科目の調整合計を取得
+   */
+  private static getFlowAdjustmentSum(
+    targetAccountId: string,
+    context: CalculationContext
+  ): number {
+    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
+    // 暫定的に0を返す
+    if (
+      "getFlowAdjustmentSum" in context &&
+      typeof context.getFlowAdjustmentSum === "function"
+    ) {
+      return (context as any).getFlowAdjustmentSum(targetAccountId);
+    }
+    console.warn(
+      `[AccountCalculator] getFlowAdjustmentSum not available for ${targetAccountId}`
+    );
+    return 0;
+  }
+
+  /**
+   * 指定された親科目の子科目合計を取得
+   */
+  private static getChildrenSum(
+    parentAccountId: string,
+    context: CalculationContext
+  ): number {
+    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
+    // 暫定的に0を返す
+    if (
+      "getChildrenSum" in context &&
+      typeof context.getChildrenSum === "function"
+    ) {
+      return (context as any).getChildrenSum(parentAccountId);
+    }
+    console.warn(
+      `[AccountCalculator] getChildrenSum not available for ${parentAccountId}`
+    );
+    return 0;
+  }
+
+  /**
+   * 指定されたBS科目にフロー科目からの調整があるかどうかを判定
+   */
+  private static hasFlowAdjustments(
+    targetAccountId: string,
+    context: CalculationContext
+  ): boolean {
+    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
+    // 暫定的にfalseを返す
+    if (
+      "hasFlowAdjustments" in context &&
+      typeof context.hasFlowAdjustments === "function"
+    ) {
+      return (context as any).hasFlowAdjustments(targetAccountId);
+    }
+    return false;
   }
 }

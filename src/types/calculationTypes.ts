@@ -24,6 +24,20 @@ export interface CalculationContext {
 
   // 🔧 改善: 計算中の値の即座反映
   setValue: (accountId: string, periodId: string, value: number) => void;
+
+  // === 新しい計算ロジック用のメソッド ===
+
+  // 親子計算用: 指定された親科目の子科目合計を取得
+  getChildrenSum: (parentAccountId: string) => number;
+
+  // BS残高計算用: 指定されたターゲット科目に対するフロー科目の調整合計を取得
+  getFlowAdjustmentSum: (targetAccountId: string) => number;
+
+  // BS残高計算用: 指定されたBS科目にフロー科目からの調整があるかどうかを判定
+  hasFlowAdjustments: (targetAccountId: string) => boolean;
+
+  // 利益剰余金計算用: isBaseProfitがtrueの科目の合計を取得
+  getBaseProfitSum: () => number;
 }
 
 // 計算戦略のインターフェース（非推奨）
