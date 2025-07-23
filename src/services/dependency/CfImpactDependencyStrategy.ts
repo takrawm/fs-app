@@ -1,6 +1,9 @@
 import type { DependencyStrategy } from "./DependencyStrategy";
 import type { Account } from "../../types/accountTypes";
-import { isFlowAccount } from "../../types/accountTypes";
+import {
+  isFlowAccount,
+  isBaseProfitSummaryAccount,
+} from "../../types/accountTypes";
 
 /**
  * flowAccountCfImpactに基づく依存関係を抽出するストラテジー
@@ -32,16 +35,11 @@ export class CfImpactDependencyStrategy implements DependencyStrategy {
       });
     }
 
-    // === 利益剰余金の場合：isBaseProfitがtrueの科目に依存 ===
+    // === 利益剰余金の場合：基礎利益サマリー科目に依存 ===
     if (account.id === "equity-retained-earnings") {
-      // isBaseProfitがtrueの科目を探す
+      // 基礎利益サマリー科目を探す
       const baseProfitAccounts = allAccounts.filter((acc) => {
-        return (
-          acc.flowAccountCfImpact &&
-          acc.flowAccountCfImpact.type === "IS_BASE_PROFIT" &&
-          "isBaseProfit" in acc.flowAccountCfImpact &&
-          acc.flowAccountCfImpact.isBaseProfit === true
-        );
+        return isBaseProfitSummaryAccount(acc);
       });
 
       baseProfitAccounts.forEach((baseProfitAccount) => {

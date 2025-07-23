@@ -1,5 +1,6 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { CalculationContext } from "../types/calculationTypes";
+import { isBSAccount, isSummaryAccount } from "../types/accountTypes";
 
 export class AccountCalculator {
   /**
@@ -15,36 +16,55 @@ export class AccountCalculator {
 
     // 1. 利益剰余金の特別計算
     if (account.id === "equity-retained-earnings") {
+      console.log(
+        `[AccountCalculator] 利益剰余金の特別計算を開始: ${account.accountName}`
+      );
       return this.calculateRetainedEarnings(account, context);
     }
 
     // 2. BS科目でADJUSTMENTターゲットになっている場合の残高計算
-    if (
-      account.sheet === "BS" &&
-      this.isAdjustmentTarget(account.id, context)
-    ) {
+    if (isBSAccount(account) && this.isAdjustmentTarget(account.id, context)) {
+      console.log(
+        `[AccountCalculator] BS科目の残高計算を開始: ${account.accountName} (${account.id})`
+      );
       return this.calculateBSBalance(account, context);
     }
 
     // 3. 親子計算（サマリー科目でparamTypeがnullの場合）
-    if (account.isSummaryAccount && parameter.paramType === null) {
+    if (isSummaryAccount(account) && parameter.paramType === null) {
+      console.log(
+        `[AccountCalculator] サマリー科目の子科目合計計算: ${account.accountName}`
+      );
       return this.calculateChildrenSum(account, context);
     }
 
     // === 通常のパラメータベースの計算 ===
+    console.log(
+      `[AccountCalculator] 通常計算 ${parameter.paramType}: ${account.accountName}`
+    );
+
     switch (parameter.paramType) {
       case "GROWTH_RATE":
         const previousValue = context.getPreviousValue(account.id);
         const currentValue = previousValue * (1 + parameter.paramValue);
+        console.log(
+          `[AccountCalculator] GROWTH_RATE計算: ${account.accountName}, 前期: ${previousValue}, 成長率: ${parameter.paramValue}, 結果: ${currentValue}`
+        );
         return currentValue;
 
       case "PERCENTAGE":
         const baseValue = context.getValue(parameter.paramReferences.accountId);
         const value = baseValue * parameter.paramValue;
+        console.log(
+          `[AccountCalculator] PERCENTAGE計算: ${account.accountName}, 基準値: ${baseValue}, 比率: ${parameter.paramValue}, 結果: ${value}`
+        );
         return value;
 
       case "PROPORTIONATE":
         const propValue = context.getValue(parameter.paramReferences.accountId);
+        console.log(
+          `[AccountCalculator] PROPORTIONATE計算: ${account.accountName}, 連動先: ${parameter.paramReferences.accountId}, 結果: ${propValue}`
+        );
         return propValue;
 
       case "CALCULATION":
@@ -76,6 +96,9 @@ export class AccountCalculator {
           }
         });
 
+        console.log(
+          `[AccountCalculator] CALCULATION計算: ${account.accountName}, 参照科目数: ${accountIds.length}, 結果: ${result}`
+        );
         return result;
 
       case null:
@@ -165,7 +188,12 @@ export class AccountCalculator {
   ): number {
     const previousBalance = context.getPreviousValue(account.id);
     const baseProfitSum = this.getBaseProfitSum(context);
-    return previousBalance + baseProfitSum;
+    const result = previousBalance + baseProfitSum;
+
+    console.log(
+      `[AccountCalculator] 利益剰余金計算詳細: 前期末残高=${previousBalance}, 基礎利益合計=${baseProfitSum}, 結果=${result}`
+    );
+    return result;
   }
 
   /**
@@ -177,7 +205,12 @@ export class AccountCalculator {
   ): number {
     const previousBalance = context.getPreviousValue(account.id);
     const flowAdjustmentSum = this.getFlowAdjustmentSum(account.id, context);
-    return previousBalance + flowAdjustmentSum;
+    const result = previousBalance + flowAdjustmentSum;
+
+    console.log(
+      `[AccountCalculator] BS残高計算詳細 ${account.accountName}: 前期末残高=${previousBalance}, フロー調整合計=${flowAdjustmentSum}, 結果=${result}`
+    );
+    return result;
   }
 
   /**
@@ -187,7 +220,11 @@ export class AccountCalculator {
     parentAccount: Readonly<Account>,
     context: CalculationContext
   ): number {
-    return this.getChildrenSum(parentAccount.id, context);
+    const result = this.getChildrenSum(parentAccount.id, context);
+    console.log(
+      `[AccountCalculator] 子科目合計計算 ${parentAccount.accountName}: 結果=${result}`
+    );
+    return result;
   }
 
   /**
@@ -197,8 +234,6 @@ export class AccountCalculator {
     accountId: string,
     context: CalculationContext
   ): boolean {
-    // この判定は現在のcontextでは直接実装が困難なため、
-    // 暫定的にfalseを返し、後でCalculationContextを拡張する
     return this.hasFlowAdjustments(accountId, context);
   }
 
@@ -206,16 +241,7 @@ export class AccountCalculator {
    * isBaseProfitがtrueの科目の合計を取得
    */
   private static getBaseProfitSum(context: CalculationContext): number {
-    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
-    // 暫定的に0を返す
-    if (
-      "getBaseProfitSum" in context &&
-      typeof context.getBaseProfitSum === "function"
-    ) {
-      return (context as any).getBaseProfitSum();
-    }
-    console.warn("[AccountCalculator] getBaseProfitSum not available");
-    return 0;
+    return context.getBaseProfitSum();
   }
 
   /**
@@ -225,18 +251,7 @@ export class AccountCalculator {
     targetAccountId: string,
     context: CalculationContext
   ): number {
-    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
-    // 暫定的に0を返す
-    if (
-      "getFlowAdjustmentSum" in context &&
-      typeof context.getFlowAdjustmentSum === "function"
-    ) {
-      return (context as any).getFlowAdjustmentSum(targetAccountId);
-    }
-    console.warn(
-      `[AccountCalculator] getFlowAdjustmentSum not available for ${targetAccountId}`
-    );
-    return 0;
+    return context.getFlowAdjustmentSum(targetAccountId);
   }
 
   /**
@@ -246,18 +261,7 @@ export class AccountCalculator {
     parentAccountId: string,
     context: CalculationContext
   ): number {
-    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
-    // 暫定的に0を返す
-    if (
-      "getChildrenSum" in context &&
-      typeof context.getChildrenSum === "function"
-    ) {
-      return (context as any).getChildrenSum(parentAccountId);
-    }
-    console.warn(
-      `[AccountCalculator] getChildrenSum not available for ${parentAccountId}`
-    );
-    return 0;
+    return context.getChildrenSum(parentAccountId);
   }
 
   /**
@@ -267,14 +271,6 @@ export class AccountCalculator {
     targetAccountId: string,
     context: CalculationContext
   ): boolean {
-    // CalculationContextを拡張してこの情報を取得する機能を追加する必要がある
-    // 暫定的にfalseを返す
-    if (
-      "hasFlowAdjustments" in context &&
-      typeof context.hasFlowAdjustments === "function"
-    ) {
-      return (context as any).hasFlowAdjustments(targetAccountId);
-    }
-    return false;
+    return context.hasFlowAdjustments(targetAccountId);
   }
 }

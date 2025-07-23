@@ -206,17 +206,37 @@ export interface BSDetailAccount extends BaseAccount {
 }
 
 /**
- * フロー科目（PL、PPE、FINANCING）のサマリー科目型定義
+ * 基礎利益サマリー科目（特別な型定義）
  */
-export interface FlowSummaryAccount extends BaseAccount {
+export interface BaseProfitSummaryAccount extends BaseAccount {
   sheet:
     | typeof SHEET_TYPES.PL
     | typeof SHEET_TYPES.PPE
     | typeof SHEET_TYPES.FINANCING;
   isSummaryAccount: true;
   parameter: SummaryAccountParameter;
-  flowAccountCfImpact: NoCfImpact;
+  flowAccountCfImpact: BaseProfitImpact; // IS_BASE_PROFITのみ
 }
+
+/**
+ * 通常のフローサマリー科目（CFに影響しない）
+ */
+export interface RegularFlowSummaryAccount extends BaseAccount {
+  sheet:
+    | typeof SHEET_TYPES.PL
+    | typeof SHEET_TYPES.PPE
+    | typeof SHEET_TYPES.FINANCING;
+  isSummaryAccount: true;
+  parameter: SummaryAccountParameter;
+  flowAccountCfImpact: NoCfImpact; // CFに影響しない
+}
+
+/**
+ * フローサマリー科目の統合型
+ */
+export type FlowSummaryAccount =
+  | BaseProfitSummaryAccount
+  | RegularFlowSummaryAccount;
 
 /**
  * フロー科目（PL、PPE、FINANCING）の明細科目型定義
@@ -403,11 +423,35 @@ export function isBSDetailAccount(
   return account.sheet === SHEET_TYPES.BS && account.isSummaryAccount === false;
 }
 
+/** 基礎利益サマリー科目かどうかを判定 */
+export function isBaseProfitSummaryAccount(
+  account: Account
+): account is BaseProfitSummaryAccount {
+  return (
+    isFlowAccount(account) &&
+    account.isSummaryAccount === true &&
+    isBaseProfitImpact(account.flowAccountCfImpact)
+  );
+}
+
+/** 通常のフローサマリー科目かどうかを判定 */
+export function isRegularFlowSummaryAccount(
+  account: Account
+): account is RegularFlowSummaryAccount {
+  return (
+    isFlowAccount(account) &&
+    account.isSummaryAccount === true &&
+    account.flowAccountCfImpact.type === null
+  );
+}
+
 /** フローサマリー科目かどうかを判定 */
 export function isFlowSummaryAccount(
   account: Account
 ): account is FlowSummaryAccount {
-  return isFlowAccount(account) && account.isSummaryAccount === true;
+  return (
+    isBaseProfitSummaryAccount(account) || isRegularFlowSummaryAccount(account)
+  );
 }
 
 /** フロー明細科目かどうかを判定 */
