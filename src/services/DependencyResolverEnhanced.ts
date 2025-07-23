@@ -59,7 +59,7 @@ export class DependencyResolverEnhanced {
       this.strategies.forEach((strategy) => {
         if (strategy.isApplicable(account)) {
           const dependencies = strategy.extractDependencies(account, accounts);
-          
+
           // パラメータベースの依存関係の場合、parametersマップから取得する必要がある
           if (strategy.name === "ParameterDependency") {
             const parameter = parameters.get(account.id);
@@ -84,9 +84,10 @@ export class DependencyResolverEnhanced {
                   graph.get(depId)!.add(account.id);
                   inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
                 } else if (strategy.name === "CfImpactDependency") {
-                  // 現在科目（account）が対象（depId）に依存
-                  graph.get(account.id)!.add(depId);
-                  inDegree.set(depId, (inDegree.get(depId) || 0) + 1);
+                  // 現在科目（account）が対象（depId）に依存するため、
+                  // 依存先（depId）から依存元（account）へのエッジを張る
+                  graph.get(depId)!.add(account.id);
+                  inDegree.set(account.id, (inDegree.get(account.id) || 0) + 1);
                 }
               }
             });
@@ -263,7 +264,7 @@ export class DependencyResolverEnhanced {
       this.strategies.forEach((strategy) => {
         if (strategy.isApplicable(account)) {
           const dependencies = strategy.extractDependencies(account, accounts);
-          
+
           if (strategy.name === "ParameterDependency") {
             const parameter = parameters.get(account.id);
             if (parameter && parameter.paramType) {
@@ -279,8 +280,14 @@ export class DependencyResolverEnhanced {
           } else {
             dependencies.forEach((depId) => {
               edges.push({
-                from: strategy.name === "ParentChildDependency" ? depId : account.id,
-                to: strategy.name === "ParentChildDependency" ? account.id : depId,
+                from:
+                  strategy.name === "ParentChildDependency"
+                    ? depId
+                    : account.id,
+                to:
+                  strategy.name === "ParentChildDependency"
+                    ? account.id
+                    : depId,
                 type: strategy.name.toLowerCase().replace("dependency", ""),
               });
             });
