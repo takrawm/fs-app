@@ -36,8 +36,8 @@ export interface CalculationContext {
   // BS残高計算用: 指定されたBS科目にフロー科目からの調整があるかどうかを判定
   hasFlowAdjustments: (targetAccountId: string) => boolean;
 
-  // 利益剰余金計算用: isBaseProfitがtrueの科目の合計を取得
-  getBaseProfitSum: () => number;
+  // 利益剰余金計算用: isBaseProfitがtrueの科目の値を取得
+  getBaseProfit: () => number;
 }
 
 // 計算戦略のインターフェース（非推奨）

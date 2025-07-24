@@ -238,7 +238,7 @@ export class CalculationStage implements PipelineStage {
         return hasAdjustments;
       },
 
-      getBaseProfitSum: () => {
+      getBaseProfit: () => {
         interface BaseProfitAccountType {
           accountId: string;
           accountName: string;

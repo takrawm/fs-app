@@ -23,7 +23,7 @@ export class AccountCalculator {
     }
 
     // 2. BS科目でADJUSTMENTターゲットになっている場合の残高計算
-    if (isBSAccount(account) && this.isAdjustmentTarget(account.id, context)) {
+    if (isBSAccount(account) && this.hasFlowAdjustments(account.id, context)) {
       console.log(
         `[AccountCalculator] BS科目の残高計算を開始: ${account.accountName} (${account.id})`
       );
@@ -61,9 +61,20 @@ export class AccountCalculator {
         return value;
 
       case "PROPORTIONATE":
-        const propValue = context.getValue(parameter.paramReferences.accountId);
+        const referenceAccountId = parameter.paramReferences.accountId;
+        const currentRefValue = context.getValue(referenceAccountId);
+        const previousRefValue = context.getPreviousValue(referenceAccountId);
+        const currentAccountValue = context.getPreviousValue(account.id);
+
+        // 参照科目の成長率を計算（今年度 / 前年度）
+        const growthRatio =
+          previousRefValue !== 0 ? currentRefValue / previousRefValue : 1;
+
+        // 当該科目の前年度値に成長率を適用
+        const propValue = currentAccountValue * growthRatio;
+
         console.log(
-          `[AccountCalculator] PROPORTIONATE計算: ${account.accountName}, 連動先: ${parameter.paramReferences.accountId}, 結果: ${propValue}`
+          `[AccountCalculator] PROPORTIONATE計算: ${account.accountName}, 連動先: ${referenceAccountId}, 参照科目現在値: ${currentRefValue}, 参照科目前年度値: ${previousRefValue}, 成長率: ${growthRatio}, 当該科目前年度値: ${currentAccountValue}, 結果: ${propValue}`
         );
         return propValue;
 
@@ -187,11 +198,11 @@ export class AccountCalculator {
     context: CalculationContext
   ): number {
     const previousBalance = context.getPreviousValue(account.id);
-    const baseProfitSum = this.getBaseProfitSum(context);
-    const result = previousBalance + baseProfitSum;
+    const baseProfit = this.getBaseProfit(context);
+    const result = previousBalance + baseProfit;
 
     console.log(
-      `[AccountCalculator] 利益剰余金計算詳細: 前期末残高=${previousBalance}, 基礎利益合計=${baseProfitSum}, 結果=${result}`
+      `[AccountCalculator] 利益剰余金計算詳細: 前期末残高=${previousBalance}, 基礎利益=${baseProfit}, 結果=${result}`
     );
     return result;
   }
@@ -228,20 +239,10 @@ export class AccountCalculator {
   }
 
   /**
-   * 指定されたBS科目がADJUSTMENTのターゲットかどうかを判定
-   */
-  private static isAdjustmentTarget(
-    accountId: string,
-    context: CalculationContext
-  ): boolean {
-    return this.hasFlowAdjustments(accountId, context);
-  }
-
-  /**
    * isBaseProfitがtrueの科目の合計を取得
    */
-  private static getBaseProfitSum(context: CalculationContext): number {
-    return context.getBaseProfitSum();
+  private static getBaseProfit(context: CalculationContext): number {
+    return context.getBaseProfit();
   }
 
   /**
