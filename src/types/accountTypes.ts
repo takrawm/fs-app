@@ -6,7 +6,6 @@ export const PARAMETER_TYPES = {
   CALCULATION: "CALCULATION",
   PERCENTAGE: "PERCENTAGE",
   PROPORTIONATE: "PROPORTIONATE",
-  CASH_CALCULATION: "CASH_CALCULATION",
 } as const;
 
 /** 操作タイプの定数定義 */
@@ -95,13 +94,6 @@ interface ProportionateParameter {
   paramReferences: SingleReference; // 連動する単一科目
 }
 
-/** 現預金計算パラメータ */
-interface CashCalculationParameter {
-  paramType: typeof PARAMETER_TYPES.CASH_CALCULATION;
-  paramValue: null;
-  paramReferences: null;
-}
-
 /** パラメータなし */
 export interface NullParameter {
   paramType: null;
@@ -120,7 +112,6 @@ export type Parameter =
   | CalculationParameter
   | PercentageParameter
   | ProportionateParameter
-  | CashCalculationParameter
   | NullParameter;
 
 /**
@@ -346,13 +337,6 @@ export function isProportionateParameter(
   param: Parameter
 ): param is ProportionateParameter {
   return param.paramType === PARAMETER_TYPES.PROPORTIONATE;
-}
-
-/** 現預金計算パラメータかどうかを判定 */
-export function isCashCalculationParameter(
-  param: Parameter
-): param is CashCalculationParameter {
-  return param.paramType === PARAMETER_TYPES.CASH_CALCULATION;
 }
 
 /** パラメータなしかどうかを判定 */

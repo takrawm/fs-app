@@ -1,3 +1,5 @@
+import type { Account } from "./accountTypes";
+
 // 計算結果は単純にnumber型として扱う
 // 以前のCalculationResultインターフェースは削除済み
 
@@ -38,6 +40,9 @@ export interface CalculationContext {
 
   // 利益剰余金計算用: isBaseProfitがtrueの科目の値を取得
   getBaseProfit: () => number;
+
+  // CF科目計算用: 科目情報を取得
+  getAccount: (accountId: string) => Account | null;
 }
 
 // 計算戦略のインターフェース（非推奨）

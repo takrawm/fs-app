@@ -246,7 +246,7 @@
       "prefix": "F"
     },
     "parameter": {
-      "paramType": "CASH_CALCULATION",
+      "paramType": null,
       "paramValue": null,
       "paramReferences": null
     },

@@ -1,10 +1,6 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { CalculationContext } from "../types/calculationTypes";
-import {
-  isBSAccount,
-  isSummaryAccount,
-  isCashCalculationParameter,
-} from "../types/accountTypes";
+import { isBSAccount, isSummaryAccount } from "../types/accountTypes";
 
 export class AccountCalculator {
   /**
@@ -34,7 +30,19 @@ export class AccountCalculator {
       return this.calculateBSBalance(account, context);
     }
 
-    // 3. 親子計算（サマリー科目でparamTypeがnullの場合）
+    // 3. フロー科目に基づくCF科目の特別計算
+    if (
+      account.sheet === "CF" &&
+      account.id.startsWith("cf_") &&
+      this.isFlowBasedCFAccount(account, context)
+    ) {
+      console.log(
+        `[AccountCalculator] フロー科目に基づくCF科目の特別計算を開始: ${account.accountName}`
+      );
+      return this.calculateFlowBasedCFAccount(account, context);
+    }
+
+    // 4. 親子計算（サマリー科目でparamTypeがnullの場合）
     if (isSummaryAccount(account) && parameter.paramType === null) {
       console.log(
         `[AccountCalculator] サマリー科目の子科目合計計算: ${account.accountName}`
@@ -115,13 +123,6 @@ export class AccountCalculator {
           `[AccountCalculator] CALCULATION計算: ${account.accountName}, 参照科目数: ${accountIds.length}, 結果: ${result}`
         );
         return result;
-
-      case "CASH_CALCULATION":
-        console.log(
-          `[AccountCalculator] CASH_CALCULATION計算: ${account.accountName} - 現預金残高計算は別途実装予定`
-        );
-        // TODO: 現預金残高計算のロジックを実装
-        return 0;
 
       case null:
         return null;
@@ -284,5 +285,112 @@ export class AccountCalculator {
     context: CalculationContext
   ): boolean {
     return context.hasFlowAdjustments(targetAccountId);
+  }
+
+  /**
+   * フロー科目に基づくCF科目かどうかを判定
+   * createFlowCfAccountで作成されたCF科目のみが対象
+   */
+  private static isFlowBasedCFAccount(
+    account: Readonly<Account>,
+    context: CalculationContext
+  ): boolean {
+    // CF科目のIDから元のフロー科目のIDを取得（cf_プレフィックスを除去）
+    const originalFlowAccountId = account.id.replace("cf_", "");
+
+    // 元のフロー科目の情報を取得
+    const originalFlowAccount = context.getAccount(originalFlowAccountId);
+    if (!originalFlowAccount) {
+      return false;
+    }
+
+    // フロー科目（PL、PPE、FINANCING）で明細科目であることを確認
+    const isFlowSheet =
+      originalFlowAccount.sheet === "PL" ||
+      originalFlowAccount.sheet === "PPE" ||
+      originalFlowAccount.sheet === "FINANCING";
+
+    const isDetailAccount = !originalFlowAccount.isSummaryAccount;
+
+    // flowAccountCfImpactが存在し、ADJUSTMENTタイプであることを確認
+    const hasAdjustmentImpact =
+      originalFlowAccount.flowAccountCfImpact &&
+      originalFlowAccount.flowAccountCfImpact.type === "ADJUSTMENT";
+
+    return isFlowSheet && isDetailAccount && hasAdjustmentImpact;
+  }
+
+  /**
+   * フロー科目に基づくCF科目の計算
+   * 元のフロー科目の値に基づいて符号を決定
+   */
+  private static calculateFlowBasedCFAccount(
+    account: Readonly<Account>,
+    context: CalculationContext
+  ): number {
+    // CF科目のIDから元のフロー科目のIDを取得（cf_プレフィックスを除去）
+    const originalFlowAccountId = account.id.replace("cf_", "");
+
+    // 元のフロー科目の値を取得
+    const originalFlowValue = context.getValue(originalFlowAccountId);
+
+    // 元のフロー科目の情報を取得
+    const originalFlowAccount = context.getAccount(originalFlowAccountId);
+    if (!originalFlowAccount) {
+      console.warn(
+        `[AccountCalculator] CF科目計算エラー: 元のフロー科目が見つかりません: ${originalFlowAccountId}`
+      );
+      return 0;
+    }
+
+    // flowAccountCfImpactがADJUSTMENTでない場合は0を返す
+    if (
+      !originalFlowAccount.flowAccountCfImpact ||
+      originalFlowAccount.flowAccountCfImpact.type !== "ADJUSTMENT"
+    ) {
+      console.log(
+        `[AccountCalculator] CF科目計算: ${account.accountName}, 元科目: ${originalFlowAccountId}, ADJUSTMENTではないため0を返す`
+      );
+      return 0;
+    }
+
+    const adjustment = originalFlowAccount.flowAccountCfImpact.adjustment;
+    const targetAccountId = adjustment.targetId;
+    const operation = adjustment.operation;
+
+    // ターゲットBS科目の情報を取得
+    const targetAccount = context.getAccount(targetAccountId);
+    if (!targetAccount) {
+      console.warn(
+        `[AccountCalculator] CF科目計算エラー: ターゲットBS科目が見つかりません: ${targetAccountId}`
+      );
+      return 0;
+    }
+
+    // 符号を決定
+    let cfValue: number;
+    const isTargetCredit = targetAccount.isCredit;
+
+    if (isTargetCredit === false) {
+      // ターゲットが借方科目（isCredit: false）の場合
+      // 符号はoperationと逆転
+      cfValue = operation === "ADD" ? -originalFlowValue : originalFlowValue;
+    } else if (isTargetCredit === true) {
+      // ターゲットが貸方科目（isCredit: true）の場合
+      // 符号はoperationと一致
+      cfValue = operation === "ADD" ? originalFlowValue : -originalFlowValue;
+    } else {
+      // isCreditがnullの場合（CF科目など）
+      console.warn(
+        `[AccountCalculator] CF科目計算エラー: ターゲット科目のisCreditがnull: ${targetAccountId}`
+      );
+      return 0;
+    }
+
+    console.log(
+      `[AccountCalculator] CF科目計算: ${account.accountName}, 元科目: ${originalFlowAccountId}, 元科目値: ${originalFlowValue}, ターゲット: ${targetAccountId} (isCredit: ${isTargetCredit}), 操作: ${operation}, CF値: ${cfValue}`
+    );
+
+    return cfValue;
   }
 }

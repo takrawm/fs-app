@@ -8,9 +8,7 @@ import { FinancialCalculatorEnhanced } from "../FinancialCalculatorEnhanced";
 import { DependencyResolverEnhanced } from "../DependencyResolverEnhanced";
 import {
   isFlowAccount,
-  isBaseProfitImpact,
   isAdjustmentImpact,
-  isFlowSummaryAccount,
   isBaseProfitSummaryAccount,
 } from "../../types/accountTypes";
 
@@ -280,6 +278,13 @@ export class CalculationStage implements PipelineStage {
           baseProfitAccount
         );
         return (baseProfitAccount as any).value;
+      },
+
+      // CF科目計算用: 科目情報を取得
+      getAccount: (accountId: string) => {
+        return (
+          pipelineContext.accounts.find((acc) => acc.id === accountId) || null
+        );
       },
     };
   }
