@@ -66,11 +66,6 @@ export class CfAccountGenerationStage implements PipelineStage {
       return null;
     }
 
-    // CF科目自体はCF生成対象外
-    if (account.sheet === SHEET_TYPES.CF) {
-      return null;
-    }
-
     // BS科目の判定
     if (isBSAccount(account)) {
       // BS科目でパラメータがnullの場合は対象外
@@ -131,7 +126,7 @@ export class CfAccountGenerationStage implements PipelineStage {
   }
 
   private createFlowCfAccount(account: Account): CFDetailAccount {
-    const cfAccountName = this.generateFlowCfAccountName(account);
+    const cfAccountName = `${account.accountName}(CF)`;
     const cfAccountId = `cf_${account.id}`;
 
     const nullParameter: NullParameter = {
@@ -162,27 +157,6 @@ export class CfAccountGenerationStage implements PipelineStage {
     };
 
     return cfAccount;
-  }
-
-  private generateFlowCfAccountName(account: Account): string {
-    if (!isFlowAccount(account)) {
-      return account.accountName;
-    }
-
-    // CF影響タイプに応じた名前生成
-    switch (account.flowAccountCfImpact.type) {
-      case CF_IMPACT_TYPES.IS_BASE_PROFIT:
-        return account.accountName;
-
-      case CF_IMPACT_TYPES.ADJUSTMENT:
-        return `${account.accountName}（調整）`;
-
-      case CF_IMPACT_TYPES.RECLASSIFICATION:
-        return `${account.accountName}（組替）`;
-
-      default:
-        return account.accountName;
-    }
   }
 
   private generateCfDisplayOrder(
