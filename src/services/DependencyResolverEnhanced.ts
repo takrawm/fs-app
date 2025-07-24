@@ -169,8 +169,9 @@ export class DependencyResolverEnhanced {
         break;
 
       case "GROWTH_RATE":
+      case "CASH_CALCULATION":
       case null:
-        // これらは他の科目に依存しない
+        // これらは他の科目に依存しない（CASH_CALCULATIONは特別な処理で最後に計算）
         break;
     }
 

@@ -1,6 +1,10 @@
 import type { Account, Parameter } from "../types/accountTypes";
 import type { CalculationContext } from "../types/calculationTypes";
-import { isBSAccount, isSummaryAccount } from "../types/accountTypes";
+import {
+  isBSAccount,
+  isSummaryAccount,
+  isCashCalculationParameter,
+} from "../types/accountTypes";
 
 export class AccountCalculator {
   /**
@@ -111,6 +115,13 @@ export class AccountCalculator {
           `[AccountCalculator] CALCULATION計算: ${account.accountName}, 参照科目数: ${accountIds.length}, 結果: ${result}`
         );
         return result;
+
+      case "CASH_CALCULATION":
+        console.log(
+          `[AccountCalculator] CASH_CALCULATION計算: ${account.accountName} - 現預金残高計算は別途実装予定`
+        );
+        // TODO: 現預金残高計算のロジックを実装
+        return 0;
 
       case null:
         return null;
